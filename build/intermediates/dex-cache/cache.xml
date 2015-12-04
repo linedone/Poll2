@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/ken/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/7.0.1/d5d13ea991eab0252e3710e5df3d6a9d4b21d461/butterknife-7.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
+        <dex dex="/Users/ken/Desktop/Poll2/app/build/intermediates/pre-dexed/debug/butterknife-7.0.1-e9a5eafe9d51b40ee74e29e7f724617b4ec73b16.jar" />
+    </item>
+    <item
+        jar="/Users/ken/Desktop/Poll2/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="6cbc7773921fcfedbe55657578f0cbfe614778dc">
+        <dex dex="/Users/ken/Desktop/Poll2/app/build/intermediates/pre-dexed/debug/classes-f5ef4412297e446d1015a0006d3188a722b00fb6.jar" />
+    </item>
+    <item
+        jar="/Users/ken/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-applinks/1.3.0/bc535105332645408ef5f1380215cc954b842178/bolts-applinks-1.3.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="bc535105332645408ef5f1380215cc954b842178">
+        <dex dex="/Users/ken/Desktop/Poll2/app/build/intermediates/pre-dexed/debug/bolts-applinks-1.3.0-9b91c62896ce0db1e9364789e05a234e29bfaa6a.jar" />
+    </item>
+    <item
+        jar="/Users/ken/android-sdks/extras/android/m2repository/com/android/support/support-annotations/23.1.1/support-annotations-23.1.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="8d680ba5a623724d1fb0e81c36a790f023a6cede">
+        <dex dex="/Users/ken/Desktop/Poll2/app/build/intermediates/pre-dexed/debug/support-annotations-23.1.1-a9d0348d416ab0ba80ff79c24d3ea83a2de7a75d.jar" />
+    </item>
+    <item
+        jar="/Users/ken/.gradle/caches/modules-2/files-2.1/com.parse/parse-android/1.11.0/6592129dec2caa8791d322c7e4b6b7a30e8eadae/parse-android-1.11.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="6592129dec2caa8791d322c7e4b6b7a30e8eadae">
+        <dex dex="/Users/ken/Desktop/Poll2/app/build/intermediates/pre-dexed/debug/parse-android-1.11.0-13dffffc855bd26e28e27b3b14cd4a8bd6b433f5.jar" />
+    </item>
+    <item
+        jar="/Users/ken/Desktop/Poll2/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/jars/libs/internal_impl-23.1.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="a4de9c81ae239414e1ed0f86441b02abaf29bca9">
+        <dex dex="/Users/ken/Desktop/Poll2/app/build/intermediates/pre-dexed/debug/internal_impl-23.1.1-a346ac2dbd36a10e62186a5604295d4b2c39184a.jar" />
+    </item>
+    <item
+        jar="/Users/ken/Desktop/Poll2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
+        <dex dex="/Users/ken/Desktop/Poll2/app/build/intermediates/pre-dexed/debug/classes-9d44a3c5a80be1828a6aaa55614645b8ff80e8bc.jar" />
+    </item>
+    <item
+        jar="/Users/ken/Desktop/Poll2/app/build/intermediates/exploded-aar/com.beardedhen/androidbootstrap/2.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="97a86524e0785eaf68e99d38de168a8bafd61d62">
+        <dex dex="/Users/ken/Desktop/Poll2/app/build/intermediates/pre-dexed/debug/classes-3005c4e398334b1c440ea8f41665f8e977dd3f7d.jar" />
+    </item>
+    <item
+        jar="/Users/ken/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-tasks/1.3.0/8a62fd16fcc1c06f284fc98e6cbded2a5af1dd4c/bolts-tasks-1.3.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="8a62fd16fcc1c06f284fc98e6cbded2a5af1dd4c">
+        <dex dex="/Users/ken/Desktop/Poll2/app/build/intermediates/pre-dexed/debug/bolts-tasks-1.3.0-45f1133ea9bcee3212b87823988c6c4b1a7f8344.jar" />
+    </item>
+
+</items>
