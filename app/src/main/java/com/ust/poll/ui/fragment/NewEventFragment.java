@@ -1,5 +1,6 @@
 package com.ust.poll.ui.fragment;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -34,6 +35,7 @@ import com.ust.poll.util.Util;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,10 +46,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class NewEventFragment extends MainActivity.PlaceholderFragment {
+    private static int FRAGMENT_CODE = 0;
     private static int RESULT_LOAD_IMG = 1;
     String imgDecodableString;
     byte[] imgFile;
-    String[] eventMembers;
+    String eventMembers;
 
     @Bind(R.id.txt_etitle) BootstrapEditText txt_etitle;
     @Bind(R.id.txt_eDate) BootstrapEditText txt_eDate;
@@ -83,7 +86,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
 
         DatePickerDialog mDatePicker = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker datepicker, int year, int monthOfYear, int dayOfMonth) {
-                String myFormat = "dd MMM, yyyy";
+                String myFormat = "yyyy-MM-dd";
                 SimpleDateFormat sdFormat = new SimpleDateFormat(myFormat, Locale.UK);
                 eventDate.set(Calendar.YEAR, year);
                 eventDate.set(Calendar.MONTH, monthOfYear);
@@ -104,6 +107,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
 
         TimePickerDialog mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
             public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                //TODO: minute 0 -> 00
                 txt_eTime.setText(hourOfDay + ":" + minute);
             }
         }, hour, minute, true);  // true for 24 hour time
@@ -120,36 +124,47 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Select Photo from Gallery
-        try {
-            // When an Image is picked
-            if (requestCode==RESULT_LOAD_IMG && resultCode==getActivity().RESULT_OK && data!=null) {
-                // Get the Image from data
-                Uri selectedImage = data.getData();
-                String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
-                // Get the cursor
-                Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                cursor.moveToFirst();  // Move to first row
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                imgDecodableString = cursor.getString(columnIndex);
-                cursor.close();
-
-                ImageView imgView = (ImageView) getActivity().findViewById(R.id.image_event_photo);
-                // Set the Image in ImageView after decoding the String
-                imgView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
-                imgFile = getBytesFromBitmap(BitmapFactory.decodeFile(imgDecodableString));
-            }
-            else {
-                Toast.makeText(getActivity().getApplicationContext(), "You haven't picked Image.", Toast.LENGTH_LONG).show();
-                Log.i("NewEvent_Gallery: ", "You haven't picked Image");
+        if(requestCode==FRAGMENT_CODE && resultCode==getActivity().RESULT_OK) {
+            if(data != null) {
+                String value = data.getStringExtra("eventMembers");
+                if(value != null) {
+                    Log.i("PickFriend", "Data passed from PickFriend fragment = " + value);
+                }
             }
         }
-        catch (Exception e) {
-            Toast.makeText(getActivity().getApplicationContext(), "Something went wrong.", Toast.LENGTH_LONG).show();
-            Log.e("NewEvent_Gallery: ", "Something went wrong.");
+        else if (requestCode==RESULT_LOAD_IMG && resultCode==getActivity().RESULT_OK) {
+            // Select Photo from Gallery
+            try {
+                // When an Image is picked
+                if (data!=null) {
+                    // Get the Image from data
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+                    // Get the cursor
+                    Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                    cursor.moveToFirst();  // Move to first row
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    imgDecodableString = cursor.getString(columnIndex);
+                    cursor.close();
+
+                    ImageView imgView = (ImageView) getActivity().findViewById(R.id.image_event_photo);
+                    // Set the Image in ImageView after decoding the String
+                    imgView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
+                    imgFile = getBytesFromBitmap(BitmapFactory.decodeFile(imgDecodableString));
+                }
+                else {
+                    Toast.makeText(getActivity().getApplicationContext(), "You haven't picked Image.", Toast.LENGTH_LONG).show();
+                    Log.i("NewEvent_Gallery: ", "You haven't picked Image");
+                }
+            }
+            catch (Exception e) {
+                Toast.makeText(getActivity().getApplicationContext(), "Something went wrong.", Toast.LENGTH_LONG).show();
+                Log.e("NewEvent_Gallery: ", "Something went wrong.");
+            }
+            // End of Select Photo from Gallery
         }
-        // End of Select Photo from Gallery
     }
 
 
@@ -158,7 +173,8 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
 
         // Get Friend List Bundle
         Bundle bundle = this.getArguments();
-        eventMembers = bundle.getStringArray("contactNo");
+        eventMembers = bundle.getString("eventMembers");
+        Log.e("Bundle Event Members: ", eventMembers);
         // End of Get Friend List Bundle
 
         if (txt_etitle.getText().toString().length() == 0) {
@@ -173,6 +189,9 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
         else if (txt_eVenue.getText().toString().length() == 0) {
             txt_eVenue.setError("Event Venue is required!");
         }
+        else if (eventMembers.isEmpty()) {
+            Toast.makeText(getActivity().getApplicationContext(), "Please select group members!!!", Toast.LENGTH_LONG).show();
+        }
         else {
             isValidInput = true;
         }
@@ -183,7 +202,18 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
 
     @OnClick(R.id.btn_event_pick_friend_list)
     public void fnPickFriends(View view) {
+
+//
+//        FragmentChild fragmentChild = new FragmentChild();
+//        fragmentChild.setTargetFragment(this, FRAGMENT_CODE);
+//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//        transaction.replace(R.id.frl_view_container, fragmentChild);
+//        transaction.addToBackStack(null);
+//        transaction.commit();
+
+
         PickFriendFragment fragment = new PickFriendFragment();
+        fragment.setTargetFragment(this, FRAGMENT_CODE);
         Bundle bundle = new Bundle();
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
@@ -206,8 +236,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                 public void done(ParseException e) {
                     if (e == null) {
                         //TODO: Success
-                    }
-                    else {
+                    } else {
                         //TODO: Failed
                     }
                 }
@@ -226,7 +255,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
             eventObject.put("EventRemarkURL", txt_eRemarkURL.getText().toString());
             eventObject.put("EventPhoto", file);
             //TODO: String Array
-            eventObject.put("EventMembers", "");
+            //eventObject.addAllUnique("EventMembers", ArrayList);
             eventObject.saveInBackground();
 
             //TODO: check parseId get or not
