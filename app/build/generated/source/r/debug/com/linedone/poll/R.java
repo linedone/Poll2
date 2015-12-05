@@ -2829,12 +2829,12 @@ containing a value of this type.
         public static final int btn_new_poll_next=0x7f0c0472;
         public static final int btn_new_poll_pickfriend_next=0x7f0c0478;
         public static final int btn_reset=0x7f0c0492;
+        public static final int btn_select_op1=0x7f0c0489;
+        public static final int btn_select_op2=0x7f0c048a;
+        public static final int btn_select_op3=0x7f0c048b;
+        public static final int btn_select_op4=0x7f0c048c;
         public static final int btn_signup=0x7f0c0458;
         public static final int btn_submit=0x7f0c0493;
-        public static final int button=0x7f0c0489;
-        public static final int button2=0x7f0c048a;
-        public static final int button3=0x7f0c048b;
-        public static final int button4=0x7f0c048c;
         public static final int buttonPanel=0x7f0c0431;
         public static final int button_group_option=0x7f0c046d;
         public static final int cancel_action=0x7f0c047d;
@@ -3570,6 +3570,7 @@ containing a value of this type.
         public static final int option3=0x7f0c0470;
         public static final int option4=0x7f0c0471;
         public static final int parentPanel=0x7f0c0433;
+        public static final int pollTitle=0x7f0c0488;
         public static final int primary=0x7f0c000b;
         public static final int progress_circular=0x7f0c0005;
         public static final int progress_horizontal=0x7f0c0006;
@@ -3610,7 +3611,6 @@ containing a value of this type.
         public static final int text2=0x7f0c0484;
         public static final int textSpacerNoButtons=0x7f0c043a;
         public static final int textView=0x7f0c0474;
-        public static final int textView2=0x7f0c0488;
         public static final int time=0x7f0c0482;
         public static final int timePicker=0x7f0c0476;
         public static final int title=0x7f0c0430;
