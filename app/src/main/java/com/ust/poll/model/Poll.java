@@ -8,6 +8,7 @@ public class Poll {
 
 
     public static final String TABLE_NAME = "POLL";
+    public static final String POLLED_TABLE_NAME = "POLLED";
     public static final String TITLE = "title";
     public static final String OPTIONS = "options";
     public static final String END_AT = "endAt";

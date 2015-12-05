@@ -10,14 +10,46 @@ public class SelectPollFragment$$ViewBinder<T extends com.ust.poll.ui.fragment.S
     View view;
     view = finder.findOptionalView(source, 2131493995, null);
     target.txt_title = finder.castView(view, 2131493995, "field 'txt_title'");
-    view = finder.findRequiredView(source, 2131494025, "field 'btn_select_op1'");
+    view = finder.findRequiredView(source, 2131494025, "field 'btn_select_op1' and method 'onClick'");
     target.btn_select_op1 = finder.castView(view, 2131494025, "field 'btn_select_op1'");
-    view = finder.findRequiredView(source, 2131494026, "field 'btn_select_op2'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClick(p0);
+        }
+      });
+    view = finder.findRequiredView(source, 2131494026, "field 'btn_select_op2' and method 'onClick'");
     target.btn_select_op2 = finder.castView(view, 2131494026, "field 'btn_select_op2'");
-    view = finder.findRequiredView(source, 2131494027, "field 'btn_select_op3'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClick(p0);
+        }
+      });
+    view = finder.findRequiredView(source, 2131494027, "field 'btn_select_op3' and method 'onClick'");
     target.btn_select_op3 = finder.castView(view, 2131494027, "field 'btn_select_op3'");
-    view = finder.findRequiredView(source, 2131494028, "field 'btn_select_op4'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClick(p0);
+        }
+      });
+    view = finder.findRequiredView(source, 2131494028, "field 'btn_select_op4' and method 'onClick'");
     target.btn_select_op4 = finder.castView(view, 2131494028, "field 'btn_select_op4'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClick(p0);
+        }
+      });
   }
 
   @Override public void unbind(T target) {
