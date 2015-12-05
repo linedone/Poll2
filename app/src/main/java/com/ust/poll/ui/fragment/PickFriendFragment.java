@@ -1,11 +1,14 @@
 package com.ust.poll.ui.fragment;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.LoaderManager;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,19 +16,21 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.linedone.poll.R;
 import com.ust.poll.MainActivity;
+import com.ust.poll.model.PhoneContactInfo;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.ButterKnife;
 
 public class PickFriendFragment extends MainActivity.PlaceholderFragment implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
+    private static int FRAGMENT_CODE = 0;
     @Bind(R.id.btn_friend_list_submit) BootstrapButton btnSubmitFriendList;
 
     @Override
@@ -129,16 +134,24 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
                 checked += friendList.getItemAtPosition(i).toString()+"\n";
             }
         }
-        NewEventFragment fragment = new NewEventFragment();
-        Bundle bundle = this.getArguments();
+
         ArrayList contactNo = contactList("phone");
         String[] positionArray = checked.split("\\n");
-        fragment.setArguments(bundle);
-        getFragmentManager().popBackStack();
-
+        String eventMembers = "";
         for (int i=0; i<positionArray.length; i++){
-            String tempPhoneno = getPhoneNumber(positionArray[i],PickFriendFragment.super.getActivity());
-            Toast.makeText(PickFriendFragment.super.getActivity(), "" + tempPhoneno.replace("+852", ""), Toast.LENGTH_SHORT).show();
+            String tmpContactNo = getPhoneNumber(positionArray[i],PickFriendFragment.super.getActivity());
+            tmpContactNo = tmpContactNo.replace(" ", "");  // remove spaces
+            tmpContactNo = tmpContactNo.replace("+852", "");  // remove +852
+            eventMembers = eventMembers.concat(tmpContactNo);
+            if (i!=(positionArray.length-1)) {
+                eventMembers = eventMembers.concat(",");
+            }
         }
+        Log.i("Event Members", eventMembers);
+
+        Intent intent = new Intent();
+        intent.putExtra("eventMembers", eventMembers);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+        getFragmentManager().popBackStack();
     }
 }
