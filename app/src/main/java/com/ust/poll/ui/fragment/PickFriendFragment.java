@@ -5,9 +5,9 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v4.app.LoaderManager;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -29,14 +29,17 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.ButterKnife;
 
-public class PickFriendFragment extends MainActivity.PlaceholderFragment implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
+public class PickFriendFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener {
     private static int FRAGMENT_CODE = 0;
+    ArrayList contactName = new ArrayList();
+    ArrayList contactNumber = new ArrayList();
     @Bind(R.id.btn_friend_list_submit) BootstrapButton btnSubmitFriendList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_pickfriend, container, false);
         ButterKnife.bind(this, rootView);
+
         return rootView;
     }
 
@@ -48,7 +51,20 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ArrayList contactName = contactList("name");
+        ArrayList<PhoneContactInfo> arrContacts = getContactsByPhoneNo();
+        Iterator iterator = arrContacts.iterator();
+
+        // Traversing elements of ArrayList object
+        while (iterator.hasNext()){
+            PhoneContactInfo contact = (PhoneContactInfo)iterator.next();
+            if (!contactName.contains(contact.getContactName())){
+                contactName.add(contact.getContactName());
+            }
+            if (!contactNumber.contains(contact.getContactNumber())){
+                contactNumber.add(contact.getContactName());
+            }
+        }
+
         ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(PickFriendFragment.super.getActivity(), android.R.layout.simple_list_item_multiple_choice, contactName);
         ListView friendList = (ListView)getView().findViewById(R.id.friendList);
 
@@ -57,40 +73,33 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
         friendList.setAdapter(mAdapter);
 
         friendList.setOnItemClickListener(this);
-
-        // Prepare the loader. Either re-connect with an existing one, or start a new one.
-        getLoaderManager().initLoader(0, null, (LoaderManager.LoaderCallbacks<Cursor>) this);
     }
 
-    public ArrayList contactList (String contactType) {
-        final ArrayList contactNo = new ArrayList();
-        final ArrayList contactName = new ArrayList();
+    public ArrayList<PhoneContactInfo> getContactsByPhoneNo() {
+        ArrayList<PhoneContactInfo> arrContacts = new ArrayList<PhoneContactInfo>();
+        PhoneContactInfo phoneContactInfo = null;
+        Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+        Cursor cursor = getActivity().getBaseContext().getContentResolver().query(uri, new String[] {ContactsContract.CommonDataKinds.Phone.NUMBER,ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,ContactsContract.CommonDataKinds.Phone._ID}, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
 
-        ContentResolver contentResolver =  getActivity().getContentResolver();
-        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-        if (cursor.getCount()>0) {
-            while (cursor.moveToNext()) {
-                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+        cursor.moveToFirst();
+        while (cursor.isAfterLast() == false) {
+            String contactNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            String contactName =  cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            int phoneContactID = cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID));
 
-                if (Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                    String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                    contactName.add(name);
-                    Cursor pCur = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?", new String[]{id}, null);
-                    while (pCur.moveToNext()) {
-                        String phoneNo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        contactNo.add(phoneNo);
-                    }
-                    pCur.close();
-                }
+            phoneContactInfo = new PhoneContactInfo();
+            phoneContactInfo.setPhoneContactID(phoneContactID);
+            phoneContactInfo.setContactName(contactName);
+            phoneContactInfo.setContactNumber(contactNumber);
+            if (phoneContactInfo != null) {
+                arrContacts.add(phoneContactInfo);
             }
+            phoneContactInfo = null;
+            cursor.moveToNext();
         }
-
-        if (contactType.equals("name")) {
-            return contactName;
-        }
-        else {
-            return contactNo;
-        }
+        cursor.close();
+        cursor = null;
+        return arrContacts;
     }
 
     public String getPhoneNumber(String name, Context context) {
@@ -108,21 +117,6 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
         return ret;
     }
 
-    @Override
-    public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
-
-    }
-
     @OnClick(R.id.btn_friend_list_submit)
     public void fnPickFriendSubmit(View view) {
         ListView friendList = (ListView)getView().findViewById(R.id.friendList);
@@ -135,7 +129,6 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
             }
         }
 
-        ArrayList contactNo = contactList("phone");
         String[] positionArray = checked.split("\\n");
         String eventMembers = "";
         for (int i=0; i<positionArray.length; i++){
