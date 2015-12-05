@@ -68,7 +68,10 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
         super.onActivityCreated(savedInstanceState);
 
 
-        ArrayList contactName = PhoneName("name");
+        ArrayList contactName = PhoneContact("name");
+
+
+        //ArrayList contactName = new ArrayList();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(NewPollFragment_PickFriend.super.getActivity(), android.R.layout.simple_list_item_multiple_choice, contactName);
 
@@ -100,12 +103,10 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
 
     }
 
-public ArrayList PhoneName (String contactType){
+public ArrayList PhoneContact (String contactType){
 
+    final ArrayList InfoContact =new ArrayList();
 
-
-    final ArrayList contactPhone =new ArrayList();
-    final ArrayList contactName =new ArrayList();
 
     ContentResolver cr =  getActivity().getContentResolver();
     Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
@@ -118,7 +119,12 @@ public ArrayList PhoneName (String contactType){
                     cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
 
                 String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                contactName.add(name);
+
+
+                if(contactType.equals("name")){
+                    InfoContact.add(name);
+                }
+
                 Cursor pCur = cr.query(
                         ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                         null,
@@ -127,7 +133,9 @@ public ArrayList PhoneName (String contactType){
                 while (pCur.moveToNext()) {
                     String phoneNo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                    contactPhone.add(phoneNo);
+                    if(contactType.equals("phone")){
+                        InfoContact.add(phoneNo);
+                    }
                     //String name = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME_PRIMARY));
                     //Toast.makeText(NewPollFragment_PickFriend.super.getActivity(), "Name: " + name + ", Phone No: " + phoneNo, Toast.LENGTH_SHORT).show();
                     //contactPhone.add(name);
@@ -139,11 +147,9 @@ public ArrayList PhoneName (String contactType){
         }
     }
 
-    if(contactType.equals("name")){
-        return contactName;
-    }else{
-        return contactPhone;
-    }
+
+        return InfoContact;
+
 
 }
 
@@ -201,7 +207,7 @@ public ArrayList PhoneName (String contactType){
         Integer hour = bundle.getInt("hour");
         Integer minute = bundle.getInt("minute");
 
-        ArrayList contactPhone = PhoneName("phone");
+        ArrayList contactPhone = PhoneContact("phone");
 
         String[] positionArray = checked.split("\\n");
 
