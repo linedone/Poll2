@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.linedone.poll.R;
 import com.parse.FindCallback;
@@ -112,6 +113,16 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
                             //Toast.makeText(ActivePollFragment.super.getActivity(), "" + idList.get(itemPosition),
                             //         Toast.LENGTH_LONG).show();
                             //idList.get(itemPosition);
+
+
+                            SelectPollFragment fragment = new SelectPollFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("pollID", idList.get(itemPosition));
+                            fragment.setArguments(bundle);
+                            getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+
+
+
                         }
                     });
                 }
