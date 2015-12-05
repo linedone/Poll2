@@ -135,5 +135,8 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         //intent.putExtra("option3", option3.getText().toString());
         //intent.putExtra("option4", option4.getText().toString());
         //getActivity().startActivity(intent);
+
+
+        //YEAH YEAH YEAH
     }
 }
