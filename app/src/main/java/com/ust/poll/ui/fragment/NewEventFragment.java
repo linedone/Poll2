@@ -1,9 +1,7 @@
 package com.ust.poll.ui.fragment;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -23,25 +21,22 @@ import android.widget.Toast;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.linedone.poll.R;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
+import com.parse.ParseQuery;
 import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 import com.ust.poll.MainActivity;
-import com.ust.poll.model.Poll;
 import com.ust.poll.ui.dialog.DialogHelper;
-import com.ust.poll.util.Util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import butterknife.Bind;
@@ -76,7 +71,9 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        //TODO: Doesn't work!!!
         if (savedInstanceState != null) {
+            Log.i("Restore Bundle", savedInstanceState.toString());
             txt_etitle.setText(savedInstanceState.getString("txt_etitle"));
             txt_eDate.setText(savedInstanceState.getString("txt_eDate"));
             txt_eTime.setText(savedInstanceState.getString("txt_eTime"));
@@ -161,7 +158,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
         outState.putString("txt_eTime", txt_eTime.getText().toString());
         outState.putString("txt_eVenue", txt_eVenue.getText().toString());
         outState.putString("txt_eRemarkURL", txt_eRemarkURL.getText().toString());
-        Toast.makeText(getActivity(), "State Saved", Toast.LENGTH_LONG).show();
+        Log.i("State Saved", outState.toString());
     }
 
     @Override
@@ -264,43 +261,44 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
         boolean isValidInput = fnEventInputValidation(view);
 
         if(isValidInput) {
-            File f = new File(imgDecodableString);
-            ParseFile file = new ParseFile(f.getName().toString(), imgFile);
-            file.saveInBackground(new SaveCallback() {
-                public void done(ParseException e) {
-                    if (e == null) {
-                        Log.i("PhotoUpload", "Photo upload successful.");
-                    } else {
-                        Log.e("PhotoUpload", "Photo upload failed. " + e);
-                    }
-                }
-            }, new ProgressCallback() {
-                public void done(Integer percentDone) {
-                    // Update your progress spinner here.
-                    // percentDone will be between 0 and 100.
-                }
-            });
-
             ParseObject eventObject = new ParseObject("Event");
             eventObject.put("EventTitle", txt_etitle.getText().toString());
             eventObject.put("EventDate", txt_eDate.getText().toString());
             eventObject.put("EventTime", txt_eTime.getText().toString());
             eventObject.put("EventVenue", txt_eVenue.getText().toString());
             eventObject.put("EventRemarkURL", txt_eRemarkURL.getText().toString());
-            eventObject.put("EventPhoto", file);
-            eventObject.put("EventMembers", eventMembers);
-
-            //TODO: check parseId get or not
-            String parseId = eventObject.getObjectId();
-
-            eventObject.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    DialogHelper.fnCloseDialog();
-                    if (e == null) {
-                        Toast.makeText(getActivity().getApplicationContext(), "Poll Successfully created.", Toast.LENGTH_LONG).show();
+            if (imgDecodableString!=null) {
+                File f = new File(imgDecodableString);
+                ParseFile file = new ParseFile(f.getName().toString(), imgFile);
+                file.saveInBackground(new SaveCallback() {
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            Log.i("PhotoUpload", "Photo upload successful.");
+                        } else {
+                            Log.e("PhotoUpload", "Photo upload failed. " + e);
+                        }
                     }
-                    else {
+                }, new ProgressCallback() {
+                    public void done(Integer percentDone) {
+                        // Update your progress spinner here.
+                        // percentDone will be between 0 and 100.
+                    }
+                });
+                eventObject.put("EventPhoto", file);
+            }
+            eventObject.put("EventMembers", eventMembers);
+            eventObject.saveInBackground();
+
+            eventObject.fetchInBackground(new GetCallback<ParseObject>() {
+                public void done(ParseObject object, ParseException e) {
+                    if (e == null) {
+                        // Success!
+                        String objectId = object.getObjectId();
+                        fnSendPushNotification(objectId, eventMembers);
+                        Toast.makeText(getActivity().getApplicationContext(), "Event created successfully.", Toast.LENGTH_LONG).show();
+                        Log.d("ObjectID", objectId);
+                    } else {
+                        // Failure!
                         Toast.makeText(getActivity().getApplicationContext(), "Error in connecting server...", Toast.LENGTH_LONG).show();
                     }
                 }
@@ -308,11 +306,22 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
         }
     }
 
-    private void fnSendPushNotification() {
-        ParsePush push = new ParsePush();
-        push.setChannel(Util.PARSE_CHANNEL);
-        push.setMessage(txt_etitle.getText().toString());
-        //push.setExpirationTime(1424841505);
-        push.sendInBackground();
+    private void fnSendPushNotification(String objectId, String phoneList) {
+        String[] userArray = phoneList.split(",");
+
+        for (int i=0; i<userArray.length; i++) {
+            ParsePush push = new ParsePush();
+            ParseQuery query = ParseInstallation.getQuery();
+            query.whereEqualTo("username", userArray[i]);
+            push.setQuery(query);
+            push.setMessage("New Event");
+            push.sendInBackground();
+        }
+
+        ActiveEventFragment fragment = new ActiveEventFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("objectId", objectId);
+        fragment.setArguments(bundle);
+        getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
     }
 }

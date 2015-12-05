@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.linedone.poll.R;
 import com.parse.ParseUser;
 import com.ust.poll.fragment.NavigationDrawerFragment;
+import com.ust.poll.ui.fragment.ActiveEventFragment;
 import com.ust.poll.ui.fragment.ActivePollFragment;
 import com.ust.poll.ui.fragment.FriendListFragment;
 import com.ust.poll.ui.fragment.MainFragment;
@@ -72,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                 break;
             case 5:
                 mTitle = getString(R.string.title_section5);
+                break;
+            case 6:
+                mTitle = getString(R.string.title_section6);
                 break;
         }
     }
@@ -145,6 +149,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                     fragment = new NewPollFragment();
                     break;
                 case 5:
+                    fragment = new ActiveEventFragment();
+                    break;
+                case 6:
                     fragment = new NewEventFragment();
                     break;
                 default:

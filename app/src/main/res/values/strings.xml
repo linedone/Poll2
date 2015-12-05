@@ -36,7 +36,8 @@
     <string name="title_section2">Poll Result</string>
     <string name="title_section3">Friend List</string>
     <string name="title_section4">New Poll</string>
-    <string name="title_section5">New Event</string>
+    <string name="title_section5">Active Event</string>
+    <string name="title_section6">New Event</string>
 
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -62,4 +63,7 @@
 
     <!-- Friend List Fragment -->
     <string name="text_friend_list_submit">Done</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
