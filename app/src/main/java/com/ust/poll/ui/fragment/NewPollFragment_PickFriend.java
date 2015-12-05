@@ -3,6 +3,7 @@ package com.ust.poll.ui.fragment;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
@@ -25,6 +26,7 @@ import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 import com.ust.poll.MainActivity;
+import com.ust.poll.model.PhoneContactInfo;
 import com.ust.poll.model.Poll;
 import com.ust.poll.ui.dialog.DialogHelper;
 
@@ -32,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -67,18 +70,26 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        ArrayList contactName = new ArrayList();
+        ArrayList<PhoneContactInfo> arrContacts = getAllPhoneContacts();
 
-        ArrayList contactName = PhoneContact("name");
+        Iterator itr = arrContacts.iterator();
+        //traversing elements of ArrayList object
+        while(itr.hasNext()){
+            PhoneContactInfo contact=(PhoneContactInfo)itr.next();
 
+            if (contactName.contains(contact.getContactName())){
+            }else{
+                contactName.add(contact.getContactName());
+            }
+        }
 
-        //ArrayList contactName = new ArrayList();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(NewPollFragment_PickFriend.super.getActivity(), android.R.layout.simple_list_item_multiple_choice, contactName);
 
         ListView friendList = (ListView)getView().findViewById(R.id.friendList);
 
         // Assign adapter to ListView
-
         friendList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         friendList.setAdapter(adapter);
 
@@ -103,55 +114,6 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
 
     }
 
-public ArrayList PhoneContact (String contactType){
-
-    final ArrayList InfoContact =new ArrayList();
-
-
-    ContentResolver cr =  getActivity().getContentResolver();
-    Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
-            null, null, null, null);
-    if (cur.getCount() > 0) {
-        while (cur.moveToNext()) {
-            String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
-
-            if (Integer.parseInt(cur.getString(
-                    cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-
-                String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-
-
-                if(contactType.equals("name")){
-                    InfoContact.add(name);
-                }
-
-                Cursor pCur = cr.query(
-                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                        null,
-                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?",
-                        new String[]{id}, null);
-                while (pCur.moveToNext()) {
-                    String phoneNo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                    if(contactType.equals("phone")){
-                        InfoContact.add(phoneNo);
-                    }
-                    //String name = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME_PRIMARY));
-                    //Toast.makeText(NewPollFragment_PickFriend.super.getActivity(), "Name: " + name + ", Phone No: " + phoneNo, Toast.LENGTH_SHORT).show();
-                    //contactPhone.add(name);
-
-
-                }
-                pCur.close();
-            }
-        }
-    }
-
-
-        return InfoContact;
-
-
-}
 
     public String getPhoneNumber(String name, Context context) {
         String ret = null;
@@ -207,7 +169,22 @@ public ArrayList PhoneContact (String contactType){
         Integer hour = bundle.getInt("hour");
         Integer minute = bundle.getInt("minute");
 
-        ArrayList contactPhone = PhoneContact("phone");
+        //ArrayList contactPhone = PhoneContact("phone");
+
+        ArrayList contactPhone = new ArrayList();
+        ArrayList<PhoneContactInfo> arrContacts = getAllPhoneContacts();
+
+        Iterator itr = arrContacts.iterator();
+        //traversing elements of ArrayList object
+        while(itr.hasNext()){
+            PhoneContactInfo contact=(PhoneContactInfo)itr.next();
+
+            if (contactPhone.contains(contact.getContactNumber().toString())){
+            }else{
+                contactPhone.add(contact.getContactNumber().toString());
+            }
+        }
+
 
         String[] positionArray = checked.split("\\n");
 
@@ -339,5 +316,42 @@ public ArrayList PhoneContact (String contactType){
         //parsePush.setExpirationTime(1424841505);
         //parsePush.sendInBackground();
     }
+
+
+
+    public ArrayList<PhoneContactInfo> getAllPhoneContacts() {
+        Log.d("START","Getting all Contacts");
+
+
+        ArrayList<PhoneContactInfo> arrContacts = new ArrayList<PhoneContactInfo>();
+        PhoneContactInfo phoneContactInfo=null;
+        Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+        Cursor cursor = getActivity().getBaseContext().getContentResolver().query(uri, new String[] {ContactsContract.CommonDataKinds.Phone.NUMBER,ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,ContactsContract.CommonDataKinds.Phone._ID}, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+        cursor.moveToFirst();
+        while (cursor.isAfterLast() == false)
+        {
+            String contactNumber= cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            String contactName =  cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            int phoneContactID = cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID));
+
+
+            phoneContactInfo = new PhoneContactInfo();
+            phoneContactInfo.setPhoneContactID(phoneContactID);
+            phoneContactInfo.setContactName(contactName);
+            phoneContactInfo.setContactNumber(contactNumber);
+            if (phoneContactInfo != null)
+            {
+                arrContacts.add(phoneContactInfo);
+            }
+            phoneContactInfo = null;
+            cursor.moveToNext();
+        }
+        cursor.close();
+        cursor = null;
+        Log.d("END","Got all Contacts");
+        return arrContacts;
+    }
+
+
 
     }
