@@ -9,16 +9,15 @@ public class PhoneContactInfo implements Serializable {
     private String ContactName;
     private String ContactNumber;
 
-
     public PhoneContactInfo(){
 
     }
+
     public PhoneContactInfo(int PhoneContactID, String ContactName, String ContactNumber){
         this.PhoneContactID = PhoneContactID;
         this.ContactName = ContactName;
         this.ContactNumber = ContactNumber;
     }
-
 
     public int getPhoneContactID() {
         return PhoneContactID;
@@ -38,7 +37,6 @@ public class PhoneContactInfo implements Serializable {
     }
 
 
-
     public String getContactNumber() {
         return ContactNumber;
     }
@@ -46,9 +44,5 @@ public class PhoneContactInfo implements Serializable {
     public void setContactNumber(String ContactNumber) {
         this.ContactNumber = ContactNumber;
     }
-
-
-
-
 }
 

@@ -1,6 +1,5 @@
 package com.ust.poll.model;
 
-
 import java.io.Serializable;
 
 public class NewPoll implements Serializable {
@@ -14,11 +13,11 @@ public class NewPoll implements Serializable {
     private String option4;
     private String friend;
 
-
     public NewPoll(){
 
     }
-    public NewPoll(String date, String time, String title, String option1, String option2, String option3, String option4, String friend){
+
+    public NewPoll (String date, String time, String title, String option1, String option2, String option3, String option4, String friend) {
         this.date = date;
         this.time = time;
         this.title = title;
@@ -42,6 +41,7 @@ public class NewPoll implements Serializable {
     public String toDisplayString() {
         return activity + " " + date + " " + bktype;
     }
+
     public String toString() {
         return "[DT:" + date + ",T:" + time + ",Centre:" + centre + ",CRT:"
                 + court + ",ACT:" + activity + ",PRI:" + price + ",USERID:"
@@ -73,7 +73,6 @@ public class NewPoll implements Serializable {
         this.option1 = option1;
     }
 
-
     public String getOption2() {
         return option2;
     }
@@ -81,7 +80,6 @@ public class NewPoll implements Serializable {
     public void setOption2(String option2) {
         this.option2 = option2;
     }
-
 
     public String getOption3() {
         return option3;
@@ -91,7 +89,6 @@ public class NewPoll implements Serializable {
         this.option3 = option3;
     }
 
-
     public String getOption4() {
         return option4;
     }
@@ -100,7 +97,6 @@ public class NewPoll implements Serializable {
         this.option4 = option4;
     }
 
-
     public String getFriend() {
         return friend;
     }
@@ -108,8 +104,5 @@ public class NewPoll implements Serializable {
     public void setFriend(String friend) {
         this.friend = friend;
     }
-
-
-
 }
 
