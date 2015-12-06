@@ -1,61 +1,72 @@
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card_view"
-    android:layout_gravity="center"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    card_view:cardCornerRadius="4dp"
-    android:layout_margin="5dp">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary">
-    </android.support.v7.widget.Toolbar>
-
-    <LinearLayout
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.ust.poll.MainActivity$PlaceholderFragment">
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:weightSum="1">
-        <TextView
-            android:id="@+id/txt_aeTitle"
-            android:layout_height="60dp"
-            android:textSize="20sp"
-            android:layout_margin="4dp"
-            android:textColor="@color/default_color"
-            android:layout_width="match_parent" />
-        <TextView
-            android:id="@+id/txt_aeDate"
+        card_view:cardCornerRadius="4dp"
+        android:layout_margin="5dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textSize="20sp"
-            android:layout_margin="4dp" />
-        <TextView
-            android:id="@+id/txt_aeTime"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textSize="20sp"
-            android:layout_margin="4dp" />
-        <TextView
-            android:id="@+id/txt_aeVenue"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textSize="20sp"
-            android:layout_margin="4dp" />
-        <TextView
-            android:id="@+id/txt_aeRemarkURL"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary">
+        </android.support.v7.widget.Toolbar>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:layout_margin="4dp" />
-        <ImageView
-            android:id="@+id/img_eaPhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_gravity="center"/>
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+            android:orientation="vertical"
+            android:weightSum="1">
+            <TextView
+                android:id="@+id/txt_aeTitle"
+                android:layout_height="60dp"
+                android:textSize="20sp"
+                android:layout_margin="4dp"
+                android:textColor="@color/default_color"
+                android:layout_width="match_parent" />
+            <TextView
+                android:id="@+id/txt_aeDate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="20sp"
+                android:layout_margin="4dp" />
+            <TextView
+                android:id="@+id/txt_aeTime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="20sp"
+                android:layout_margin="4dp" />
+            <TextView
+                android:id="@+id/txt_aeVenue"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="20sp"
+                android:layout_margin="4dp" />
+            <TextView
+                android:id="@+id/txt_aeRemarkURL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_margin="4dp" />
+            <ImageView
+                android:id="@+id/img_eaPhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

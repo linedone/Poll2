@@ -25,11 +25,11 @@ import butterknife.ButterKnife;
 
 public class ActiveEventFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener {
 
-    String[] strTitle = {"TEST1", "TEST2", "TEST3", "TEST4", "TEST5", "TEST6", "TEST7", "TEST8", "TEST9", "TEST10", "TEST11", "TEST12", "TEST13", "TEST14", "TEST15"};
-    String[] strDate = {"TEST1", "TEST2", "TEST3", "TEST4", "TEST5", "TEST6", "TEST7", "TEST8", "TEST9", "TEST10", "TEST11", "TEST12", "TEST13", "TEST14", "TEST15"};;
+    String[] strTitle = {"TEST1", "TEST2", "TEST3", "TEST4"};
+    String[] strDate = {"TEST1", "TEST2", "TEST3", "TEST4"};;
     String[] strTime = {"TEST1", "TEST2", "TEST3", "TEST4", "TEST5", "TEST6", "TEST7", "TEST8", "TEST9", "TEST10", "TEST11", "TEST12", "TEST13", "TEST14", "TEST15"};;
     String[] strVenue = {"TEST1", "TEST2", "TEST3", "TEST4", "TEST5", "TEST6", "TEST7", "TEST8", "TEST9", "TEST10", "TEST11", "TEST12", "TEST13", "TEST14", "TEST15"};;
-    String[] strRemarkURL = {"TEST1", "TEST2", "TEST3", "TEST4", "TEST5", "TEST6", "TEST7", "TEST8", "TEST9", "TEST10", "TEST11", "TEST12", "TEST13", "TEST14", "TEST15"};;
+    String[] strRemarkURL = {"TEST1", "TEST2", "TEST3", "TEST4", "TEST5"};;
     //byte[] imageEvent;
 
     ListView eventList;
@@ -47,8 +47,9 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
         super.onActivityCreated(savedInstanceState);
 
         eventList = (ListView)getActivity().findViewById(R.id.activeEventListView);
-        EventAdapter mAdapter = new EventAdapter(getActivity().getApplicationContext(), strTitle, strDate, strTime, strVenue, strRemarkURL);
+        EventAdapter mAdapter = new EventAdapter(getActivity(), strTitle, strDate, strTime, strVenue, strRemarkURL);
         eventList.setAdapter(mAdapter);
+        eventList.setOnItemClickListener(this);
 
 //        ParseUser user = ParseUser.getCurrentUser();
 //        String objectId = user.getObjectId();
@@ -85,6 +86,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int itemPosition = position;
+        Toast.makeText(getActivity().getApplicationContext(), "Item "+position+" selected.", Toast.LENGTH_LONG).show();
 
 //        DetailEventFragment fragment = new DetailEventFragment();
 //        Bundle bundle = new Bundle();
