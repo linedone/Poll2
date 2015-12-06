@@ -3,6 +3,7 @@ package com.ust.poll.ui.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +24,7 @@ import com.parse.ParseUser;
 import com.ust.poll.MainActivity;
 import com.ust.poll.activity.LoginActivity;
 import com.ust.poll.model.Poll;
+import com.ust.poll.model.Polled;
 import com.ust.poll.ui.dialog.DialogHelper;
 
 import java.text.SimpleDateFormat;
@@ -74,7 +76,8 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
         DialogHelper.fnShowDialog(this.getContext());
 
         ParseUser user = ParseUser.getCurrentUser();
-        String username = user.getUsername();
+        final String username = user.getUsername();
+        final String userid = user.getObjectId();
 
         final ArrayList<String> idList = new ArrayList<String>();
 
@@ -88,13 +91,39 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
                 if (e == null) {
                     int counter = 0;
                     for (ParseObject p : objects) {
-                        String id = p.getObjectId();
+                        final String id = p.getObjectId();
                         idList.add(id);
-                        String t = p.get(Poll.TITLE).toString();
+                        final String t = p.get(Poll.TITLE).toString();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMM-dd HH:mm");
-                        String dt = sdf.format((Date)p.get(Poll.END_AT));
-                        String op = p.get(Poll.OPTIONS).toString();
-                        list.add(t + "||" + dt+"||"+op);
+                        final String dt = sdf.format((Date)p.get(Poll.END_AT));
+                        final String op = p.get(Poll.OPTIONS).toString();
+                        list.add(t + "||" + dt + "||" + op);
+
+                        ParseQuery<ParseObject> polledquery = ParseQuery.getQuery(Polled.TABLE_NAME);
+                        polledquery.whereEqualTo(Polled.POLLID, id);
+                        polledquery.whereEqualTo(Polled.USERID, userid);
+                        polledquery.findInBackground(new FindCallback<ParseObject>() {
+                            public void done(List<ParseObject> objects2, ParseException ee) {
+                                if (ee == null) {
+                                    //for (ParseObject pp : objects2) {
+                                        //list.remove(list.size()-1);
+                                    //list.clear();
+                                    //}
+                                    //list.remove(t + "||" + dt + "||" + op);
+
+                                    //Log.d("active", "" + id);
+                                    //Log.d("active", "" + userid);
+
+                                } else {
+
+                                    //Log.d("active", "" + id);
+                                    //Log.d("active", "" + userid);
+                                }
+
+                            }
+                        });
+
+
                         counter++;
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(ctx,android.R.layout.simple_list_item_1, android.R.id.text1, list);
