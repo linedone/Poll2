@@ -225,6 +225,9 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
         else if (txt_etitle.getText().toString().length()==0) {
             txt_etitle.setError("Event Title is required!");
         }
+        else if (txt_etitle.getText().toString().length()>90) {
+            txt_etitle.setError("Event Title maximum 90 character letters!");
+        }
         else if (txt_eDate.getText().toString().length()==0) {
             txt_eDate.setError("Event Date is required!");
         }
@@ -295,11 +298,11 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                         // Success!
                         String objectId = object.getObjectId();
                         fnSendPushNotification(objectId, eventMembers);
-                        Toast.makeText(getActivity().getApplicationContext(), "Event created successfully.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity().getApplicationContext(), "Event created successfully!", Toast.LENGTH_LONG).show();
                         Log.d("ObjectID", objectId);
                     } else {
                         // Failure!
-                        Toast.makeText(getActivity().getApplicationContext(), "Error in connecting server...", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity().getApplicationContext(), "Server connection failure...", Toast.LENGTH_LONG).show();
                     }
                 }
             });
