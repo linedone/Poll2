@@ -269,7 +269,12 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
             eventObject.put("EventDate", txt_eDate.getText().toString());
             eventObject.put("EventTime", txt_eTime.getText().toString());
             eventObject.put("EventVenue", txt_eVenue.getText().toString());
-            eventObject.put("EventRemarkURL", txt_eRemarkURL.getText().toString());
+            if (txt_eRemarkURL.getText().length()==0) {
+                eventObject.put("EventRemarkURL", "N/A");
+            }
+            else {
+                eventObject.put("EventRemarkURL", txt_eRemarkURL.getText().toString());
+            }
             if (imgDecodableString!=null) {
                 File f = new File(imgDecodableString);
                 ParseFile file = new ParseFile(f.getName().toString(), imgFile);
