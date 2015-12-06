@@ -1366,6 +1366,7 @@
     <string name="btn_event_create">Create Event</string>
     <string name="btn_event_pick_friend_list">Pick Friends</string>
     <string name="btn_event_pick_photo">Upload Photo</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="parse_app_id">Hw4xO8CIqVxU0RhCH1z623XBosgjM6wz3cKmVBMR</string>
@@ -1407,7 +1408,8 @@
     <string name="title_section2">Poll Result</string>
     <string name="title_section3">Friend List</string>
     <string name="title_section4">New Poll</string>
-    <string name="title_section5">New Event</string>
+    <string name="title_section5">Active Event</string>
+    <string name="title_section6">New Event</string>
     <string name="title_vote">Vote</string>
     <!-- From: file:/Users/ken/Desktop/Poll2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/values/values.xml -->
     <eat-comment/>
