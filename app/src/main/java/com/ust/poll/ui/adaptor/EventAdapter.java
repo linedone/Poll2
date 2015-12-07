@@ -1,8 +1,6 @@
 package com.ust.poll.ui.adaptor;
 
-import android.app.Fragment;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +8,8 @@ import android.widget.ArrayAdapter;
 
 import com.linedone.poll.R;
 import com.ust.poll.model.EventViewHolder;
+
+import java.util.ArrayList;
 
 public class EventAdapter extends ArrayAdapter<String>
 {
@@ -21,15 +21,15 @@ public class EventAdapter extends ArrayAdapter<String>
     String[] arrayVenues;
     String[] arrayRemarkURLs;
 
-    public EventAdapter(Context context, String[] strTitle, String[] strDate, String[] strTime, String[] strVenue, String[] strRemarkURL) {
-        super(context, R.layout.fragment_active_event_item, R.id.txt_aeTitle, strTitle);
+    public EventAdapter(Context context, ArrayList<String> strTitles, ArrayList<String> strDates, ArrayList<String> strTimes, ArrayList<String> strVenues, ArrayList<String> strRemarkURLs) {
+        super(context, R.layout.fragment_active_event_item, R.id.txt_aeTitle, strTitles);
         this.context = context;
 
-        this.arrayTitles = strTitle;
-        this.arrayDates = strDate;
-        this.arrayTimes = strTime;
-        this.arrayVenues = strVenue;
-        this.arrayRemarkURLs = strRemarkURL;
+        this.arrayTitles = strTitles.toArray(new String[strTitles.size()]);
+        this.arrayDates = strDates.toArray(new String[strDates.size()]);
+        this.arrayTimes = strTimes.toArray(new String[strTimes.size()]);
+        this.arrayVenues = strVenues.toArray(new String[strVenues.size()]);
+        this.arrayRemarkURLs = strRemarkURLs.toArray(new String[strRemarkURLs.size()]);
     }
 
     @Override
@@ -48,10 +48,10 @@ public class EventAdapter extends ArrayAdapter<String>
         }
 
         holder.txtTitle.setText(arrayTitles[position]);
-        holder.txtDate.setText(arrayDates[position]);
-        holder.txtTime.setText(arrayTimes[position]);
-        holder.txtVenue.setText(arrayVenues[position]);
-        holder.txtRemarkURL.setText(arrayRemarkURLs[position]);
+        holder.txtDate.setText("Event Date: " + arrayDates[position]);
+        holder.txtTime.setText("Event Time: " + arrayTimes[position]);
+        holder.txtVenue.setText("Event Venue: " + arrayVenues[position]);
+        holder.txtRemarkURL.setText("Event Remarks: " + arrayRemarkURLs[position]);
         //holder.imgPhoto.setImageBitmap(arrayImages[position]);
 
         return vRow;

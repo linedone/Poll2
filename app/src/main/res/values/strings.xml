@@ -56,7 +56,7 @@
     <string name="text_event_date">Event Date</string>
     <string name="text_event_time">Event Time</string>
     <string name="text_event_venue">Meeting Place / Venue</string>
-    <string name="text_event_remark_url">Remarks / URL</string>
+    <string name="text_event_remark_url">Remarks</string>
     <string name="btn_event_pick_photo">Upload Photo</string>
     <string name="btn_event_pick_friend_list">Pick Friends</string>
     <string name="btn_event_create">Create Event</string>

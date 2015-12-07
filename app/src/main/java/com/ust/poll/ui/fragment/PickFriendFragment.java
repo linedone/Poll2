@@ -134,7 +134,7 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
         for (int i=0; i<positionArray.length; i++){
             String tmpContactNo = getPhoneNumber(positionArray[i],PickFriendFragment.super.getActivity());
             tmpContactNo = tmpContactNo.replace(" ", "");  // remove spaces
-            tmpContactNo = tmpContactNo.replace("+852", "");  // remove +852
+            tmpContactNo = tmpContactNo.replace("-", "");  // remove hyphen
             eventMembers = eventMembers.concat(tmpContactNo);
             if (i!=(positionArray.length-1)) {
                 eventMembers = eventMembers.concat(",");

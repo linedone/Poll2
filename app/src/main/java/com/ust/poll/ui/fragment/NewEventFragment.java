@@ -1,6 +1,7 @@
 package com.ust.poll.ui.fragment;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -31,12 +32,12 @@ import com.parse.ParseQuery;
 import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 import com.ust.poll.MainActivity;
-import com.ust.poll.ui.dialog.DialogHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import butterknife.Bind;
@@ -46,6 +47,7 @@ import butterknife.OnClick;
 public class NewEventFragment extends MainActivity.PlaceholderFragment {
     private static int FRAGMENT_CODE = 0;
     private static int RESULT_LOAD_IMG = 1;
+    private ProgressDialog progressDialog;
     String imgDecodableString;
     byte[] imgFile;
     String eventMembers;
@@ -92,12 +94,10 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
 
         DatePickerDialog mDatePicker = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker datepicker, int year, int monthOfYear, int dayOfMonth) {
-                String myFormat = "yyyy-MM-dd";
-                SimpleDateFormat sdFormat = new SimpleDateFormat(myFormat, Locale.UK);
+                SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.UK);
                 eventDate.set(Calendar.YEAR, year);
                 eventDate.set(Calendar.MONTH, monthOfYear);
                 eventDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
                 todayDate.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
                 todayDate.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH));
                 todayDate.set(Calendar.DAY_OF_MONTH, Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
@@ -264,6 +264,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
         boolean isValidInput = fnEventInputValidation(view);
 
         if(isValidInput) {
+            progressDialog = ProgressDialog.show(getActivity(), "", "Saving record...", true);
             ParseObject eventObject = new ParseObject("Event");
             eventObject.put("EventTitle", txt_etitle.getText().toString());
             eventObject.put("EventDate", txt_eDate.getText().toString());
@@ -288,8 +289,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                     }
                 }, new ProgressCallback() {
                     public void done(Integer percentDone) {
-                        // Update your progress spinner here.
-                        // percentDone will be between 0 and 100.
+
                     }
                 });
                 eventObject.put("EventPhoto", file);
@@ -305,6 +305,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                         fnSendPushNotification(objectId, eventMembers);
                         Toast.makeText(getActivity().getApplicationContext(), "Event created successfully!", Toast.LENGTH_LONG).show();
                         Log.d("ObjectID", objectId);
+                        progressDialog.dismiss();
                     } else {
                         // Failure!
                         Toast.makeText(getActivity().getApplicationContext(), "Server connection failure...", Toast.LENGTH_LONG).show();
