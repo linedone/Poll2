@@ -3,8 +3,6 @@ package com.ust.poll.ui.fragment;
 import android.app.ProgressDialog;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,22 +33,36 @@ import butterknife.ButterKnife;
 
 public class ActiveEventFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener {
     private ProgressDialog progressDialog;
-    final ArrayList<String> strEventIds = new ArrayList<String>();
-    final ArrayList<String> strTitles = new ArrayList<String>();
-    final ArrayList<String> strDates = new ArrayList<String>();
-    final ArrayList<String> strTimes = new ArrayList<String>();
-    final ArrayList<String> strVenues = new ArrayList<String>();
-    final ArrayList<String> strRemarkURLs = new ArrayList<String>();
-    final ArrayList<String> strMembers = new ArrayList<String>();
-    final ArrayList<String> strImages = new ArrayList<String>();
+    ArrayList<String> strEventIds;
+    ArrayList<String> strTitles;
+    ArrayList<String> strDates;
+    ArrayList<String> strTimes;
+    ArrayList<String> strVenues;
+    ArrayList<String> strRemarkURLs;
+    ArrayList<String> strMembers;
+    ArrayList<String> strImages;
     ListView eventList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_active_event, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_event_active, container, false);
         ButterKnife.bind(this, rootView);
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        strEventIds = new ArrayList<String>();
+        strTitles = new ArrayList<String>();
+        strDates = new ArrayList<String>();
+        strTimes = new ArrayList<String>();
+        strVenues = new ArrayList<String>();
+        strRemarkURLs = new ArrayList<String>();
+        strMembers = new ArrayList<String>();
+        strImages = new ArrayList<String>();
     }
 
     @Override
@@ -126,11 +138,10 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //        DetailEventFragment fragment = new DetailEventFragment();
-        //        Bundle bundle = new Bundle();
-        //        bundle.putString("objectID", idList.get(itemPosition));
-        //        fragment.setArguments(bundle);
-        //        getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
-        Toast.makeText(getActivity().getApplicationContext(), "Item "+position+" clicked.", Toast.LENGTH_LONG).show();
+        DetailFriendListEventFragment fragment = new DetailFriendListEventFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("objectId", strEventIds.get(position));
+        fragment.setArguments(bundle);
+        getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
     }
 }

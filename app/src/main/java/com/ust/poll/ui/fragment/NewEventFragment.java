@@ -156,6 +156,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
         outState.putString("txt_eTime", txt_eTime.getText().toString());
         outState.putString("txt_eVenue", txt_eVenue.getText().toString());
         outState.putString("txt_eRemarkURL", txt_eRemarkURL.getText().toString());
+        getFragmentManager().beginTransaction().remove(this);
         Log.i("State Saved", outState.toString());
     }
 

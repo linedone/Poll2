@@ -10,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,11 +21,11 @@ import com.parse.ParseUser;
 import com.ust.poll.fragment.NavigationDrawerFragment;
 import com.ust.poll.ui.fragment.ActiveEventFragment;
 import com.ust.poll.ui.fragment.ActivePollFragment;
+import com.ust.poll.ui.fragment.DetailFriendListEventFragment;
 import com.ust.poll.ui.fragment.FriendListFragment;
 import com.ust.poll.ui.fragment.MainFragment;
 import com.ust.poll.ui.fragment.NewEventFragment;
 import com.ust.poll.ui.fragment.NewPollFragment;
-import com.ust.poll.ui.fragment.NewPollFragment_DateTime;
 import com.ust.poll.ui.fragment.PollResultFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -205,6 +204,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                 case 6:
                     fragment = new NewEventFragment();
                     break;
+                case 7:
+                    fragment = new DetailFriendListEventFragment();
+                    break;
+
                 default:
                     fragment = new MainFragment();
                     break;

@@ -24,7 +24,7 @@ public class EventAdapter extends ArrayAdapter<String>
     String[] arrayImages;
 
     public EventAdapter(Context context, ArrayList<String> strTitles, ArrayList<String> strDates, ArrayList<String> strTimes, ArrayList<String> strVenues, ArrayList<String> strRemarkURLs, ArrayList<String> strImages) {
-        super(context, R.layout.fragment_active_event_item, R.id.txt_aeTitle, strTitles);
+        super(context, R.layout.fragment_event_active_item, R.id.txt_aeTitle, strTitles);
         this.context = context;
 
         this.arrayTitles = strTitles.toArray(new String[strTitles.size()]);
@@ -42,7 +42,7 @@ public class EventAdapter extends ArrayAdapter<String>
 
         if (vRow==null) {  // Create at 1st time ONLY
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            vRow = inflater.inflate(R.layout.fragment_active_event_item, parent, false);
+            vRow = inflater.inflate(R.layout.fragment_event_active_item, parent, false);
             holder = new EventViewHolder(vRow);
             vRow.setTag(holder);
         }

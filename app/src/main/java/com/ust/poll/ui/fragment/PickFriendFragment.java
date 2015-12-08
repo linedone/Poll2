@@ -1,7 +1,6 @@
 package com.ust.poll.ui.fragment;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -37,7 +36,7 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_pickfriend, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_event_pickfriend, container, false);
         ButterKnife.bind(this, rootView);
 
         return rootView;
