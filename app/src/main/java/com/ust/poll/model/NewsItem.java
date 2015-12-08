@@ -5,6 +5,17 @@ public class NewsItem {
 	private String headline;
 	private String reporterName;
 	private String date;
+	private String pollId;
+
+
+
+	public String getpollID() {
+		return pollId;
+	}
+
+	public void setpollID(String pollId) {
+		this.pollId = pollId;
+	}
 
 	public String getHeadline() {
 		return headline;

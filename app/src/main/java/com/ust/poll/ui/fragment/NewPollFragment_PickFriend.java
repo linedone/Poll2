@@ -24,6 +24,7 @@ import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.ust.poll.MainActivity;
 import com.ust.poll.model.PhoneContactInfo;
@@ -222,9 +223,12 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
         }
 
 
+        ParseUser user = ParseUser.getCurrentUser();
+        final String username = user.getUsername();
 
 
         pollObject.put(Poll.FRIEND_PHONE, phone_Friend);
+        pollObject.put(Poll.CREATORPHONE, username);
 
         pollObject.saveInBackground(new SaveCallback() {
             @Override

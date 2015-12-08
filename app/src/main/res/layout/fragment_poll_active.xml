@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/Title"
         android:listSelector="@drawable/list_selector_flatcolor"
+        android:background="#d1ecfe"
         android:dividerHeight="1dp" />
 
     <ListView

@@ -13,4 +13,5 @@ public class Poll {
     public static final String OBJECTID = "objectId";
     public static final String FRIENDS = "FRIENDS";
     public static final String USERNAME = "username";
+    public static final String CREATORPHONE = "creatorPhone";
 }

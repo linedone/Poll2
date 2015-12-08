@@ -2,7 +2,12 @@ package com.ust.poll.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Contacts;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,8 +18,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.linedone.poll.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -43,6 +50,9 @@ import butterknife.ButterKnife;
  */
 public class ActivePollFragment extends MainActivity.PlaceholderFragment {
 
+    @Nullable
+    @Bind(R.id.custom_list)
+    ListView lv1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,11 +60,51 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
         ButterKnife.bind(this, rootView);
 
         return rootView;
+
+
     }
+
+
+    @Override
+    public void onActivityCreated(final Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        //Log.d("active", "testing12345");
+        new getActlistTask().execute();
+
+        lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
+                //view.setSelected(true);
+                // ListView Clicked item index
+                int itemPosition = position;
+                // ListView Clicked item value
+                //String itemValue = (String) listView.getItemAtPosition(position);
+                // Show Alert
+                //Toast.makeText(ActivePollFragment.super.getActivity(), "" + idList.get(itemPosition),
+                //         Toast.LENGTH_LONG).show();
+                //idList.get(itemPosition);
+
+
+                SelectPollFragment fragment = new SelectPollFragment();
+                Bundle bundle = new Bundle();
+                //bundle.putString("pollID", s.get(itemPosition));
+                bundle.putString("pollID", ((TextView) view.findViewById(R.id.pollid)).getText().toString());
+                fragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+
+
+            }
+        });
+    }
+
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+
 
     }
 
@@ -72,22 +122,6 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
 
 
 
-    @Override
-    public void onActivityCreated(final Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
-
-        //ParseQuery followerQuery = ParseQuery.getQuery("Followers");
-        //.whereEqualTo("following", ParseUser.getCurrentUser());
-        //userQuery.whereMatchesKeyInQuery("objectId", "followerId", followerQuery);
-
-        ArrayList<NewsItem> poll_details = getactPoll();
-        final ListView lv1 = (ListView) getView().findViewById(R.id.custom_list);
-        lv1.setAdapter(new CustomListAdapter(this.getContext(), poll_details));
-
-
-    }
 
 
     private ArrayList<NewsItem> getactPoll() {
@@ -121,6 +155,7 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMM-dd HH:mm");
                 final String dt = sdf.format((Date) p.get(Poll.END_AT));
                 final String op = p.get(Poll.OPTIONS).toString();
+                final String cph = p.get(Poll.CREATORPHONE).toString();
 
 
                 ParseQuery<ParseObject> polledquery = ParseQuery.getQuery(Polled.TABLE_NAME);
@@ -135,10 +170,10 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
                         //objectsWereRetrievedSuccessfully(objects);
                         NewsItem newsData = new NewsItem();
                         newsData.setHeadline("" + t);
-                        newsData.setReporterName("Ken");
+                        newsData.setReporterName("" + getContactName(cph));
                         newsData.setDate("" + dt);
+                        newsData.setpollID(id);
                         results.add(newsData);
-
                         Log.d("active", "" + t);
                     }
 
@@ -154,6 +189,37 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
         }
         return results;
     }
+
+
+    private class getActlistTask extends AsyncTask<ArrayList<NewsItem>, Integer, ArrayList<NewsItem>> {
+        protected ArrayList<NewsItem> doInBackground(ArrayList<NewsItem>... activeList) {
+            //int count = urls.length;
+            //long totalSize = 0;
+            //for (int i = 0; i < count; i++) {
+                //totalSize += Downloader.downloadFile(urls[i]);
+                //publishProgress((int) ((i / (float) count) * 100));
+            //}
+            ArrayList<NewsItem> poll_details = getactPoll();
+            Log.d("active", "testing123");
+            return poll_details;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            //setProgressPercent(progress[0]);
+        }
+
+        protected void onPostExecute(ArrayList<NewsItem> result) {
+            //showDialog("Downloaded " + result + " bytes");
+
+            lv1.setAdapter(new CustomListAdapter(getActivity().getBaseContext(), result));
+        }
+
+
+    }
+
+
+/*
+
 
 
     private ArrayList<NewsItem> getListData() {
@@ -253,16 +319,16 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
 
                         }
                     });
-*/
-                } else {
-                    DialogHelper.getOkAlertDialog(ctx,
-                            "Error in connecting server..", e.getMessage())
-                            .show();
-                }
+
+} else {
+        DialogHelper.getOkAlertDialog(ctx,
+        "Error in connecting server..", e.getMessage())
+        .show();
+        }
 
 
 
-            }
+        }
 
 
         });
@@ -272,6 +338,41 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
 
 
         return results;
+        }
+
+ */
+
+
+
+    public String getContactName(final String phoneNumber)
+    {
+        Uri uri;
+        String[] projection;
+        Uri mBaseUri = Contacts.Phones.CONTENT_FILTER_URL;
+        projection = new String[] { android.provider.Contacts.People.NAME };
+        try {
+            Class<?> c =Class.forName("android.provider.ContactsContract$PhoneLookup");
+            mBaseUri = (Uri) c.getField("CONTENT_FILTER_URI").get(mBaseUri);
+            projection = new String[] { "display_name" };
+        }
+        catch (Exception e) {
+        }
+
+
+        uri = Uri.withAppendedPath(mBaseUri, Uri.encode(phoneNumber));
+        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+
+        String contactName = "";
+
+        if (cursor.moveToFirst())
+        {
+            contactName = cursor.getString(0);
+        }
+
+        cursor.close();
+        cursor = null;
+
+        return contactName;
     }
 
 

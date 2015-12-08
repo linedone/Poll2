@@ -117,30 +117,36 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
                         //Log.d("select", "" + op);
                         TextView pollTitle = (TextView) getView().findViewById(R.id.pollTitle);
                         pollTitle.setText(t);
+                        pollTitle.setVisibility(View.VISIBLE);
 
                         //String[] optionArray = op.split(",");
 
                         if (op.get(0).equals("OPTION 1")) {
                             btn_select_op1.setVisibility(View.GONE);
                         } else {
+                            btn_select_op1.setVisibility(View.VISIBLE);
                             btn_select_op1.setText("" + op.get(0));
                         }
 
                         if (op.get(1).equals("OPTION 2")) {
                             btn_select_op2.setVisibility(View.GONE);
                         } else {
+                            btn_select_op2.setVisibility(View.VISIBLE);
                             btn_select_op2.setText("" + op.get(1));
                         }
 
                         if (op.get(2).equals("OPTION 3")) {
                             btn_select_op3.setVisibility(View.GONE);
                         } else {
+                            btn_select_op3.setVisibility(View.VISIBLE);
                             btn_select_op3.setText("" + op.get(2));
                         }
 
                         if (op.get(3).equals("OPTION 4")) {
                             btn_select_op4.setVisibility(View.GONE);
                         } else {
+
+                            btn_select_op4.setVisibility(View.VISIBLE);
                             btn_select_op4.setText("" + op.get(3));
                         }
 

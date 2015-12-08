@@ -27,7 +27,7 @@
 
         <activity
             android:name="com.ust.poll.activity.LoginActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:label="@string/app_name"
             android:theme="@style/FullscreenTheme" >
             <intent-filter>
@@ -39,6 +39,7 @@
 
         <activity
             android:name="com.ust.poll.MainActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_main" >
         </activity>
 

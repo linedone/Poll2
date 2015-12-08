@@ -48,14 +48,16 @@ public class CustomListAdapter extends BaseAdapter {
 			holder.headlineView = (TextView) convertView.findViewById(R.id.title);
 			holder.reporterNameView = (TextView) convertView.findViewById(R.id.reporter);
 			holder.reportedDateView = (TextView) convertView.findViewById(R.id.date);
+			holder.reportedIdView = (TextView) convertView.findViewById(R.id.pollid);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		
-		holder.headlineView.setText(listData.get(position).getHeadline());
-		holder.reporterNameView.setText("By, " + listData.get(position).getReporterName());
-		holder.reportedDateView.setText(listData.get(position).getDate());
+		holder.headlineView.setText("Poll Title : " + listData.get(position).getHeadline());
+		holder.reporterNameView.setText("Created By, " + listData.get(position).getReporterName());
+		holder.reportedDateView.setText("Poll Deadline : " + listData.get(position).getDate());
+		holder.reportedIdView.setText(listData.get(position).getpollID());
 
 		return convertView;
 	}
@@ -64,6 +66,7 @@ public class CustomListAdapter extends BaseAdapter {
 		TextView headlineView;
 		TextView reporterNameView;
 		TextView reportedDateView;
+		TextView reportedIdView;
 	}
 
 }
