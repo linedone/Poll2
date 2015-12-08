@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 
 import com.linedone.poll.R;
 import com.ust.poll.model.EventViewHolder;
+import com.ust.poll.util.MediaUtil;
 
 import java.util.ArrayList;
 
@@ -20,8 +21,9 @@ public class EventAdapter extends ArrayAdapter<String>
     String[] arrayTimes;
     String[] arrayVenues;
     String[] arrayRemarkURLs;
+    String[] arrayImages;
 
-    public EventAdapter(Context context, ArrayList<String> strTitles, ArrayList<String> strDates, ArrayList<String> strTimes, ArrayList<String> strVenues, ArrayList<String> strRemarkURLs) {
+    public EventAdapter(Context context, ArrayList<String> strTitles, ArrayList<String> strDates, ArrayList<String> strTimes, ArrayList<String> strVenues, ArrayList<String> strRemarkURLs, ArrayList<String> strImages) {
         super(context, R.layout.fragment_active_event_item, R.id.txt_aeTitle, strTitles);
         this.context = context;
 
@@ -30,6 +32,7 @@ public class EventAdapter extends ArrayAdapter<String>
         this.arrayTimes = strTimes.toArray(new String[strTimes.size()]);
         this.arrayVenues = strVenues.toArray(new String[strVenues.size()]);
         this.arrayRemarkURLs = strRemarkURLs.toArray(new String[strRemarkURLs.size()]);
+        this.arrayImages = strImages.toArray(new String[strImages.size()]);
     }
 
     @Override
@@ -52,7 +55,7 @@ public class EventAdapter extends ArrayAdapter<String>
         holder.txtTime.setText("Event Time: " + arrayTimes[position]);
         holder.txtVenue.setText("Event Venue: " + arrayVenues[position]);
         holder.txtRemarkURL.setText("Event Remarks: " + arrayRemarkURLs[position]);
-        //holder.imgPhoto.setImageBitmap(arrayImages[position]);
+        holder.imgPhoto.setImageBitmap(MediaUtil.getBitmapFromString(arrayImages[position]));
 
         return vRow;
     }

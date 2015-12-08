@@ -1,9 +1,11 @@
 package com.ust.poll.ui.fragment;
 
 import android.app.ProgressDialog;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.ust.poll.MainActivity;
 import com.ust.poll.ui.adaptor.EventAdapter;
+import com.ust.poll.util.MediaUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,7 +33,7 @@ import java.util.Locale;
 
 import butterknife.ButterKnife;
 
-public class ActiveEventFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener{
+public class ActiveEventFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener {
     private ProgressDialog progressDialog;
     final ArrayList<String> strEventIds = new ArrayList<String>();
     final ArrayList<String> strTitles = new ArrayList<String>();
@@ -39,6 +42,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
     final ArrayList<String> strVenues = new ArrayList<String>();
     final ArrayList<String> strRemarkURLs = new ArrayList<String>();
     final ArrayList<String> strMembers = new ArrayList<String>();
+    final ArrayList<String> strImages = new ArrayList<String>();
     ListView eventList;
 
     @Override
@@ -58,7 +62,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
         //String userObjectId = user.getObjectId();
         String userPhoneNumber = user.getUsername();
 
-        progressDialog = ProgressDialog.show(getActivity(), "", "Loading record...", true);
+        progressDialog = ProgressDialog.show(getActivity(), "", "Loading records...", true);
         ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery("Event");
         parseQuery.whereContains("EventMembers", userPhoneNumber);
         parseQuery.whereGreaterThanOrEqualTo("EventDate", dFormat.format(new Date()));
@@ -74,7 +78,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
     }
 
     public void retrieveEventSuccess(List<ParseObject> parseObjects, ParseException e) {
-        if (e == null) {
+        if (e==null) {
             int counter = 0;
             for (ParseObject parseObject : parseObjects) {
                 strEventIds.add(parseObject.getObjectId().toString());
@@ -87,12 +91,14 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
                 ParseFile fileObject = parseObjects.get(counter).getParseFile("EventPhoto");
                 if(fileObject!=null){
                     try {
-                        byte[] imageEvent = fileObject.getData();
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(imageEvent, 0, imageEvent.length);
+                        strImages.add(Base64.encodeToString(fileObject.getData(), Base64.DEFAULT));
                     }
                     catch (ParseException ePhotoMsg) {
                         Log.e("File", "Error: " + ePhotoMsg.getMessage());
                     }
+                }
+                else {  //NO Image uploaded
+                    strImages.add(MediaUtil.getStringFromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.event, null)));
                 }
                 strMembers.add(parseObject.get("EventMembers").toString());
                 Log.d("Retrieve Database", parseObject.get("EventTitle").toString() + " || " + parseObject.get("EventDate").toString() + " || " + parseObject.get("EventTime").toString() + " || " + parseObject.get("EventVenue").toString() + " || " + parseObject.get("EventRemarkURL").toString());
@@ -100,17 +106,19 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
             }
             Log.d("Database", "Retrieved " + parseObjects.size() + " Event");
 
-            if (strEventIds != null) {  // Construct a ListView
+            if (strEventIds!=null) {  // Construct a ListView
                 eventList = (ListView) getActivity().findViewById(R.id.activeEventListView);
-                EventAdapter mAdapter = new EventAdapter(getActivity(), strTitles, strDates, strTimes, strVenues, strRemarkURLs);
+                EventAdapter mAdapter = new EventAdapter(getActivity(), strTitles, strDates, strTimes, strVenues, strRemarkURLs, strImages);
                 eventList.setAdapter(mAdapter);
                 progressDialog.dismiss();
                 eventList.setOnItemClickListener(this);
-            } else {
+            }
+            else {
                 System.out.println("No Event");
                 Log.e("ERROR", "Event ID is equal to null!!!");
             }
-        } else {
+        }
+        else {
             Toast.makeText(getActivity().getApplicationContext(), "Querying failure...", Toast.LENGTH_LONG).show();
             Log.e("Database", "Error: " + e.getMessage());
         }
@@ -126,4 +134,3 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
         Toast.makeText(getActivity().getApplicationContext(), "Item "+position+" clicked.", Toast.LENGTH_LONG).show();
     }
 }
-

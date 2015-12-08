@@ -1,11 +1,11 @@
 package com.ust.poll.ui.fragment;
 
+import com.ust.poll.util.MediaUtil;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,11 +33,9 @@ import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 import com.ust.poll.MainActivity;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import butterknife.Bind;
@@ -197,7 +195,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                     ImageView imgView = (ImageView) getActivity().findViewById(R.id.image_event_photo);
                     // Set the Image in ImageView after decoding the String
                     imgView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
-                    imgFile = getBytesFromBitmap(BitmapFactory.decodeFile(imgDecodableString));
+                    imgFile = MediaUtil.getBytesFromBitmap(BitmapFactory.decodeFile(imgDecodableString));
 
                     btn_event_pick_photo.setText("Change Photo");
                 }
@@ -250,12 +248,6 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
         Bundle bundle = new Bundle();
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
-    }
-
-    public byte[] getBytesFromBitmap(Bitmap bitmap) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
-        return stream.toByteArray();
     }
 
     @OnClick(R.id.btn_event_create)
