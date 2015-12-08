@@ -79,12 +79,18 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
                 DialogHelper.fnCloseDialog();
                 if (e == null) {
                     for (ParseObject p : objects) {
-                        String t = p.get(Poll.TITLE).toString();
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMM-dd HH:mm");
-                        String dt = sdf.format((Date) p.get(Poll.END_AT));
-                        String op = p.get(Poll.OPTIONS).toString();
-                        list.add(t + "||" + dt+"||"+op);
+
+                        list.add(p.getObjectId());
+
+                        //String t = p.get(Poll.TITLE).toString();
+                        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMM-dd HH:mm");
+                        //String dt = sdf.format((Date) p.get(Poll.END_AT));
+                        //String op = p.get(Poll.OPTIONS).toString();
+                        //list.add(t + "||" + dt+"||"+op);
                     }
+
+
+
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(ctx, android.R.layout.simple_list_item_1, android.R.id.text1, list);
                     listView.setAdapter(adapter);
                 } else {

@@ -164,11 +164,11 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
         String option2 = bundle.getString("option2");
         String option3 = bundle.getString("option3");
         String option4 = bundle.getString("option4");
-        Integer day = bundle.getInt("day");
-        Integer month = bundle.getInt("month");
-        Integer year = bundle.getInt("year");
-        Integer hour = bundle.getInt("hour");
-        Integer minute = bundle.getInt("minute");
+        String date = bundle.getString("date");
+        String time = bundle.getString("time");
+        //Integer year = bundle.getInt("year");
+        //Integer hour = bundle.getInt("hour");
+        //Integer minute = bundle.getInt("minute");
 
         //ArrayList contactPhone = PhoneContact("phone");
 
@@ -189,17 +189,18 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
 
         String[] positionArray = checked.split("\\n");
 
-        String phone_Friend = "";
-
+        String[] phone_Friend = new String[positionArray.length];
+        int friendCounter = 0;
         for (int i = 0; i < positionArray.length; i++){
             String tempPhoneno = getPhoneNumber(positionArray[i], NewPollFragment_PickFriend.super.getActivity());
             Toast.makeText(NewPollFragment_PickFriend.super.getActivity(), "" + tempPhoneno.replace("+852", ""), Toast.LENGTH_SHORT).show();
-            phone_Friend += ""+ tempPhoneno.replace(" ", "") + ",";
+            phone_Friend[friendCounter] = tempPhoneno.replace(" ", "");
             //Toast.makeText(NewPollFragment_PickFriend.super.getActivity(), "" + contactPhone.get(Integer.parseInt(positionArray[i])), Toast.LENGTH_SHORT).show();
+            friendCounter++;
         }
 
         //Log.d("test", "" + Integer.toString(day));
-        Log.d("test", "" + phone_Friend);
+        //Log.d("test", "" + phone_Friend);
         //contactPhone.get(position);
 
 
@@ -211,11 +212,13 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
         pollObject.addAllUnique(Poll.OPTIONS, Arrays.asList(option1,
                 option2, option3, option4));
 
-        String date = String.valueOf(day)+ " " +  String.valueOf(month) + " " +  String.valueOf(year) + " " + String.valueOf(hour) + ":" +  String.valueOf(minute);
-        SimpleDateFormat format = new SimpleDateFormat("dd MM yyyy hh:mm");
+        String deadDate = date + " " +  time;
+
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         try {
             Log.d("test", "" + date);
-            Date deadline = format.parse(date);
+            Date deadline = format.parse(deadDate);
             pollObject.put(Poll.END_AT,deadline);
             Log.d("test", "" + deadline);
         } catch (java.text.ParseException e) {
@@ -226,8 +229,9 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
         ParseUser user = ParseUser.getCurrentUser();
         final String username = user.getUsername();
 
+        pollObject.put(Poll.FRIEND_PHONE, Arrays.asList(phone_Friend));
 
-        pollObject.put(Poll.FRIEND_PHONE, phone_Friend);
+
         pollObject.put(Poll.CREATORPHONE, username);
 
         pollObject.saveInBackground(new SaveCallback() {
@@ -252,10 +256,10 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
     //private void fnCreatePoll() {
     //}
 
-    private void fnSendPushNotification(String phoneList) {
+    private void fnSendPushNotification(String[] phoneList) {
 
 
-        String[] userArray = phoneList.split(",");
+        String[] userArray = phoneList;
 
         for (int i = 0; i < userArray.length; i++){
 

@@ -162,11 +162,15 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
 
         boolean nextChecking = true;
 
-        if(txt_deadlineDate.getText().toString().equalsIgnoreCase(""))
+        if(txt_deadlineDate.getText().toString().length() == 0 ){
             txt_deadlineDate.setError("Poll deadline date is required!");
+            nextChecking = false;
+        }
 
-        if(txt_deadlineTime.getText().toString().equalsIgnoreCase(""))
+        if(txt_deadlineTime.getText().toString().length() == 0 ){
             txt_deadlineTime.setError("Poll deadline time is required!");
+            nextChecking = false;
+        }
 
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -220,13 +224,15 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         }
 
         if(nextChecking) {
-            NewPollFragment_DateTime fragment = new NewPollFragment_DateTime();
+            NewPollFragment_PickFriend fragment = new NewPollFragment_PickFriend();
             Bundle bundle = new Bundle();
             bundle.putString("title", txt_title.getText().toString());
             bundle.putString("option1", option1.getText().toString());
             bundle.putString("option2", option2.getText().toString());
             bundle.putString("option3", option3.getText().toString());
             bundle.putString("option4", option4.getText().toString());
+            bundle.putString("date", txt_deadlineDate.getText().toString());
+            bundle.putString("time", txt_deadlineTime.getText().toString());
             fragment.setArguments(bundle);
             getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
 

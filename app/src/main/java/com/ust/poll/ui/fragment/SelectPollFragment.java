@@ -39,6 +39,7 @@ import com.ust.poll.ui.dialog.DialogHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -95,7 +96,7 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
 
 
         Bundle bundle = this.getArguments();
-        String objectID = bundle.getString("pollID");
+        final String objectID = bundle.getString("pollID");
 
         query.whereContains(Poll.OBJECTID, objectID);
         //query.whereGreaterThan(Poll.END_AT, new Date());
@@ -181,6 +182,7 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
 
         ParseUser user = ParseUser.getCurrentUser();
         final String userid = user.getObjectId();
+        final String username = user.getUsername();
 
         switch (v.getId()) {
             case R.id.btn_select_op1:
@@ -219,24 +221,17 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
             public void onClick(DialogInterface dialog, int which) {
                 //btn.setText(input.getText().toString());
 
-                ParseObject pollObject = new ParseObject(Polled.TABLE_NAME);
-                pollObject.put(Polled.OPTION, finalOption);
-                pollObject.put(Polled.POLLID, pollID);
-                pollObject.put(Polled.USERID, userid);
+                ParseObject polledObject = new ParseObject(Polled.TABLE_NAME);
+                polledObject.put(Polled.OPTION, finalOption);
+                polledObject.put(Polled.POLLID, pollID);
+                polledObject.put(Polled.USERID, userid);
 
-                pollObject.saveInBackground(new SaveCallback() {
+                polledObject.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
                         DialogHelper.fnCloseDialog();
                         if (e == null) {
-                            Toast.makeText(getActivity().getBaseContext(),
-                                    "Poll has been submitted.",
-                                    Toast.LENGTH_LONG).show();
 
-                            ActivePollFragment fragment = new ActivePollFragment();
-                            Bundle newbundle = new Bundle();
-                            fragment.setArguments(newbundle);
-                            getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
 
                         } else {
                             DialogHelper.getOkAlertDialog(getActivity().getBaseContext(),
@@ -245,6 +240,73 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
                         }
                     }
                 });
+
+
+                ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery(Poll.TABLE_NAME);
+                parseQuery.whereEqualTo(Poll.OBJECTID, pollID);
+                parseQuery.whereContainedIn(Poll.FRIEND_PHONE, Arrays.asList(username.replace("+852", "")));
+
+
+
+                parseQuery.findInBackground(new FindCallback<ParseObject>() {
+                    public void done(List<ParseObject> parseObjects, ParseException e) {
+                        if (e == null) {
+
+                            Log.d("active---", "" + userid);
+
+                            Log.d("active---", "" + username);
+                            Log.d("active---", "" + pollID);
+
+                            List<String> list11 =  new ArrayList<String>();
+                            for (ParseObject p : parseObjects) {
+
+                                ParseObject point = ParseObject.createWithoutData(Poll.TABLE_NAME, p.getObjectId());
+
+                                list11 =  p.getList(Poll.FRIEND_PHONE);
+                                list11.remove(username.replace("+852", ""));
+                                String[] tempPhone = list11.toArray(new String[0]);
+                                point.put(Poll.FRIEND_PHONE, Arrays.asList(tempPhone));
+                                point.put(Poll.FRIEND_ID, Arrays.asList(userid));
+                                // Save
+                                point.saveInBackground(new SaveCallback() {
+                                    public void done(ParseException e) {
+                                        if (e == null) {
+                                            // Saved successfully.
+
+                                            Toast.makeText(getActivity().getBaseContext(),
+                                                    "Poll has been submitted.",
+                                                    Toast.LENGTH_LONG).show();
+
+                                            ActivePollFragment fragment = new ActivePollFragment();
+                                            Bundle newbundle = new Bundle();
+                                            fragment.setArguments(newbundle);
+                                            getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+
+
+                                        } else {
+                                            // The save failed.
+                                        }
+                                    }
+                                });
+
+                                //ParseObject updateData = new ParseObject(Poll.TABLE_NAME);
+
+                                //
+                                //updateData.saveInBackground();
+
+
+
+                            }
+                            //retrieveEventSuccess(parseObjects, e);
+                        } else {
+                            //progressDialog.dismiss();
+                        }
+                    }
+                });
+
+
+
+
 
 
 
