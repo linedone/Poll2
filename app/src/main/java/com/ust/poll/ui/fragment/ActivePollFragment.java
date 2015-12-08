@@ -358,7 +358,6 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
         catch (Exception e) {
         }
 
-
         uri = Uri.withAppendedPath(mBaseUri, Uri.encode(phoneNumber));
         Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
 

@@ -196,7 +196,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                     ImageView imgView = (ImageView) getActivity().findViewById(R.id.image_event_photo);
                     // Set the Image in ImageView after decoding the String
                     imgView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
-                    imgFile = MediaUtil.getBytesFromBitmap(BitmapFactory.decodeFile(imgDecodableString));
+                    imgFile = MediaUtil.getBytesFromImagePath(imgDecodableString);
 
                     btn_event_pick_photo.setText("Change Photo");
                 }
