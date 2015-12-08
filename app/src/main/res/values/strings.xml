@@ -50,6 +50,8 @@
 
     <!-- New Poll Fragment -->
     <string name="text_btn_new_poll">New Poll</string>
+    <string name="text_newpoll_deadline_date">Deadline Date</string>
+    <string name="text_newpoll_deadline_time">Deadline Time</string>
 
     <!-- New Event Fragment -->
     <string name="text_event_name">Event Title</string>

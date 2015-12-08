@@ -82,6 +82,31 @@
 
         </com.beardedhen.androidbootstrap.BootstrapButtonGroup>
 
+
+        <com.beardedhen.androidbootstrap.BootstrapEditText
+            android:id="@+id/txt_deadlineDate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginTop="25dp"
+            android:textSize="@dimen/bootstrap_h1_text_size"
+            android:gravity="center"
+            android:inputType="date"
+            android:focusable="false"
+            android:hint="@string/text_newpoll_deadline_date" />
+
+        <com.beardedhen.androidbootstrap.BootstrapEditText
+            android:id="@+id/txt_deadlineTime"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginTop="25dp"
+            android:textSize="@dimen/bootstrap_h1_text_size"
+            android:gravity="center"
+            android:inputType="time"
+            android:focusable="false"
+            android:hint="@string/text_newpoll_deadline_time" />
+
     </LinearLayout>
 
     <com.beardedhen.androidbootstrap.BootstrapButton

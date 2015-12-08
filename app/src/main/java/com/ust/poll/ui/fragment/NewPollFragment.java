@@ -1,19 +1,32 @@
 package com.ust.poll.ui.fragment;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.linedone.poll.R;
 import com.ust.poll.MainActivity;
+import com.ust.poll.model.Poll;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,6 +42,9 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
     @Bind(R.id.option3) BootstrapButton option3;
     @Bind(R.id.option4) BootstrapButton option4;
 
+    @Bind(R.id.txt_deadlineDate) BootstrapEditText txt_deadlineDate;
+    @Bind(R.id.txt_deadlineTime) BootstrapEditText txt_deadlineTime;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_poll_new, container, false);
@@ -42,6 +58,70 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         super.onActivityCreated(savedInstanceState);
 
     }
+
+
+
+    @OnClick(R.id.txt_deadlineDate)
+    public void fnPickDate(View view) {
+        final Calendar eventDate = Calendar.getInstance();
+        final Calendar todayDate = Calendar.getInstance();
+        int mYear = eventDate.get(Calendar.YEAR);
+        int mMonth = eventDate.get(Calendar.MONTH);
+        int mDay = eventDate.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog mDatePicker = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker datepicker, int year, int monthOfYear, int dayOfMonth) {
+                SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.UK);
+                eventDate.set(Calendar.YEAR, year);
+                eventDate.set(Calendar.MONTH, monthOfYear);
+                eventDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                todayDate.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
+                todayDate.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH));
+                todayDate.set(Calendar.DAY_OF_MONTH, Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+
+                if (eventDate.getTime().compareTo(todayDate.getTime()) >= 0) {
+                    txt_deadlineDate.setText(sdFormat.format(eventDate.getTime()));
+                }
+                else {
+                    txt_deadlineDate.setText("");
+                    Toast.makeText(getActivity().getApplicationContext(), "Please select a suitable event date.", Toast.LENGTH_LONG).show();
+                }
+            }
+        },mYear, mMonth, mDay);
+        mDatePicker.setTitle("Select Date");
+        mDatePicker.show();
+    }
+
+
+    @OnClick(R.id.txt_deadlineTime)
+    public void fnPickTime(View view) {
+        final Calendar eventTime = Calendar.getInstance();
+        int hour = eventTime.get(Calendar.HOUR_OF_DAY);
+        int minute = eventTime.get(Calendar.MINUTE);
+
+        TimePickerDialog mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                if (hourOfDay<10 && minute<10) {
+                    txt_deadlineTime.setText("0" + hourOfDay + ":0" + minute);
+                }
+                else if (hourOfDay>=10 && minute<10){
+                    txt_deadlineTime.setText(hourOfDay + ":0" + minute);
+                }
+                else if (hourOfDay<10 && minute>=10){
+                    txt_deadlineTime.setText("0" + hourOfDay + ":" + minute);
+                }
+                else {
+                    txt_deadlineTime.setText(hourOfDay + ":" + minute);
+                }
+            }
+        }, hour, minute, true);  // true for 24 hour time
+        mTimePicker.setTitle("Select Time");
+        mTimePicker.show();
+    }
+
+
+
+
 
     @OnClick({ R.id.option1, R.id.option2, R.id.option3, R.id.option4 })
     public void fnOption(View view) {
@@ -81,6 +161,38 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         //fragmentTransaction.commit();
 
         boolean nextChecking = true;
+
+        if(txt_deadlineDate.getText().toString().equalsIgnoreCase(""))
+            txt_deadlineDate.setError("Poll deadline date is required!");
+
+        if(txt_deadlineTime.getText().toString().equalsIgnoreCase(""))
+            txt_deadlineTime.setError("Poll deadline time is required!");
+
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        //Date today = new Date();
+
+
+        //try {
+        //    Date pollDate = sdf.parse(txt_deadlineDate.getText().toString());
+
+
+        //    if(today.compareTo(pollDate) > 0){
+
+
+        //        txt_deadlineDate.setError("Poll date invalid");
+
+        //        nextChecking = false;
+        //    }
+
+        //} catch (ParseException e) {
+        //    e.printStackTrace();
+        //}
+
+
+
+        //Log.d("test", "" + );
+
 
         if( txt_title.getText().toString().length() == 0 ) {
             txt_title.setError("Poll title is required!");

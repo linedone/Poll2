@@ -1,12 +1,16 @@
 package com.ust.poll;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+
+
     }
 
     @Override
@@ -55,6 +61,51 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                 .commit();
+
+    }
+
+    /* Prevent app from being killed on back */
+    @Override
+    public void onBackPressed() {
+
+        Boolean backCheck = true;
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.getFragments().toString().contains("");
+
+        Log.d("MainActivity", "" + fragmentManager.getFragments().toString());
+
+        if(fragmentManager.getFragments().toString().contains("SelectPollFragment")){
+            backCheck = false;
+        }
+        else if (fragmentManager.getFragments().toString().contains("NewPollFragment_DateTime")) {
+            backCheck = false;
+        }
+        else if (fragmentManager.getFragments().toString().contains("NewPollFragment_PickFriend")) {
+            backCheck = false;
+        }
+        else{
+        }
+
+
+        if(backCheck){
+
+            new AlertDialog.Builder(this)
+                    .setMessage("Are you sure you want to exit?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            MainActivity.super.onBackPressed();
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+
+
+        }else{
+            super.onBackPressed();
+        }
+
     }
 
     public void onSectionAttached(int number) {
