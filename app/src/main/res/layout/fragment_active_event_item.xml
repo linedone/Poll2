@@ -36,6 +36,7 @@
                 android:textSize="20sp"
                 android:layout_margin="4dp"
                 android:textColor="@color/default_color"
+                android:gravity="center"
                 android:layout_width="match_parent" />
             <TextView
                 android:id="@+id/txt_aeDate"

@@ -170,7 +170,6 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if(requestCode==FRAGMENT_CODE && resultCode==getActivity().RESULT_OK) {
             if(data != null) {
                 if(data.getStringExtra("eventMembers") != null) {
@@ -225,8 +224,8 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
         else if (txt_etitle.getText().toString().length()==0) {
             txt_etitle.setError("Event Title is required!");
         }
-        else if (txt_etitle.getText().toString().length()>90) {
-            txt_etitle.setError("Event Title maximum 90 character letters!");
+        else if (txt_etitle.getText().toString().length()>54) {
+            txt_etitle.setError("Event Title maximum 54 character letters!");
         }
         else if (txt_eDate.getText().toString().length()==0) {
             txt_eDate.setError("Event Date is required!");
@@ -278,8 +277,8 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
             }
             if (imgDecodableString!=null) {
                 File f = new File(imgDecodableString);
-                ParseFile file = new ParseFile(f.getName().toString(), imgFile);
-                file.saveInBackground(new SaveCallback() {
+                ParseFile fileObject = new ParseFile(f.getName().toString(), imgFile);
+                fileObject.saveInBackground(new SaveCallback() {
                     public void done(ParseException e) {
                         if (e == null) {
                             Log.i("PhotoUpload", "Photo upload successful.");
@@ -289,10 +288,9 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                     }
                 }, new ProgressCallback() {
                     public void done(Integer percentDone) {
-
                     }
                 });
-                eventObject.put("EventPhoto", file);
+                eventObject.put("EventPhoto", fileObject);
             }
             eventObject.put("EventMembers", eventMembers);
             eventObject.saveInBackground();
@@ -306,7 +304,8 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                         Toast.makeText(getActivity().getApplicationContext(), "Event created successfully!", Toast.LENGTH_LONG).show();
                         Log.d("ObjectID", objectId);
                         progressDialog.dismiss();
-                    } else {
+                    }
+                    else {
                         // Failure!
                         Toast.makeText(getActivity().getApplicationContext(), "Server connection failure...", Toast.LENGTH_LONG).show();
                     }
