@@ -8,10 +8,10 @@ import butterknife.ButterKnife.ViewBinder;
 public class NewEventFragment$$ViewBinder<T extends com.ust.poll.ui.fragment.NewEventFragment> implements ViewBinder<T> {
   @Override public void bind(final Finder finder, final T target, Object source) {
     View view;
-    view = finder.findRequiredView(source, 2131493980, "field 'txt_etitle'");
-    target.txt_etitle = finder.castView(view, 2131493980, "field 'txt_etitle'");
-    view = finder.findRequiredView(source, 2131493981, "field 'txt_eDate' and method 'fnPickDate'");
-    target.txt_eDate = finder.castView(view, 2131493981, "field 'txt_eDate'");
+    view = finder.findRequiredView(source, 2131493989, "field 'txt_etitle'");
+    target.txt_etitle = finder.castView(view, 2131493989, "field 'txt_etitle'");
+    view = finder.findRequiredView(source, 2131493990, "field 'txt_eDate' and method 'fnPickDate'");
+    target.txt_eDate = finder.castView(view, 2131493990, "field 'txt_eDate'");
     view.setOnClickListener(
       new butterknife.internal.DebouncingOnClickListener() {
         @Override public void doClick(
@@ -20,8 +20,8 @@ public class NewEventFragment$$ViewBinder<T extends com.ust.poll.ui.fragment.New
           target.fnPickDate(p0);
         }
       });
-    view = finder.findRequiredView(source, 2131493982, "field 'txt_eTime' and method 'fnPickTime'");
-    target.txt_eTime = finder.castView(view, 2131493982, "field 'txt_eTime'");
+    view = finder.findRequiredView(source, 2131493991, "field 'txt_eTime' and method 'fnPickTime'");
+    target.txt_eTime = finder.castView(view, 2131493991, "field 'txt_eTime'");
     view.setOnClickListener(
       new butterknife.internal.DebouncingOnClickListener() {
         @Override public void doClick(
@@ -30,12 +30,12 @@ public class NewEventFragment$$ViewBinder<T extends com.ust.poll.ui.fragment.New
           target.fnPickTime(p0);
         }
       });
-    view = finder.findRequiredView(source, 2131493983, "field 'txt_eVenue'");
-    target.txt_eVenue = finder.castView(view, 2131493983, "field 'txt_eVenue'");
-    view = finder.findRequiredView(source, 2131493984, "field 'txt_eRemarkURL'");
-    target.txt_eRemarkURL = finder.castView(view, 2131493984, "field 'txt_eRemarkURL'");
-    view = finder.findRequiredView(source, 2131493986, "field 'btn_event_pick_photo' and method 'fnPickPhoto'");
-    target.btn_event_pick_photo = finder.castView(view, 2131493986, "field 'btn_event_pick_photo'");
+    view = finder.findRequiredView(source, 2131493992, "field 'txt_eVenue'");
+    target.txt_eVenue = finder.castView(view, 2131493992, "field 'txt_eVenue'");
+    view = finder.findRequiredView(source, 2131493993, "field 'txt_eRemarkURL'");
+    target.txt_eRemarkURL = finder.castView(view, 2131493993, "field 'txt_eRemarkURL'");
+    view = finder.findRequiredView(source, 2131493995, "field 'btn_event_pick_photo' and method 'fnPickPhoto'");
+    target.btn_event_pick_photo = finder.castView(view, 2131493995, "field 'btn_event_pick_photo'");
     view.setOnClickListener(
       new butterknife.internal.DebouncingOnClickListener() {
         @Override public void doClick(
@@ -44,7 +44,7 @@ public class NewEventFragment$$ViewBinder<T extends com.ust.poll.ui.fragment.New
           target.fnPickPhoto(p0);
         }
       });
-    view = finder.findRequiredView(source, 2131493987, "method 'fnPickFriends'");
+    view = finder.findRequiredView(source, 2131493996, "method 'fnPickFriends'");
     view.setOnClickListener(
       new butterknife.internal.DebouncingOnClickListener() {
         @Override public void doClick(
@@ -53,7 +53,7 @@ public class NewEventFragment$$ViewBinder<T extends com.ust.poll.ui.fragment.New
           target.fnPickFriends(p0);
         }
       });
-    view = finder.findRequiredView(source, 2131493988, "method 'fnEventCreate'");
+    view = finder.findRequiredView(source, 2131493997, "method 'fnEventCreate'");
     view.setOnClickListener(
       new butterknife.internal.DebouncingOnClickListener() {
         @Override public void doClick(

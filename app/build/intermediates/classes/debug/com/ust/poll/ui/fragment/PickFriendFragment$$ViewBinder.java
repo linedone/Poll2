@@ -8,8 +8,8 @@ import butterknife.ButterKnife.ViewBinder;
 public class PickFriendFragment$$ViewBinder<T extends com.ust.poll.ui.fragment.PickFriendFragment> implements ViewBinder<T> {
   @Override public void bind(final Finder finder, final T target, Object source) {
     View view;
-    view = finder.findRequiredView(source, 2131493993, "field 'btnSubmitFriendList' and method 'fnPickFriendSubmit'");
-    target.btnSubmitFriendList = finder.castView(view, 2131493993, "field 'btnSubmitFriendList'");
+    view = finder.findRequiredView(source, 2131494002, "field 'btnSubmitFriendList' and method 'fnPickFriendSubmit'");
+    target.btnSubmitFriendList = finder.castView(view, 2131494002, "field 'btnSubmitFriendList'");
     view.setOnClickListener(
       new butterknife.internal.DebouncingOnClickListener() {
         @Override public void doClick(

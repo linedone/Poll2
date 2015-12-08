@@ -23,8 +23,11 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.ust.poll.MainActivity;
 import com.ust.poll.activity.LoginActivity;
+import com.ust.poll.model.NewPoll;
+import com.ust.poll.model.NewsItem;
 import com.ust.poll.model.Poll;
 import com.ust.poll.model.Polled;
+import com.ust.poll.ui.adaptor.CustomListAdapter;
 import com.ust.poll.ui.dialog.DialogHelper;
 
 import java.text.SimpleDateFormat;
@@ -40,8 +43,6 @@ import butterknife.ButterKnife;
  */
 public class ActivePollFragment extends MainActivity.PlaceholderFragment {
 
-    @Bind(R.id.listView)
-    ListView listView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,18 +69,107 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
         return super.onOptionsItemSelected(item);
     }
 
+
+
+
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        final ArrayList<String> list = new ArrayList<String>();
+
+
+
+        //ParseQuery followerQuery = ParseQuery.getQuery("Followers");
+        //.whereEqualTo("following", ParseUser.getCurrentUser());
+        //userQuery.whereMatchesKeyInQuery("objectId", "followerId", followerQuery);
+
+        ArrayList<NewsItem> poll_details = getactPoll();
+        final ListView lv1 = (ListView) getView().findViewById(R.id.custom_list);
+        lv1.setAdapter(new CustomListAdapter(this.getContext(), poll_details));
+
+
+    }
+
+
+    private ArrayList<NewsItem> getactPoll() {
+
+        // query search with username subsets
+        ArrayList<NewsItem> results = new ArrayList<NewsItem>();
+        ParseUser user = ParseUser.getCurrentUser();
+        final String username = user.getUsername();
+        final String userid = user.getObjectId();
+        final ArrayList<String> idList = new ArrayList<String>();
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(Poll.TABLE_NAME);
+        query.whereContains(Poll.FRIEND_PHONE, username.replace("+852", ""));
+        query.whereGreaterThan(Poll.END_AT, new Date());
+
+
+
+        List<ParseObject> pollObject;
+        //String[] myFriends = new String[0];
+        //Object[] myFriendsObjects = null;
+
+
+
+        try {
+            pollObject = query.find();
+            for (ParseObject p : pollObject) {
+
+                final String id = p.getObjectId();
+                idList.add(id);
+                final String t = p.get(Poll.TITLE).toString();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMM-dd HH:mm");
+                final String dt = sdf.format((Date) p.get(Poll.END_AT));
+                final String op = p.get(Poll.OPTIONS).toString();
+
+
+                ParseQuery<ParseObject> polledquery = ParseQuery.getQuery(Polled.TABLE_NAME);
+                polledquery.whereEqualTo(Polled.POLLID, id);
+                polledquery.whereEqualTo(Polled.USERID, userid);
+
+                try {
+                    int test = polledquery.count();
+                    if (!(test > 0)) {
+
+                        //list2.add(t + "||" + dt + "||" + op);
+                        //objectsWereRetrievedSuccessfully(objects);
+                        NewsItem newsData = new NewsItem();
+                        newsData.setHeadline("" + t);
+                        newsData.setReporterName("Ken");
+                        newsData.setDate("" + dt);
+                        results.add(newsData);
+
+                        Log.d("active", "" + t);
+                    }
+
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+
+            }
+
+            //myFriends = Arrays.copyOf(myFriendsObjects, myFriendsObjects.length, String[].class);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return results;
+    }
+
+
+    private ArrayList<NewsItem> getListData() {
+        final ArrayList<NewsItem> results = new ArrayList<NewsItem>();
+
+
+
         final Context ctx = this.getActivity();
         DialogHelper.fnShowDialog(this.getContext());
 
         ParseUser user = ParseUser.getCurrentUser();
         final String username = user.getUsername();
         final String userid = user.getObjectId();
-
+        final ArrayList<String> list2 = new ArrayList<String>();
         final ArrayList<String> idList = new ArrayList<String>();
+
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery(Poll.TABLE_NAME);
         //Log.d("active", "" + username.replace("+852", ""));
@@ -87,48 +177,57 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
         query.whereGreaterThan(Poll.END_AT, new Date());
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> objects, ParseException e) {
+                NewsItem newsData = new NewsItem();
                 DialogHelper.fnCloseDialog();
                 if (e == null) {
                     int counter = 0;
+
                     for (ParseObject p : objects) {
                         final String id = p.getObjectId();
                         idList.add(id);
                         final String t = p.get(Poll.TITLE).toString();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMM-dd HH:mm");
-                        final String dt = sdf.format((Date)p.get(Poll.END_AT));
+                        final String dt = sdf.format((Date) p.get(Poll.END_AT));
                         final String op = p.get(Poll.OPTIONS).toString();
-                        list.add(t + "||" + dt + "||" + op);
+
 
                         ParseQuery<ParseObject> polledquery = ParseQuery.getQuery(Polled.TABLE_NAME);
                         polledquery.whereEqualTo(Polled.POLLID, id);
                         polledquery.whereEqualTo(Polled.USERID, userid);
-                        polledquery.findInBackground(new FindCallback<ParseObject>() {
-                            public void done(List<ParseObject> objects2, ParseException ee) {
-                                if (ee == null) {
-                                    //for (ParseObject pp : objects2) {
-                                        //list.remove(list.size()-1);
-                                    //list.clear();
-                                    //}
-                                    //list.remove(t + "||" + dt + "||" + op);
 
-                                    //Log.d("active", "" + id);
-                                    //Log.d("active", "" + userid);
+                        try {
+                            int test = polledquery.count();
+                            if (!(test > 0)) {
 
-                                } else {
+                                //list2.add(t + "||" + dt + "||" + op);
+                                //objectsWereRetrievedSuccessfully(objects);
+                                newsData = new NewsItem();
+                                newsData.setHeadline("" + t);
+                                newsData.setReporterName("Ken");
+                                newsData.setDate("" + dt);
+                                results.add(newsData);
 
-                                    //Log.d("active", "" + id);
-                                    //Log.d("active", "" + userid);
-                                }
-
+                                Log.d("active", "" + t);
                             }
-                        });
+
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
 
 
+                        //Log.d("active", "" + list2.size());
+                        //NewPoll pollList = new NewPoll();
+                        //list2.addAll(pollList.getactiveList());
                         counter++;
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(ctx,android.R.layout.simple_list_item_1, android.R.id.text1, list);
-                    listView.setAdapter(adapter);
 
+                    //Log.d("active", "" + list2.size());
+                    //ArrayAdapter<String> adapter = new ArrayAdapter<String>(ctx,android.R.layout.simple_list_item_1, android.R.id.text1, list2);
+                    //listView.setAdapter(adapter);
+
+
+
+/*
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                         @Override
@@ -154,13 +253,27 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
 
                         }
                     });
-                }
-                else {
+*/
+                } else {
                     DialogHelper.getOkAlertDialog(ctx,
                             "Error in connecting server..", e.getMessage())
                             .show();
                 }
+
+
+
             }
+
+
         });
+
+
+
+
+
+        return results;
     }
+
+
+
 }

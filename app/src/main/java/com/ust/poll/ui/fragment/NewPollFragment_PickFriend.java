@@ -179,9 +179,9 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
         while(itr.hasNext()){
             PhoneContactInfo contact=(PhoneContactInfo)itr.next();
 
-            if (contactPhone.contains(contact.getContactNumber().toString())){
+            if (contactPhone.contains(contact.getContactNumber())){
             }else{
-                contactPhone.add(contact.getContactNumber().toString());
+                contactPhone.add(contact.getContactNumber());
             }
         }
 

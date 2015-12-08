@@ -1,6 +1,7 @@
 package com.ust.poll.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class NewPoll implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -12,12 +13,14 @@ public class NewPoll implements Serializable {
     private String option3;
     private String option4;
     private String friend;
+    private Boolean pollchecked;
+
 
     public NewPoll(){
 
     }
 
-    public NewPoll (String date, String time, String title, String option1, String option2, String option3, String option4, String friend) {
+    public NewPoll (String date, String time, String title, String option1, String option2, String option3, String option4, String friend, Boolean pollchecked) {
         this.date = date;
         this.time = time;
         this.title = title;
@@ -26,6 +29,7 @@ public class NewPoll implements Serializable {
         this.option3 = option3;
         this.option4 = option4;
         this.friend = friend;
+        this.pollchecked = pollchecked;
     }
 
 
@@ -103,6 +107,15 @@ public class NewPoll implements Serializable {
 
     public void setFriend(String friend) {
         this.friend = friend;
+    }
+
+
+    public Boolean getChecked() {
+        return pollchecked;
+    }
+
+    public void setChecked(Boolean pollchecked) {
+        this.pollchecked = pollchecked;
     }
 }
 

@@ -1129,6 +1129,13 @@
     <color name="highlighted_text_material_light">#66009688</color>
     <color name="hint_foreground_material_dark">@color/bright_foreground_disabled_material_dark</color>
     <color name="hint_foreground_material_light">@color/bright_foreground_disabled_material_light</color>
+    <!-- From: file:/Users/ken/Desktop/Poll2/app/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="list_row_default_bg">#ffffff</color>
+    <color name="list_row_pressed_bg">#008cef</color>
+    <color name="list_row_selected_bg">#86d3f6</color>
+    <!-- From: file:/Users/ken/Desktop/Poll2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/values/values.xml -->
+    <eat-comment/>
     <color name="material_blue_grey_800">#ff37474f</color>
     <color name="material_blue_grey_900">#ff263238</color>
     <color name="material_blue_grey_950">#ff21272b</color>
@@ -1160,10 +1167,22 @@
     <color name="secondary_text_default_material_light">#8a000000</color>
     <color name="secondary_text_disabled_material_dark">#36ffffff</color>
     <color name="secondary_text_disabled_material_light">#24000000</color>
+    <!-- From: file:/Users/ken/Desktop/Poll2/app/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="style_color_accent">#01bcd5</color>
+    <color name="style_color_primary">#2d5d82</color>
+    <color name="style_color_primary_dark">#21425d</color>
+    <!-- From: file:/Users/ken/Desktop/Poll2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/values/values.xml -->
+    <eat-comment/>
     <color name="switch_thumb_disabled_material_dark">#ff616161</color>
     <color name="switch_thumb_disabled_material_light">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_dark">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
+    <!-- From: file:/Users/ken/Desktop/Poll2/app/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="text_color_default">#00000C</color>
+    <color name="text_color_inverse">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
     <declare-styleable name="ActionBar"><attr name="navigationMode"><enum name="normal" value="0"/><enum name="listMode" value="1"/><enum name="tabMode" value="2"/></attr><attr name="displayOptions"><flag name="none" value="0"/><flag name="useLogo" value="0x1"/><flag name="showHome" value="0x2"/><flag name="homeAsUp" value="0x4"/><flag name="showTitle" value="0x8"/><flag name="showCustom" value="0x10"/><flag name="disableHome" value="0x20"/></attr><attr name="title"/><attr format="string" name="subtitle"/><attr format="reference" name="titleTextStyle"/><attr format="reference" name="subtitleTextStyle"/><attr format="reference" name="icon"/><attr format="reference" name="logo"/><attr format="reference" name="divider"/><attr format="reference" name="background"/><attr format="reference|color" name="backgroundStacked"/><attr format="reference|color" name="backgroundSplit"/><attr format="reference" name="customNavigationLayout"/><attr name="height"/><attr format="reference" name="homeLayout"/><attr format="reference" name="progressBarStyle"/><attr format="reference" name="indeterminateProgressStyle"/><attr format="dimension" name="progressBarPadding"/><attr name="homeAsUpIndicator"/><attr format="dimension" name="itemPadding"/><attr format="boolean" name="hideOnContentScroll"/><attr format="dimension" name="contentInsetStart"/><attr format="dimension" name="contentInsetEnd"/><attr format="dimension" name="contentInsetLeft"/><attr format="dimension" name="contentInsetRight"/><attr format="dimension" name="elevation"/><attr format="reference" name="popupTheme"/></declare-styleable>
     <declare-styleable name="ActionBarLayout"><attr name="android:layout_gravity"/></declare-styleable>
     <declare-styleable name="ActionMenuItemView"><attr name="android:minWidth"/></declare-styleable>
@@ -1201,6 +1220,8 @@
     <declare-styleable name="View"><attr format="dimension" name="paddingStart"/><attr format="dimension" name="paddingEnd"/><attr name="android:focusable"/><attr format="reference" name="theme"/><attr name="android:theme"/></declare-styleable>
     <declare-styleable name="ViewBackgroundHelper"><attr name="android:background"/><attr format="color" name="backgroundTint"/><attr name="backgroundTintMode"><enum name="src_over" value="3"/><enum name="src_in" value="5"/><enum name="src_atop" value="9"/><enum name="multiply" value="14"/><enum name="screen" value="15"/></attr></declare-styleable>
     <declare-styleable name="ViewStubCompat"><attr name="android:layout"/><attr name="android:inflatedId"/><attr name="android:id"/></declare-styleable>
+    <!-- From: file:/Users/ken/Desktop/Poll2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/values/values.xml -->
+    <eat-comment/>
     <dimen name="abc_action_bar_content_inset_material">16dp</dimen>
     <dimen name="abc_action_bar_default_height_material">56dp</dimen>
     <dimen name="abc_action_bar_default_padding_end_material">0dp</dimen>
@@ -1421,6 +1442,9 @@
     <eat-comment/>
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/style_color_primary</item>
+        <item name="colorPrimaryDark">@color/style_color_primary_dark</item>
+        <item name="colorAccent">@color/style_color_accent</item>
     </style>
     <!-- From: file:/Users/ken/Desktop/Poll2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/values/values.xml -->
     <eat-comment/>

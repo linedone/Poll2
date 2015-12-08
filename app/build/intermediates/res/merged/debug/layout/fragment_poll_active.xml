@@ -20,11 +20,21 @@
         android:gravity="center"
         android:text="ACTIVE POLL" />
 
+
+    <ListView
+        android:id="@+id/custom_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Title"
+        android:listSelector="@drawable/list_selector_flatcolor"
+        android:dividerHeight="1dp" />
+
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listView"
-        android:layout_below="@+id/Title"
+        android:visibility="gone"
+        android:layout_below="@+id/custom_list"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>
 <!-- From: file:/Users/ken/Desktop/Poll2/app/src/main/res/layout/fragment_poll_active.xml -->
