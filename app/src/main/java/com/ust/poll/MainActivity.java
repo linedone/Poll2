@@ -204,10 +204,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                 case 6:
                     fragment = new NewEventFragment();
                     break;
-                case 7:
-                    fragment = new DetailFriendListEventFragment();
-                    break;
-
                 default:
                     fragment = new MainFragment();
                     break;
