@@ -211,7 +211,6 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RESULT_CAMERA && resultCode == getActivity().RESULT_OK) {
-            //progressDialog = ProgressDialog.show(getActivity(), "", "Uploading photo...", true);
             Uri takenPhotoUri = getPhotoFileUri(fileName);
             byte[] imgFile = MediaUtil.getBytesFromImagePath(takenPhotoUri.getPath());
             if (imgFile!=null) {
@@ -249,7 +248,6 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
                     }
                 });
             }
-            //progressDialog.dismiss();
         }
     }
 
