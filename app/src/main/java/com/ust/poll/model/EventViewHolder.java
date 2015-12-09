@@ -3,6 +3,7 @@ package com.ust.poll.model;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.linedone.poll.R;
 
@@ -14,6 +15,7 @@ public class EventViewHolder
     public TextView txtVenue;
     public TextView txtRemarkURL;
     public ImageView imgPhoto;
+    public android.support.v7.widget.Toolbar toolbar;
 
     public EventViewHolder(View vRow)
     {
@@ -23,5 +25,6 @@ public class EventViewHolder
         txtVenue = (TextView) vRow.findViewById(R.id.txt_aeVenue);
         txtRemarkURL = (TextView) vRow.findViewById(R.id.txt_aeRemarkURL);
         imgPhoto = (ImageView) vRow.findViewById(R.id.img_eaPhoto);
+        toolbar = (android.support.v7.widget.Toolbar) vRow.findViewById(R.id.toolbar);
     }
 }

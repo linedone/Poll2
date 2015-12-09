@@ -2,6 +2,7 @@ package com.ust.poll.ui.adaptor;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,10 @@ import com.linedone.poll.R;
 import com.ust.poll.model.EventViewHolder;
 import com.ust.poll.util.MediaUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class EventAdapter extends ArrayAdapter<String>
 {
@@ -23,6 +27,8 @@ public class EventAdapter extends ArrayAdapter<String>
     String[] arrayVenues;
     String[] arrayRemarkURLs;
     String[] arrayImages;
+
+    SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.UK);
 
     public EventAdapter(Context context, ArrayList<String> strTitles, ArrayList<String> strDates, ArrayList<String> strTimes, ArrayList<String> strVenues, ArrayList<String> strRemarkURLs, ArrayList<String> strImages) {
         super(context, R.layout.fragment_event_active_item, R.id.txt_aeTitle, strTitles);
@@ -53,6 +59,15 @@ public class EventAdapter extends ArrayAdapter<String>
 
         holder.txtTitle.setText(arrayTitles[position]);
         holder.txtDate.setText("Event Date: " + arrayDates[position]);
+        if (arrayDates[position].toString().compareTo(dFormat.format(new Date()).toString())==0) {
+            holder.toolbar.setBackground(new ColorDrawable(Color.parseColor("#ec407a")));
+        }
+        else if (position%2==0) {
+            holder.toolbar.setBackground(new ColorDrawable(Color.parseColor("#01bcd5")));
+        }
+        else {
+            holder.toolbar.setBackground(new ColorDrawable(Color.parseColor("#2d5d82")));
+        }
         holder.txtTime.setText("Event Time: " + arrayTimes[position]);
         holder.txtVenue.setText("Event Venue: " + arrayVenues[position]);
         holder.txtRemarkURL.setText("Event Remarks: " + arrayRemarkURLs[position]);

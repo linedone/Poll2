@@ -12,7 +12,6 @@ public class PhoneContactInfo implements Serializable {
     public PhoneContactInfo(){
 
     }
-
     public PhoneContactInfo(int PhoneContactID, String ContactName, String ContactNumber){
         this.PhoneContactID = PhoneContactID;
         this.ContactName = ContactName;
@@ -22,27 +21,21 @@ public class PhoneContactInfo implements Serializable {
     public int getPhoneContactID() {
         return PhoneContactID;
     }
-
     public void setPhoneContactID(int PhoneContactID) {
         this.PhoneContactID = PhoneContactID;
     }
 
-
     public String getContactName() {
         return ContactName;
     }
-
     public void setContactName(String ContactName) {
         this.ContactName = ContactName;
     }
 
-
     public String getContactNumber() {
         return ContactNumber;
     }
-
     public void setContactNumber(String ContactNumber) {
         this.ContactNumber = ContactNumber;
     }
 }
-

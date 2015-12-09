@@ -113,7 +113,6 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
                     strImages.add(MediaUtil.getStringFromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.empty, null)));
                 }
                 strMembers.add(parseObject.get("EventMembers").toString());
-                Log.d("Retrieve Database", parseObject.get("EventTitle").toString() + " || " + parseObject.get("EventDate").toString() + " || " + parseObject.get("EventTime").toString() + " || " + parseObject.get("EventVenue").toString() + " || " + parseObject.get("EventRemarkURL").toString());
                 counter++;
             }
             Log.d("Database", "Retrieved " + parseObjects.size() + " Event");
