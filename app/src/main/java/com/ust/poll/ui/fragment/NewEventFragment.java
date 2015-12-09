@@ -70,7 +70,6 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //TODO: Doesn't work!!!
         if (savedInstanceState != null) {
             Log.i("Restore Bundle", savedInstanceState.toString());
             txt_etitle.setText(savedInstanceState.getString("txt_etitle"));
@@ -144,7 +143,9 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
     public void fnPickPhoto(View view) {
         // Create intent to Open Image applications like Gallery, Google Photos
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent, RESULT_LOAD_IMG);  // Start the Intent
+        if (galleryIntent.resolveActivity(getActivity().getPackageManager())!=null) {  // Check avaliable intent to handle before use
+            startActivityForResult(galleryIntent, RESULT_LOAD_IMG);  // Start the Intent
+        }
     }
 
     @Override

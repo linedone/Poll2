@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Poll</string>
+    <string name="app_name">Lets Meet</string>
     <string name="app_desc">Poll App</string>
 
     <!-- Parse API -->
@@ -65,4 +65,7 @@
 
     <!-- Friend List Fragment -->
     <string name="text_friend_list_submit">Done</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

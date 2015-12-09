@@ -41,6 +41,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
     ArrayList<String> strRemarkURLs;
     ArrayList<String> strMembers;
     ArrayList<String> strImages;
+    String userId;
     ListView eventList;
 
     @Override
@@ -71,7 +72,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
 
         SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.UK);
         ParseUser user = ParseUser.getCurrentUser();
-        //String userObjectId = user.getObjectId();
+        userId = user.getObjectId();
         String userPhoneNumber = user.getUsername();
 
         progressDialog = ProgressDialog.show(getActivity(), "", "Loading records...", true);
@@ -140,6 +141,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
         DetailFriendListEventFragment fragment = new DetailFriendListEventFragment();
         Bundle bundle = new Bundle();
         bundle.putString("objectId", strEventIds.get(position));
+        bundle.putString("userId", userId);
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
     }
