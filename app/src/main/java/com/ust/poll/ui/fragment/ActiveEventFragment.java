@@ -110,7 +110,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
                     }
                 }
                 else {  //NO Image uploaded
-                    strImages.add(MediaUtil.getStringFromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.event, null)));
+                    strImages.add(MediaUtil.getStringFromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.empty, null)));
                 }
                 strMembers.add(parseObject.get("EventMembers").toString());
                 Log.d("Retrieve Database", parseObject.get("EventTitle").toString() + " || " + parseObject.get("EventDate").toString() + " || " + parseObject.get("EventTime").toString() + " || " + parseObject.get("EventVenue").toString() + " || " + parseObject.get("EventRemarkURL").toString());

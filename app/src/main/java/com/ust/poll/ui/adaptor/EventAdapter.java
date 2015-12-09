@@ -1,6 +1,7 @@
 package com.ust.poll.ui.adaptor;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,6 @@ public class EventAdapter extends ArrayAdapter<String>
         holder.txtVenue.setText("Event Venue: " + arrayVenues[position]);
         holder.txtRemarkURL.setText("Event Remarks: " + arrayRemarkURLs[position]);
         holder.imgPhoto.setImageBitmap(MediaUtil.getBitmapFromString(arrayImages[position]));
-
         return vRow;
     }
 }

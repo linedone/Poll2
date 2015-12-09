@@ -3,36 +3,47 @@ package com.ust.poll.ui.fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Contacts;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.linedone.poll.R;
 import com.parse.GetCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.ust.poll.MainActivity;
+import com.ust.poll.util.MediaUtil;
 
 import butterknife.ButterKnife;
 
-public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener {
+public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener, View.OnClickListener {
     private ProgressDialog progressDialog;
     String eventObjectId;
+    TextView titleGroupMember;
     TextView title;
     TextView date;
     TextView time;
     TextView venue;
     TextView remark;
+    ImageButton galleryButton;
+//    ImageView image;
     String strMember;
     ListView firendList;
 
@@ -47,12 +58,14 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        galleryButton = (ImageButton) getActivity().findViewById(R.id.galleryButton);
+        titleGroupMember = (TextView) getActivity().findViewById(R.id.txt_efl_title_group_member);
         title = (TextView) getActivity().findViewById(R.id.txt_eflTitle);
         date = (TextView) getActivity().findViewById(R.id.txt_eflDate);
         time = (TextView) getActivity().findViewById(R.id.txt_eflTime);
         venue = (TextView) getActivity().findViewById(R.id.txt_eflVenue);
         remark = (TextView) getActivity().findViewById(R.id.txt_eflRemarkURL);
+//        image = (ImageView) getActivity().findViewById(R.id.img_eflPhoto);
 
         Bundle bundle = this.getArguments();
         eventObjectId = bundle.getString("objectId");
@@ -66,16 +79,33 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
                 }
             }
         });
+        galleryButton.setOnClickListener(this);
     }
 
     public void retrieveEventSuccess(ParseObject parseObject, ParseException e) {
         if (e==null) {
+            titleGroupMember.setText("Group Members");
+            Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.camera);
+            galleryButton.setImageBitmap(icon);
             title.setText("Title: " + parseObject.get("EventTitle").toString());
             date.setText("Date: " + parseObject.get("EventDate").toString());
             time.setText("Time: " + parseObject.get("EventTime").toString());
             venue.setText("Venue: " + parseObject.get("EventVenue").toString());
             remark.setText("Remark: " + parseObject.get("EventRemarkURL").toString());
             strMember = parseObject.get("EventMembers").toString();
+//            ParseFile fileObject = (ParseFile) parseObject.get("EventPhoto");
+//            fileObject.getDataInBackground(new GetDataCallback() {
+//                public void done(byte[] data, ParseException e) {
+//                    if (e == null) {
+//                        Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);  // Decode the Byte[] into Bitmap
+//                        image.setImageBitmap(bmp);
+//
+//                    } else {
+//                        image.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.empty, null));
+//                        Log.d("Set Image", "There was no image uploaded or having problem downloading the data.");
+//                    }
+//                }
+//            });
             Log.d("Retrieve Database", parseObject.get("EventTitle").toString() + " || " + parseObject.get("EventDate").toString() + " || " + parseObject.get("EventTime").toString() + " || " + parseObject.get("EventVenue").toString() + " || " + parseObject.get("EventRemarkURL").toString() + " || " + parseObject.get("EventMembers").toString());
 
             // Spilt strMember to an array and find the name by phone number
@@ -142,5 +172,10 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        //TODO: Goto Gallery and Upload
     }
 }

@@ -55,7 +55,6 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
     @Bind(R.id.txt_eTime) BootstrapEditText txt_eTime;
     @Bind(R.id.txt_eVenue) BootstrapEditText txt_eVenue;
     @Bind(R.id.txt_eRemarkURL) BootstrapEditText txt_eRemarkURL;
-
     @Bind(R.id.btn_event_pick_photo) BootstrapButton btn_event_pick_photo;
 
     @Override
@@ -165,7 +164,12 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
         super.onResume();
 
         ImageView imgView = (ImageView) getActivity().findViewById(R.id.image_event_photo);
-        imgView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
+        if (imgFile!=null) {
+            imgView.setImageBitmap(MediaUtil.getBitmapFromByte(imgFile));
+        }
+        else {
+            imgView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -194,10 +198,10 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                     cursor.close();
 
                     ImageView imgView = (ImageView) getActivity().findViewById(R.id.image_event_photo);
-                    // Set the Image in ImageView after decoding the String
-                    imgView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
                     imgFile = MediaUtil.getBytesFromImagePath(imgDecodableString);
-
+                    // Set the Image in ImageView after decoding the String
+                    //imgView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
+                    imgView.setImageBitmap(MediaUtil.getBitmapFromByte(imgFile));
                     btn_event_pick_photo.setText("Change Photo");
                 }
                 else {
@@ -256,7 +260,6 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
         boolean isValidInput = fnEventInputValidation(view);
 
         if(isValidInput) {
-            progressDialog = ProgressDialog.show(getActivity(), "", "Saving record...", true);
             ParseObject eventObject = new ParseObject("Event");
             eventObject.put("EventTitle", txt_etitle.getText().toString());
             eventObject.put("EventDate", txt_eDate.getText().toString());
@@ -269,6 +272,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                 eventObject.put("EventRemarkURL", txt_eRemarkURL.getText().toString());
             }
             if (imgDecodableString!=null) {
+                progressDialog = ProgressDialog.show(getActivity(), "", "Uploading photo...", true);
                 File f = new File(imgDecodableString);
                 ParseFile fileObject = new ParseFile(f.getName().toString(), imgFile);
                 fileObject.saveInBackground(new SaveCallback() {
@@ -283,9 +287,11 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                     public void done(Integer percentDone) {
                     }
                 });
+                progressDialog.dismiss();
                 eventObject.put("EventPhoto", fileObject);
             }
             eventObject.put("EventMembers", eventMembers);
+            progressDialog = ProgressDialog.show(getActivity(), "", "Saving record...", true);
             eventObject.saveInBackground();
 
             eventObject.fetchInBackground(new GetCallback<ParseObject>() {
