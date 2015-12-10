@@ -1,25 +1,18 @@
 package com.ust.poll.ui.fragment;
 
 import android.app.ProgressDialog;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.linedone.poll.R;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -29,7 +22,6 @@ import com.ust.poll.ui.adaptor.EventPhotoAdapter;
 import com.ust.poll.util.MediaUtil;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -46,6 +38,12 @@ public class DetailGalleryEventFragment extends MainActivity.PlaceholderFragment
         ButterKnife.bind(this, rootView);
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        strImages = new ArrayList<String>();
     }
 
     @Override
@@ -73,13 +71,12 @@ public class DetailGalleryEventFragment extends MainActivity.PlaceholderFragment
             for (ParseObject parseObject : parseObjects) {
                 ParseFile fileObject = parseObjects.get(counter).getParseFile("File");
                 if(fileObject!=null){
-//                    try {
-//                        //TODO: BugFix
-////                        strImages.add(Base64.encodeToString(fileObject.getData(), Base64.DEFAULT));
-//                    }
-//                    catch (ParseException ePhotoMsg) {
-//                        Log.e("File", "Error: " + ePhotoMsg.getMessage());
-//                    }
+                    try {
+                        strImages.add(Base64.encodeToString(fileObject.getData(), Base64.DEFAULT));
+                    }
+                    catch (ParseException ePhotoMsg) {
+                        Log.e("File", "Error: " + ePhotoMsg.getMessage());
+                    }
                 }
                 else {  //NO Image uploaded
                     strImages.add(MediaUtil.getStringFromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.empty, null)));

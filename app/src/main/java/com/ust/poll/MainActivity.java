@@ -21,7 +21,6 @@ import com.parse.ParseUser;
 import com.ust.poll.fragment.NavigationDrawerFragment;
 import com.ust.poll.ui.fragment.ActiveEventFragment;
 import com.ust.poll.ui.fragment.ActivePollFragment;
-import com.ust.poll.ui.fragment.DetailFriendListEventFragment;
 import com.ust.poll.ui.fragment.FriendListFragment;
 import com.ust.poll.ui.fragment.MainFragment;
 import com.ust.poll.ui.fragment.NewEventFragment;
@@ -49,24 +48,18 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-
-
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
-
+        fragmentManager.beginTransaction().replace(R.id.container, PlaceholderFragment.newInstance(position + 1)).commit();
     }
 
     /* Prevent app from being killed on back */
     @Override
     public void onBackPressed() {
-
         Boolean backCheck = true;
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -74,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
         Log.d("MainActivity", "" + fragmentManager.getFragments().toString());
 
-        if(fragmentManager.getFragments().toString().contains("SelectPollFragment")){
+        if (fragmentManager.getFragments().toString().contains("SelectPollFragment")){
             backCheck = false;
         }
         else if (fragmentManager.getFragments().toString().contains("NewPollFragment_DateTime")) {
@@ -83,12 +76,20 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         else if (fragmentManager.getFragments().toString().contains("NewPollFragment_PickFriend")) {
             backCheck = false;
         }
-        else{
+        else if (fragmentManager.getFragments().toString().contains("DetailFriendListEventFragment")) {
+            backCheck = false;
+        }
+        else if (fragmentManager.getFragments().toString().contains("DetailGalleryEventFragment")) {
+            backCheck = false;
+        }
+        else if (fragmentManager.getFragments().toString().contains("PickFriendFragment")) {
+            backCheck = false;
+        }
+        else {
+
         }
 
-
-        if(backCheck){
-
+        if (backCheck){
             new AlertDialog.Builder(this)
                     .setMessage("Are you sure you want to exit?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -97,14 +98,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                             MainActivity.super.onBackPressed();
                         }
                     })
-                    .setNegativeButton("No", null)
-                    .show();
-
-
-        }else{
+                    .setNegativeButton("No", null).show();
+        }
+        else {
             super.onBackPressed();
         }
-
     }
 
     public void onSectionAttached(int number) {

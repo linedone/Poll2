@@ -31,7 +31,7 @@
         android:gravity="center"
         android:hint="@string/text_login_name"
         android:inputType="text"
-        app:bootstrapSize="md"
+        app:bootstrapSize="lg"
         app:bootstrapBrand="info" />
 
     <com.beardedhen.androidbootstrap.BootstrapEditText
@@ -44,7 +44,7 @@
         android:gravity="center"
         android:hint="@string/text_password"
         android:inputType="textPassword"
-        app:bootstrapSize="md"
+        app:bootstrapSize="lg"
         app:bootstrapBrand="info" />
 
     <LinearLayout
@@ -52,7 +52,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt_password"
         android:gravity="center" >
-
         <com.beardedhen.androidbootstrap.BootstrapButton
             android:id="@+id/btn_login"
             android:layout_width="wrap_content"
@@ -80,7 +79,5 @@
             app:buttonMode="regular"
             app:showOutline="false"
             app:roundedCorners="true" />
-
     </LinearLayout>
-
 </RelativeLayout>
