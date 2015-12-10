@@ -20,6 +20,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.linedone.poll.R;
 import com.ust.poll.MainActivity;
 import com.ust.poll.model.PhoneContactInfo;
+import com.ust.poll.util.TelephonyUtil;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -101,21 +102,6 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
         return arrContacts;
     }
 
-    public String getPhoneNumber(String name, Context context) {
-        String ret = null;
-        String selection = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME+" like'%" + name +"%'";
-        String[] projection = new String[] { ContactsContract.CommonDataKinds.Phone.NUMBER};
-        Cursor c = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, selection, null, null);
-        if (c.moveToFirst()) {
-            ret = c.getString(0);
-        }
-        c.close();
-        if (ret==null) {
-            ret = "Unsaved";
-        }
-        return ret;
-    }
-
     @OnClick(R.id.btn_friend_list_submit)
     public void fnPickFriendSubmit(View view) {
         ListView friendList = (ListView)getView().findViewById(R.id.friendList);
@@ -130,11 +116,23 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
 
         String[] positionArray = checked.split("\\n");
         String eventMembers = "";
+        String zipCode = TelephonyUtil.GetCountryZipCode(getContext());
+        Log.d("ZIPCODE", zipCode);
+
         for (int i=0; i<positionArray.length; i++){
-            String tmpContactNo = getPhoneNumber(positionArray[i],PickFriendFragment.super.getActivity());
+
+            String tmpContactNo = TelephonyUtil.getPhoneNumber(positionArray[i], PickFriendFragment.super.getActivity());
             tmpContactNo = tmpContactNo.replace(" ", "");  // remove spaces
             tmpContactNo = tmpContactNo.replace("-", "");  // remove hyphen
-            eventMembers = eventMembers.concat(tmpContactNo);
+
+            StringBuilder number = new StringBuilder();
+            if (!tmpContactNo.contains("+")) {
+                number.append("+");
+                number.append(zipCode);
+            }
+            number.append(tmpContactNo);
+            Log.d("FinalPhone", number.toString());
+            eventMembers = eventMembers.concat(number.toString());
             if (i!=(positionArray.length-1)) {
                 eventMembers = eventMembers.concat(",");
             }

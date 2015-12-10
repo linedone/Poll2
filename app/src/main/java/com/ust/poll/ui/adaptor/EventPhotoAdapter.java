@@ -1,8 +1,6 @@
 package com.ust.poll.ui.adaptor;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +8,8 @@ import android.widget.ArrayAdapter;
 
 import com.linedone.poll.R;
 import com.ust.poll.model.EventPhotoViewHolder;
-import com.ust.poll.model.EventViewHolder;
 import com.ust.poll.util.MediaUtil;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 public class EventPhotoAdapter extends ArrayAdapter<String>
 {
@@ -44,7 +37,6 @@ public class EventPhotoAdapter extends ArrayAdapter<String>
         else {  // Recycling
             holder = (EventPhotoViewHolder) vRow.getTag();
         }
-
         holder.imageView.setImageBitmap(MediaUtil.getBitmapFromString(arrayImages[position]));
 
         return vRow;
