@@ -247,7 +247,6 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
                 parseQuery.whereContainedIn(Poll.FRIEND_PHONE, Arrays.asList(username.replace("+852", "")));
 
 
-
                 parseQuery.findInBackground(new FindCallback<ParseObject>() {
                     public void done(List<ParseObject> parseObjects, ParseException e) {
                         if (e == null) {
@@ -257,15 +256,20 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
                             Log.d("active---", "" + username);
                             Log.d("active---", "" + pollID);
 
-                            List<String> list11 =  new ArrayList<String>();
+                            List<String> list11 = new ArrayList<String>();
                             for (ParseObject p : parseObjects) {
 
                                 ParseObject point = ParseObject.createWithoutData(Poll.TABLE_NAME, p.getObjectId());
 
-                                list11 =  p.getList(Poll.FRIEND_PHONE);
+                                list11 = p.getList(Poll.FRIEND_PHONE);
                                 list11.remove(username.replace("+852", ""));
                                 String[] tempPhone = list11.toArray(new String[0]);
-                                point.put(Poll.FRIEND_PHONE, Arrays.asList(tempPhone));
+
+                                if (tempPhone.length == 0) {
+                                    point.put(Poll.FRIEND_PHONE, Arrays.asList("null"));
+                                } else {
+                                    point.put(Poll.FRIEND_PHONE, Arrays.asList(tempPhone));
+                                }
                                 point.put(Poll.FRIEND_ID, Arrays.asList(userid));
                                 // Save
                                 point.saveInBackground(new SaveCallback() {
@@ -295,7 +299,6 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
                                 //updateData.saveInBackground();
 
 
-
                             }
                             //retrieveEventSuccess(parseObjects, e);
                         } else {
@@ -303,12 +306,6 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
                         }
                     }
                 });
-
-
-
-
-
-
 
 
             }

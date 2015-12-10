@@ -17,10 +17,22 @@
         android:typeface="sans" />
 
     <TextView
-        android:id="@+id/reporter"
+        android:id="@+id/result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
+        android:text=""
+        android:textColor="@drawable/list_item_text_selector"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:visibility="invisible"
+        android:typeface="sans" />
+
+    <TextView
+        android:id="@+id/reporter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/result"
         android:layout_marginTop="5dip"
         android:text=""
         android:textColor="@drawable/list_item_text_selector"
