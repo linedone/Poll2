@@ -1,8 +1,14 @@
 package com.ust.poll.ui.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Contacts;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,20 +18,27 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.ust.poll.MainActivity;
 import com.linedone.poll.R;
 import com.ust.poll.activity.LoginActivity;
+import com.ust.poll.model.NewsItem;
 import com.ust.poll.model.Poll;
+import com.ust.poll.model.Polled;
+import com.ust.poll.ui.adaptor.CustomListAdapter;
 import com.ust.poll.ui.dialog.DialogHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -37,14 +50,19 @@ import butterknife.ButterKnife;
  */
 public class PollResultFragment extends MainActivity.PlaceholderFragment {
 
-    @Bind(R.id.listView)
-    ListView listView;
+
+    private ProgressDialog progressDialog;
+
+    @Nullable
+    @Bind(R.id.result_custom_list)
+    ListView lv1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_poll_result, container, false);
         ButterKnife.bind(this, rootView);
+
         return rootView;
     }
 
@@ -70,44 +88,186 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
         super.onActivityCreated(savedInstanceState);
         final ArrayList<String> list = new ArrayList<String>();
         final Context ctx = this.getActivity();
-        DialogHelper.fnShowDialog(this.getContext());
+        //DialogHelper.fnShowDialog(this.getContext());
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(Poll.TABLE_NAME);
-        query.whereLessThan(Poll.END_AT, new Date());
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> objects, ParseException e) {
-                DialogHelper.fnCloseDialog();
+
+
+        progressDialog = ProgressDialog.show(getActivity(), "", "Loading records...", true);
+
+
+        lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
+                //view.setSelected(true);
+                // ListView Clicked item index
+                int itemPosition = position;
+
+                //SelectPollFragment fragment = new SelectPollFragment();
+                //Bundle bundle = new Bundle();
+                //bundle.putString("pollID", ((TextView) view.findViewById(R.id.pollid)).getText().toString());
+                //fragment.setArguments(bundle);
+                //getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+
+
+            }
+        });
+
+        ParseQuery myQuery1 = new ParseQuery(Poll.TABLE_NAME);
+        myQuery1.whereLessThan(Poll.END_AT, new Date());
+
+        ParseQuery myQuery2 = new ParseQuery(Poll.TABLE_NAME);
+        //myQuery2.whereEqualTo(Poll.FRIEND_PHONE, "[]");
+        myQuery2.whereContainedIn(Poll.FRIEND_PHONE, Arrays.asList("null"));
+        //myQuery2.whereEqualTo(Poll.FRIEND_PHONE, Arrays.asList(""));
+
+        List<ParseQuery<ParseObject>> queries = new ArrayList<ParseQuery<ParseObject>>();
+        queries.add(myQuery1);
+        queries.add(myQuery2);
+
+        ParseQuery<ParseObject> mainQuery = ParseQuery.or(queries);
+
+
+        mainQuery.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> parseObjects, ParseException e) {
                 if (e == null) {
-                    for (ParseObject p : objects) {
-
-                        list.add(p.getObjectId());
-
-                        //String t = p.get(Poll.TITLE).toString();
-                        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMM-dd HH:mm");
-                        //String dt = sdf.format((Date) p.get(Poll.END_AT));
-                        //String op = p.get(Poll.OPTIONS).toString();
-                        //list.add(t + "||" + dt+"||"+op);
-                    }
+                    retrieveEventSuccess(parseObjects, e);
 
 
-
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(ctx, android.R.layout.simple_list_item_1, android.R.id.text1, list);
-                    listView.setAdapter(adapter);
                 } else {
-                    DialogHelper.getOkAlertDialog(ctx,
-                            "Error in connecting server..", e.getMessage())
-                            .show();
+                    progressDialog.dismiss();
                 }
             }
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
 
-                Object o = parent.getAdapter().getItem(position);
-                Toast.makeText(ctx, o.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
+
+
+
+    public void retrieveEventSuccess(List<ParseObject> parseObjects, ParseException e) {
+
+        if (e==null) {
+            int counter = 0;
+
+            ArrayList<String> idList = new ArrayList<String>();
+            ArrayList<NewsItem> results = new ArrayList<NewsItem>();
+            for (ParseObject parseObject : parseObjects) {
+
+                ParseUser user = ParseUser.getCurrentUser();
+                final String username = user.getUsername();
+                final String userid = user.getObjectId();
+                //cache
+                parseObject.pinInBackground();
+                final String id = parseObject.getObjectId();
+                idList.add(id);
+                final String t = parseObject.get(Poll.TITLE).toString();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMM-dd HH:mm");
+                final String dt = sdf.format((Date) parseObject.get(Poll.END_AT));
+                final String op = parseObject.get(Poll.OPTIONS).toString();
+                final String cph = parseObject.get(Poll.CREATORPHONE).toString();
+
+
+                NewsItem newsData = new NewsItem();
+                newsData.setHeadline("" + t);
+                newsData.setReporterName("" + getContactName(cph));
+                newsData.setDate("" + dt);
+                newsData.setpollID(id);
+                //Log.d("active", "" + t);
+
+
+                String allOpt = "";
+                ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery(Polled.TABLE_NAME);
+                parseQuery.whereEqualTo(Polled.POLLID, id);
+
+                try {
+                    List<ParseObject> pObject = parseQuery.find();
+
+                    for (ParseObject p : pObject) {
+                        //allOpt += p.get(Polled.OPTION) + "," + p.get(Polled.USERID)+ ",";
+                        allOpt += p.get(Polled.OPTION) + ",";
+                    }
+                    String[] optArray = allOpt.split(",");
+
+                    allOpt = displayDuplicate(optArray);
+
+                    //Log.d("result------", "" + allOpt);
+
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                    progressDialog.dismiss();
+                }
+
+                newsData.setallOpt(""+allOpt);
+                Log.d("result------", "" + allOpt);
+                results.add(newsData);
+            }
+
+
+            lv1.setAdapter(new CustomListAdapter(getActivity().getBaseContext(), results));
+            Log.d("Database", "Retrieved " + parseObjects.size() + " Active");
+            progressDialog.dismiss();
+
+
+        }
+        else {
+            progressDialog.dismiss();
+            Toast.makeText(getActivity().getApplicationContext(), "Querying failure...", Toast.LENGTH_LONG).show();
+            Log.e("Database", "Error: " + e.getMessage());
+        }
+    }
+
+
+    public String getContactName(final String phoneNumber)
+    {
+        Uri uri;
+        String[] projection;
+        Uri mBaseUri = Contacts.Phones.CONTENT_FILTER_URL;
+        projection = new String[] { android.provider.Contacts.People.NAME };
+        try {
+            Class<?> c =Class.forName("android.provider.ContactsContract$PhoneLookup");
+            mBaseUri = (Uri) c.getField("CONTENT_FILTER_URI").get(mBaseUri);
+            projection = new String[] { "display_name" };
+        }
+        catch (Exception e) {
+        }
+
+
+        uri = Uri.withAppendedPath(mBaseUri, Uri.encode(phoneNumber));
+        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+
+        String contactName = "";
+
+        if (cursor.moveToFirst())
+        {
+            contactName = cursor.getString(0);
+        }
+
+        cursor.close();
+        cursor = null;
+
+        return contactName;
+    }
+
+
+    public String displayDuplicate(String[] ar) {
+        String resultStr = "";
+        boolean[] done = new boolean[ar.length];
+        for(int i = 0; i < ar.length; i++) {
+            if(done[i])
+                continue;
+            int nb = 0;
+            for(int j = i; j < ar.length; j++) {
+                if(done[j])
+                    continue;
+                if(ar[j].equals(ar[i])) {
+                    done[j] = true;
+                    nb++;
+                }
+            }
+            resultStr += ar[i] + " " + nb + " times, ";
+        }
+        return resultStr;
+    }
+
 }

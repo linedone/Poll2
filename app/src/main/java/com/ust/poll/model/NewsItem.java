@@ -1,11 +1,14 @@
 package com.ust.poll.model;
 
+import java.util.ArrayList;
+
 public class NewsItem {
 
 	private String headline;
 	private String reporterName;
 	private String date;
 	private String pollId;
+	private String allOpt;
 
 
 
@@ -41,9 +44,21 @@ public class NewsItem {
 		this.date = date;
 	}
 
+
+	public String getallOpt() {
+		return allOpt;
+	}
+
+	public void setallOpt(String allOpt) {
+		this.allOpt = allOpt;
+	}
+
+
+
+
 	@Override
 	public String toString() {
 		return "[ headline=" + headline + ", reporter Name=" + 
-				reporterName + " , date=" + date + "]";
+				reporterName + " , date=" + date + " , Option=" + allOpt +"]";
 	}
 }

@@ -20,10 +20,14 @@
         android:gravity="center"
         android:text="POLL RESULT" />
 
+
     <ListView
-        android:layout_width="wrap_content"
+        android:id="@+id/result_custom_list"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
         android:layout_below="@+id/Title"
-        android:layout_centerHorizontal="true" />
+        android:listSelector="@drawable/list_selector_flatcolor"
+        android:background="#d1ecfe"
+        android:dividerHeight="1dp" />
+
 </RelativeLayout>

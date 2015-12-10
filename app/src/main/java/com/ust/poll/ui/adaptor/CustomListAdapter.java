@@ -46,6 +46,7 @@ public class CustomListAdapter extends BaseAdapter {
 			convertView = layoutInflater.inflate(R.layout.list_row_layout, null);
 			holder = new ViewHolder();
 			holder.headlineView = (TextView) convertView.findViewById(R.id.title);
+			holder.resultView= (TextView) convertView.findViewById(R.id.result);
 			holder.reporterNameView = (TextView) convertView.findViewById(R.id.reporter);
 			holder.reportedDateView = (TextView) convertView.findViewById(R.id.date);
 			holder.reportedIdView = (TextView) convertView.findViewById(R.id.pollid);
@@ -55,6 +56,16 @@ public class CustomListAdapter extends BaseAdapter {
 		}
 		
 		holder.headlineView.setText("Poll Title : " + listData.get(position).getHeadline());
+
+		if(listData.get(position).getallOpt() == null) {
+
+			holder.resultView.setVisibility(View.GONE);
+		}else{
+
+			holder.resultView.setVisibility(View.VISIBLE);
+			holder.resultView.setText("Poll Result : " + listData.get(position).getallOpt());
+		}
+
 		holder.reporterNameView.setText("Created By, " + listData.get(position).getReporterName());
 		holder.reportedDateView.setText("Poll Deadline : " + listData.get(position).getDate());
 		holder.reportedIdView.setText(listData.get(position).getpollID());
@@ -67,6 +78,7 @@ public class CustomListAdapter extends BaseAdapter {
 		TextView reporterNameView;
 		TextView reportedDateView;
 		TextView reportedIdView;
+		TextView resultView;
 	}
 
 }
