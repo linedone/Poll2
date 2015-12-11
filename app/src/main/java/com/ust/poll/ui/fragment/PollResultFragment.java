@@ -33,12 +33,14 @@ import com.ust.poll.activity.LoginActivity;
 import com.ust.poll.model.NewsItem;
 import com.ust.poll.model.Poll;
 import com.ust.poll.model.Polled;
+import com.ust.poll.model.Result;
 import com.ust.poll.ui.adaptor.CustomListAdapter;
 import com.ust.poll.ui.dialog.DialogHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -177,6 +179,7 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
 
 
                 String allOpt = "";
+                ArrayList sortedResult = new ArrayList();
                 ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery(Polled.TABLE_NAME);
                 parseQuery.whereEqualTo(Polled.POLLID, id);
 
@@ -189,8 +192,12 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
                     }
                     String[] optArray = allOpt.split(",");
 
-                    allOpt = displayDuplicate(optArray);
+                    sortedResult = displayDuplicate(optArray);
 
+                    allOpt = "";
+                    for(int i = 0; i < sortedResult.size(); i++) {
+                        allOpt += "\n" + sortedResult.get(i).toString();
+                    }
                     //Log.d("result------", "" + allOpt);
 
                 } catch (ParseException e1) {
@@ -250,8 +257,11 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
     }
 
 
-    public String displayDuplicate(String[] ar) {
-        String resultStr = "";
+    public ArrayList displayDuplicate(String[] ar) {
+        //String resultStr = "";
+
+        ArrayList<Result> resultList = new ArrayList<Result>();
+
         boolean[] done = new boolean[ar.length];
         for(int i = 0; i < ar.length; i++) {
             if(done[i])
@@ -265,9 +275,18 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
                     nb++;
                 }
             }
-            resultStr += ar[i] + " " + nb + " times, ";
+
+
+            resultList.add(new Result(nb, ar[i]));
         }
-        return resultStr;
+
+
+        Collections.sort(resultList);
+        for(int i = 0; i < resultList.size(); i++) {
+
+            Log.d("result", "" + resultList.get(i).toString());
+        }
+        return resultList;
     }
 
 }
