@@ -47,6 +47,7 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int itemPosition = position;  // ListView Clicked item index
     }
+
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -61,7 +62,7 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
                 contactName.add(contact.getContactName());
             }
             if (!contactNumber.contains(contact.getContactNumber())){
-                contactNumber.add(contact.getContactName());
+                contactNumber.add(contact.getContactNumber());
             }
         }
 
@@ -73,13 +74,26 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
         friendList.setAdapter(mAdapter);
 
         friendList.setOnItemClickListener(this);
+
+        Bundle bundle = this.getArguments();
+        if (bundle!=null && bundle.getString("eventMembers")!=null) {
+            String[] contactPosition = bundle.getString("contactPosition").split(",");
+            for (int i=0; i<friendList.getCount(); i++) {
+                for (int j=0; j<contactPosition.length; j++) {
+                    if (String.valueOf(i).compareTo(contactPosition[j])==0) {
+                        friendList.setItemChecked(i, true);
+                    }
+                }
+            }
+        }
     }
 
     public ArrayList<PhoneContactInfo> getContactsByPhoneNo() {
         ArrayList<PhoneContactInfo> arrContacts = new ArrayList<PhoneContactInfo>();
         PhoneContactInfo phoneContactInfo = null;
         Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-        Cursor cursor = getActivity().getBaseContext().getContentResolver().query(uri, new String[] {ContactsContract.CommonDataKinds.Phone.NUMBER,ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,ContactsContract.CommonDataKinds.Phone._ID}, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+        Cursor cursor = getActivity().getBaseContext().getContentResolver().query(uri, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone._ID}, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+        String zipCode = TelephonyUtil.GetCountryZipCode(getContext());
 
         cursor.moveToFirst();
         while (cursor.isAfterLast() == false) {
@@ -87,10 +101,21 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
             String contactName =  cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             int phoneContactID = cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID));
 
+            contactNumber = contactNumber.replace(" ", "");  // remove spaces
+            contactNumber = contactNumber.replace("-", "");  // remove hyphen
+
+            String finalContactNumber;
+            if (!contactNumber.contains("+")) {
+                finalContactNumber = zipCode+contactNumber;
+            }
+            else {
+                finalContactNumber = contactNumber;
+            }
+
             phoneContactInfo = new PhoneContactInfo();
             phoneContactInfo.setPhoneContactID(phoneContactID);
             phoneContactInfo.setContactName(contactName);
-            phoneContactInfo.setContactNumber(contactNumber);
+            phoneContactInfo.setContactNumber(finalContactNumber);
             if (phoneContactInfo != null) {
                 arrContacts.add(phoneContactInfo);
             }
@@ -108,9 +133,13 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
         int cntChoice = friendList.getCount();
         String checked = "";
         SparseBooleanArray sparseBooleanArray = friendList.getCheckedItemPositions();
+        String contactPosition = "";
+
         for (int i=0; i<cntChoice; i++) {
             if (sparseBooleanArray.get(i)==true) {
                 checked += friendList.getItemAtPosition(i).toString()+"\n";
+                contactPosition = contactPosition.concat(String.valueOf(i));
+                contactPosition = contactPosition.concat(",");
             }
         }
 
@@ -129,12 +158,14 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
             number.append(tmpContactNo);
 
             eventMembers = eventMembers.concat(number.toString());
+
             if (i!=(positionArray.length-1)) {
                 eventMembers = eventMembers.concat(",");
             }
         }
         Intent intent = new Intent();
         intent.putExtra("eventMembers", eventMembers);
+        intent.putExtra("contactPosition", contactPosition);
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
         getFragmentManager().popBackStack();
     }

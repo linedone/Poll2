@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
@@ -21,13 +20,16 @@ import com.linedone.poll.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.ust.poll.MainActivity;
 import com.ust.poll.ui.adaptor.EventAdapter;
 import com.ust.poll.util.MediaUtil;
+import com.ust.poll.util.TelephonyUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -125,6 +127,9 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
                 counter++;
             }
             Log.d("Database", "Retrieved " + parseObjects.size() + " Event");
+            if (parseObjects.size()==0) {
+                Toast.makeText(getActivity().getApplicationContext(), "No Event", Toast.LENGTH_LONG).show();
+            }
 
             if (strEventIds!=null) {  // Construct a ListView
                 eventList = (ListView) getActivity().findViewById(R.id.activeEventListView);
@@ -147,10 +152,15 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        fnOpenEventDetailByPosition(position);
+    }
+
+    private void fnOpenEventDetailByPosition(int position) {
         DetailFriendListEventFragment fragment = new DetailFriendListEventFragment();
         Bundle bundle = new Bundle();
         bundle.putString("objectId", strEventIds.get(position));
         bundle.putString("userId", userId);
+        bundle.putString("userPhoneNumber", userPhoneNumber);
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
     }
@@ -172,8 +182,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
                 if (inputConfirm.getText().toString().toUpperCase().compareTo("YES") == 0) {
                     // Check DB
                     removeDBRecord(removeObjectId, newPosition);
-
-                    //TODO: remove item from ListView
+                    fnOpenEventDetailByPosition(newPosition);
                 }
             }
         });
@@ -185,7 +194,8 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
         });
         alertDialog.show();
 
-        return false;
+        // Return ture to stop the click event, return false to propagate the event
+        return true;
     }
 
     private void removeDBRecord(String removeObjectId, int position) {
@@ -206,7 +216,5 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
                 progressDialog.dismiss();
             }
         });
-
-        //TODO: Send message to notify members to leave event
     }
 }

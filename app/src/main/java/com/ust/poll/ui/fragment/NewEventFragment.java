@@ -49,6 +49,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
     String imgDecodableString;
     byte[] imgFile;
     String eventMembers;
+    String contactPosition;
 
     @Bind(R.id.txt_etitle) BootstrapEditText txt_etitle;
     @Bind(R.id.txt_eDate) BootstrapEditText txt_eDate;
@@ -157,7 +158,6 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
         outState.putString("txt_eVenue", txt_eVenue.getText().toString());
         outState.putString("txt_eRemarkURL", txt_eRemarkURL.getText().toString());
         getFragmentManager().beginTransaction().remove(this);
-        Log.i("State Saved", outState.toString());
     }
 
     @Override
@@ -178,6 +178,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
             if(data != null) {
                 if(data.getStringExtra("eventMembers") != null) {
                     eventMembers = data.getStringExtra("eventMembers");
+                    contactPosition = data.getStringExtra("contactPosition");
                     Log.i("PickFriend", "Data passed from PickFriend Fragment = " + eventMembers);
                 }
             }
@@ -252,6 +253,10 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
         PickFriendFragment fragment = new PickFriendFragment();
         fragment.setTargetFragment(this, FRAGMENT_CODE);
         Bundle bundle = new Bundle();
+        if (eventMembers!=null) {
+            bundle.putString("eventMembers", eventMembers);
+            bundle.putString("contactPosition", contactPosition);
+        }
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
     }

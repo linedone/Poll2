@@ -51,6 +51,7 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
     private static int RESULT_CAMERA = 1;
     String objectId;
     String userId;
+    String userPhoneNumber;
     String fileName;
     String strMember;
     ListView firendList;
@@ -69,9 +70,12 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
         super.onActivityCreated(savedInstanceState);
 
         Bundle bundle = this.getArguments();
-        objectId = bundle.getString("objectId");
-        userId = bundle.getString("userId");
-        Log.i("Event Object ID", objectId);
+        if (bundle!=null) {
+            objectId = bundle.getString("objectId");
+            userId = bundle.getString("userId");
+            userPhoneNumber = bundle.getString("userPhoneNumber");
+        }
+
         progressDialog = ProgressDialog.show(getActivity(), "", "Loading records...", true);
         ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery("Event");
         parseQuery.getInBackground(objectId, new GetCallback<ParseObject>() {
@@ -128,6 +132,15 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
             }
 
             if (strMember!=null) {  // Construct a ListView
+
+                if (!strMember.contains(userPhoneNumber)) {
+                    ActiveEventFragment fragment = new ActiveEventFragment();
+                    Bundle bundle = new Bundle();
+                    fragment.setArguments(bundle);
+                    getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+                    progressDialog.dismiss();
+                }
+
                 firendList = (ListView) getActivity().findViewById(R.id.eventfriendListView);
                 ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, arrayMemberNames);
                 firendList.setAdapter(mAdapter);
@@ -217,8 +230,6 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
                 ParseObject eventObject = new ParseObject("EventPhoto");
                 eventObject.put("EventId", objectId);
                 eventObject.put("UserId", userId);
-
-                ProgressDialog.show(getActivity(), "Upload Photo", "Saving Photo...", true);
                 ParseFile fileObject = new ParseFile(fileName, imgFile);
                 fileObject.saveInBackground(new SaveCallback() {
                     public void done(ParseException e) {
@@ -227,7 +238,6 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
                         } else {
                             Log.e("PhotoUpload", "Upload failure. " + e);
                         }
-                        progressDialog.dismiss();
                     }
                 }, new ProgressCallback() {
                     public void done(Integer percentDone) {
