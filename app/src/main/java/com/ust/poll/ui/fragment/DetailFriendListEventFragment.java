@@ -218,15 +218,16 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
                 eventObject.put("EventId", objectId);
                 eventObject.put("UserId", userId);
 
-
+                ProgressDialog.show(getActivity(), "Upload Photo", "Saving Photo...", true);
                 ParseFile fileObject = new ParseFile(fileName, imgFile);
                 fileObject.saveInBackground(new SaveCallback() {
                     public void done(ParseException e) {
                         if (e == null) {
-                            Log.i("PhotoUpload", "Photo upload successful.");
+                            Log.i("PhotoUpload", "Upload successful.");
                         } else {
-                            Log.e("PhotoUpload", "Photo upload failed. " + e);
+                            Log.e("PhotoUpload", "Upload failure. " + e);
                         }
+                        progressDialog.dismiss();
                     }
                 }, new ProgressCallback() {
                     public void done(Integer percentDone) {

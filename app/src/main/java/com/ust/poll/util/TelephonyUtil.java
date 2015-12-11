@@ -13,7 +13,6 @@ public class TelephonyUtil {
         String CountryZipCode = "";
 
         TelephonyManager manager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        //getNetworkCountryIso
         CountryID= manager.getSimCountryIso().toUpperCase();
         String[] rl = mContext.getResources().getStringArray(R.array.CountryCodes);
         for(int i=0; i<rl.length; i++){

@@ -1,14 +1,19 @@
 package com.ust.poll.ui.fragment;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -19,6 +24,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.ust.poll.MainActivity;
 import com.ust.poll.ui.adaptor.EventAdapter;
 import com.ust.poll.util.MediaUtil;
@@ -31,7 +37,7 @@ import java.util.Locale;
 
 import butterknife.ButterKnife;
 
-public class ActiveEventFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener {
+public class ActiveEventFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     private ProgressDialog progressDialog;
     ArrayList<String> strEventIds;
     ArrayList<String> strTitles;
@@ -42,7 +48,9 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
     ArrayList<String> strMembers;
     ArrayList<String> strImages;
     String userId;
+    String userPhoneNumber;
     ListView eventList;
+    EventAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,7 +81,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
         SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.UK);
         ParseUser user = ParseUser.getCurrentUser();
         userId = user.getObjectId();
-        String userPhoneNumber = user.getUsername();
+        userPhoneNumber = user.getUsername();
 
         progressDialog = ProgressDialog.show(getActivity(), "", "Loading records...", true);
         ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery("Event");
@@ -120,10 +128,11 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
 
             if (strEventIds!=null) {  // Construct a ListView
                 eventList = (ListView) getActivity().findViewById(R.id.activeEventListView);
-                EventAdapter mAdapter = new EventAdapter(getActivity(), strTitles, strDates, strTimes, strVenues, strRemarkURLs, strImages);
+                mAdapter = new EventAdapter(getActivity(), strTitles, strDates, strTimes, strVenues, strRemarkURLs, strImages);
                 eventList.setAdapter(mAdapter);
                 progressDialog.dismiss();
                 eventList.setOnItemClickListener(this);
+                eventList.setOnItemLongClickListener(this);
             }
             else {
                 System.out.println("No Event");
@@ -144,5 +153,60 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
         bundle.putString("userId", userId);
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+        final String removeObjectId = strEventIds.get(position);
+        final int newPosition = position;
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this.getContext());
+        alertDialog.setTitle("Unable to attend the event. \nPress 'YES' to confirm.");
+        final EditText inputConfirm = new EditText(this.getContext());
+        inputConfirm.setInputType(InputType.TYPE_CLASS_TEXT);
+        alertDialog.setView(inputConfirm);
+
+        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                if (inputConfirm.getText().toString().toUpperCase().compareTo("YES") == 0) {
+                    // Check DB
+                    removeDBRecord(removeObjectId, newPosition);
+
+                    //TODO: remove item from ListView
+                }
+            }
+        });
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
+
+        return false;
+    }
+
+    private void removeDBRecord(String removeObjectId, int position) {
+        progressDialog = ProgressDialog.show(getActivity(), "", "Removing record...", true);
+        ParseObject point = ParseObject.createWithoutData("Event", removeObjectId);
+
+        String newMember = strMembers.get(position);
+        newMember = newMember.replace(","+userPhoneNumber.toString(),"");
+        newMember = newMember.replace(userPhoneNumber.toString()+",","");
+        point.put("EventMembers", newMember);
+        point.saveInBackground(new SaveCallback() {
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Event has been removed!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "Server connection failure...", Toast.LENGTH_LONG).show();
+                }
+                progressDialog.dismiss();
+            }
+        });
+
+        //TODO: Send message to notify members to leave event
     }
 }

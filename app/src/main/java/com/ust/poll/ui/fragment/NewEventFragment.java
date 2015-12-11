@@ -322,7 +322,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
             ParseQuery query = ParseInstallation.getQuery();
             query.whereEqualTo("username", userArray[i]);
             push.setQuery(query);
-            push.setMessage("New Event");
+            push.setMessage("New Event: "+txt_etitle.getText().toString());
             push.sendInBackground();
         }
 
