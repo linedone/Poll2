@@ -2,7 +2,10 @@ package com.ust.poll.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Contacts;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -70,7 +73,7 @@ public class FriendListFragment extends MainActivity.PlaceholderFragment {
             public void done(List<ParseUser> objects, ParseException e) {
                 if (e == null) {
                     for (ParseUser p : objects) {
-                        list.add(p.getUsername());
+                        list.add(getContactName(p.getUsername()));
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(ctx,android.R.layout.simple_list_item_1, android.R.id.text1, list);
                     listView.setAdapter(adapter);
@@ -82,5 +85,37 @@ public class FriendListFragment extends MainActivity.PlaceholderFragment {
                 }
             }
         });
+    }
+
+
+    public String getContactName(final String phoneNumber)
+    {
+        Uri uri;
+        String[] projection;
+        Uri mBaseUri = Contacts.Phones.CONTENT_FILTER_URL;
+        projection = new String[] { android.provider.Contacts.People.NAME };
+        try {
+            Class<?> c =Class.forName("android.provider.ContactsContract$PhoneLookup");
+            mBaseUri = (Uri) c.getField("CONTENT_FILTER_URI").get(mBaseUri);
+            projection = new String[] { "display_name" };
+        }
+        catch (Exception e) {
+        }
+
+
+        uri = Uri.withAppendedPath(mBaseUri, Uri.encode(phoneNumber));
+        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+
+        String contactName = "";
+
+        if (cursor.moveToFirst())
+        {
+            contactName = cursor.getString(0);
+        }
+
+        cursor.close();
+        cursor = null;
+
+        return contactName;
     }
 }
