@@ -245,7 +245,7 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
 
                 ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery(Poll.TABLE_NAME);
                 parseQuery.whereEqualTo(Poll.OBJECTID, pollID);
-                parseQuery.whereContainedIn(Poll.FRIEND_PHONE, Arrays.asList(username.replace("+852", "")));
+                parseQuery.whereContainedIn(Poll.FRIEND_PHONE, Arrays.asList(username));
 
 
                 parseQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -263,7 +263,7 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
                                 ParseObject point = ParseObject.createWithoutData(Poll.TABLE_NAME, p.getObjectId());
 
                                 list11 = p.getList(Poll.FRIEND_PHONE);
-                                list11.remove(username.replace("+852", ""));
+                                list11.remove(username);
                                 String[] tempPhone = list11.toArray(new String[0]);
 
                                 if (tempPhone.length == 0) {

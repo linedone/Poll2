@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-
+        //this.setTheme(R.style.AppTheme2);
 
     }
 

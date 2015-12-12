@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -66,11 +67,12 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.fragment_poll_active, container, false);
         ButterKnife.bind(this, rootView);
 
+        //getActivity().setTheme(R.style.AppTheme2);
         return rootView;
-
 
     }
 
@@ -91,7 +93,8 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
         final String userid = user.getObjectId();
 
         ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery(Poll.TABLE_NAME);
-        parseQuery.whereContainedIn(Poll.FRIEND_PHONE, Arrays.asList(username.replace("+852", "")));
+        parseQuery.whereContainedIn(Poll.FRIEND_PHONE, Arrays.asList(username));
+        //parseQuery.whereContainedIn(Poll.FRIEND_ID, Arrays.asList(userid));
         parseQuery.whereGreaterThan(Poll.END_AT, new Date());
         parseQuery.orderByAscending(Poll.END_AT);
 
@@ -135,7 +138,7 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
         if (e==null) {
             int counter = 0;
             ArrayList<String> idList = new ArrayList<String>();
-            ArrayList<NewsItem> results = new ArrayList<NewsItem>();
+            final ArrayList<NewsItem> results = new ArrayList<NewsItem>();
             for (ParseObject parseObject : parseObjects) {
 
                 ParseUser user = ParseUser.getCurrentUser();
@@ -151,11 +154,38 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
                 final String op = parseObject.get(Poll.OPTIONS).toString();
                 final String cph = parseObject.get(Poll.CREATORPHONE).toString();
 
-
+                NewsItem newsData = new NewsItem();
+                newsData.setHeadline("" + t);
+                newsData.setReporterName("" + getContactName(cph));
+                newsData.setDate("" + dt);
+                newsData.setpollID(id);
+                results.add(newsData);
+                Log.d("active------", "" + t);
+/*
                 ParseQuery<ParseObject> polledquery = ParseQuery.getQuery(Polled.TABLE_NAME);
                 polledquery.whereEqualTo(Polled.POLLID, id);
                 polledquery.whereEqualTo(Polled.USERID, userid);
 
+                polledquery.findInBackground(new FindCallback<ParseObject>() {
+                    public void done(List<ParseObject> parseObjects, ParseException e) {
+                        if (e == null) {
+
+                            NewsItem newsData = new NewsItem();
+                            newsData.setHeadline("" + t);
+                            newsData.setReporterName("" + getContactName(cph));
+                            newsData.setDate("" + dt);
+                            newsData.setpollID(id);
+                            results.add(newsData);
+                            Log.d("active------", "" + t);
+
+                            //retrieveEventSuccess(parseObjects, e);
+                        } else {
+                            progressDialog.dismiss();
+                        }
+                    }
+                });
+/*
+                /*
                 try {
                     int test = polledquery.count();
                     if (!(test > 0)) {
@@ -177,7 +207,7 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
                     e1.printStackTrace();
                     progressDialog.dismiss();
                 }
-
+                */
 
             }
 

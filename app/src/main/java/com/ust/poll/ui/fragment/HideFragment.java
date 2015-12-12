@@ -9,6 +9,8 @@ import com.ust.poll.MainActivity;
  */
 public class HideFragment extends MainActivity.PlaceholderFragment {
     public void HideFragment() {
+
+        /*
         FragmentTransaction transaction;
         transaction =  getFragmentManager().beginTransaction();
 
@@ -61,5 +63,6 @@ public class HideFragment extends MainActivity.PlaceholderFragment {
         if (selectPollFragment != null) {
             transaction.hide(selectPollFragment);
         }
+        */
     }
 }

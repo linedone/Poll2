@@ -142,8 +142,8 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
         int cntChoice = friendList.getCount();
 
 
-        String checked = "";
-        String unchecked = "";
+        ArrayList checked = new ArrayList();
+        ArrayList unchecked = new ArrayList();
 
         SparseBooleanArray sparseBooleanArray = friendList.getCheckedItemPositions();
 
@@ -152,7 +152,8 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
 
             if(sparseBooleanArray.get(i) == true)
             {
-                checked += friendList.getItemAtPosition(i).toString() + "\n";
+                checked.add(friendList.getItemAtPosition(i));
+                //checked += friendList.getItemAtPosition(i).toString() + "\n";
                 //checked += ""+ i + "\n";
             }
             else  if(sparseBooleanArray.get(i) == false)
@@ -191,12 +192,12 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
         }
 
 
-        String[] positionArray = checked.split("\\n");
+        //String[] positionArray = checked.split("\\n");
 
-        Log.d("newpoll", ""+positionArray.length);
+        Log.d("newpoll", ""+checked.size());
         Boolean nextChecking = true;
 
-        if (positionArray.length <=1){
+        if (checked.size() <=0){
             Toast.makeText(NewPollFragment_PickFriend.super.getActivity(), "At least select one friend", Toast.LENGTH_LONG).show();
             nextChecking = false;
         }
@@ -208,10 +209,10 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
             hideFrag.HideFragment();
 
             String zipCode = TelephonyUtil.GetCountryZipCode(getContext());
-            String[] phone_Friend = new String[positionArray.length];
+            String[] phone_Friend = new String[checked.size()];
             int friendCounter = 0;
-            for (int i = 0; i < positionArray.length; i++){
-                String tempPhoneno = getPhoneNumber(positionArray[i], NewPollFragment_PickFriend.super.getActivity());
+            for (int i = 0; i < checked.size(); i++){
+                String tempPhoneno = getPhoneNumber(""+checked.get(i), NewPollFragment_PickFriend.super.getActivity());
                 //Toast.makeText(NewPollFragment_PickFriend.super.getActivity(), "" + tempPhoneno.replace("+852", ""), Toast.LENGTH_SHORT).show();
                 //phone_Friend[friendCounter] = tempPhoneno.replace(" ", "");
 
