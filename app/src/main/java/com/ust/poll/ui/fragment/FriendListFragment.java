@@ -1,5 +1,6 @@
 package com.ust.poll.ui.fragment;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
@@ -30,6 +31,7 @@ import butterknife.ButterKnife;
 public class FriendListFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener {
     @Bind(R.id.listView) ListView listView;
     ArrayList<String> contactList = new ArrayList<String>();
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,13 +44,14 @@ public class FriendListFragment extends MainActivity.PlaceholderFragment impleme
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        progressDialog = ProgressDialog.show(getActivity(), "", "Loading contacts...", true);
         ParseQuery<ParseUser> parseQuery = ParseUser.getQuery();
         parseQuery.findInBackground(new FindCallback<ParseUser>() {
             public void done(List<ParseUser> parseObjects, ParseException e) {
                 retrieveSuccess(parseObjects, e);
             }
         });
+        progressDialog.dismiss();
     }
 
     private void retrieveSuccess(List<ParseUser> parseObjects, ParseException e) {

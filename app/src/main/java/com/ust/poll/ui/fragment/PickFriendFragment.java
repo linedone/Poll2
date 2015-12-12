@@ -1,7 +1,7 @@
 package com.ust.poll.ui.fragment;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
+import android.provider.ContactsContract.CommonDataKinds.Phone;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.linedone.poll.R;
 import com.ust.poll.MainActivity;
@@ -33,6 +33,7 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
     private static int FRAGMENT_CODE = 0;
     ArrayList contactName = new ArrayList();
     ArrayList contactNumber = new ArrayList();
+    ArrayList contactPerson = new ArrayList();
     @Bind(R.id.btn_friend_list_submit) BootstrapButton btnSubmitFriendList;
 
     @Override
@@ -52,7 +53,7 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ArrayList<PhoneContactInfo> arrContacts = getContactsByPhoneNo();
+        ArrayList<PhoneContactInfo> arrContacts = getContactsFromDeviceContactList();
         Iterator iterator = arrContacts.iterator();
 
         // Traversing elements of ArrayList object
@@ -61,12 +62,15 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
             if (!contactName.contains(contact.getContactName())){
                 contactName.add(contact.getContactName());
             }
-            if (!contactNumber.contains(contact.getContactNumber())){
+            if (!contactNumber.contains(contact.getContactNumber())) {
                 contactNumber.add(contact.getContactNumber());
+            }
+            if (!contactPerson.contains(contact.getContactName() + " [" + contact.getContactNumber() + "]")) {
+                contactPerson.add(contact.getContactName() + " [" + contact.getContactNumber() + "]");
             }
         }
 
-        ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(PickFriendFragment.super.getActivity(), android.R.layout.simple_list_item_multiple_choice, contactName);
+        ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(PickFriendFragment.super.getActivity(), android.R.layout.simple_list_item_multiple_choice, contactPerson);
         ListView friendList = (ListView)getView().findViewById(R.id.friendList);
 
         // Assign adapter to ListView
@@ -88,11 +92,14 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
         }
     }
 
-    public ArrayList<PhoneContactInfo> getContactsByPhoneNo() {
+    public ArrayList<PhoneContactInfo> getContactsFromDeviceContactList() {
         ArrayList<PhoneContactInfo> arrContacts = new ArrayList<PhoneContactInfo>();
         PhoneContactInfo phoneContactInfo = null;
-        Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-        Cursor cursor = getActivity().getBaseContext().getContentResolver().query(uri, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone._ID}, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+
+        Uri contentUri = Phone.CONTENT_URI;
+        ContentResolver contentResolver = getActivity().getBaseContext().getContentResolver();
+//        Cursor cursor = contentResolver.query(contentUri, new String[]{Phone.NUMBER, Phone.DISPLAY_NAME, Phone._ID}, Phone.TYPE + "=" + Phone.TYPE_MOBILE, null, Phone.DISPLAY_NAME + " ASC");
+        Cursor cursor = contentResolver.query(contentUri, new String[]{Phone.NUMBER, Phone.DISPLAY_NAME, Phone._ID}, null, null, Phone.DISPLAY_NAME + " ASC");
         String zipCode = TelephonyUtil.GetCountryZipCode(getContext());
 
         cursor.moveToFirst();
@@ -124,49 +131,52 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
         }
         cursor.close();
         cursor = null;
+
         return arrContacts;
     }
 
     @OnClick(R.id.btn_friend_list_submit)
     public void fnPickFriendSubmit(View view) {
-
-
-        HideFragment hideFrag = new HideFragment();
-        hideFrag.HideFragment();
         ListView friendList = (ListView)getView().findViewById(R.id.friendList);
         int cntChoice = friendList.getCount();
         String checked = "";
         SparseBooleanArray sparseBooleanArray = friendList.getCheckedItemPositions();
         String contactPosition = "";
+        String eventMembers = "";
 
         for (int i=0; i<cntChoice; i++) {
             if (sparseBooleanArray.get(i)==true) {
-                checked += friendList.getItemAtPosition(i).toString()+"\n";
+                String contact = friendList.getItemAtPosition(i).toString();
+                contact = contact.substring(contact.indexOf("[") + 1, contact.indexOf("]"));
+                eventMembers = eventMembers.concat(contact).concat(",");
+
+                checked += contact + "\n";
                 contactPosition = contactPosition.concat(String.valueOf(i));
                 contactPosition = contactPosition.concat(",");
             }
         }
 
-        String[] positionArray = checked.split("\\n");
-        String eventMembers = "";
-        String zipCode = TelephonyUtil.GetCountryZipCode(getContext());
+//        String[] positionArray = checked.split("\\n");
+//
+//        String zipCode = TelephonyUtil.GetCountryZipCode(getContext());
+//
+//        for (int i=0; i<positionArray.length; i++){
 
-        for (int i=0; i<positionArray.length; i++){
-            String tmpContactNo = TelephonyUtil.getPhoneNumber(positionArray[i], PickFriendFragment.super.getActivity());
-            tmpContactNo = tmpContactNo.replace(" ", "");  // remove spaces
-            tmpContactNo = tmpContactNo.replace("-", "");  // remove hyphen
-            StringBuilder number = new StringBuilder();
-            if (!tmpContactNo.contains("+")) {
-                number.append(zipCode);
-            }
-            number.append(tmpContactNo);
-
-            eventMembers = eventMembers.concat(number.toString());
-
-            if (i!=(positionArray.length-1)) {
-                eventMembers = eventMembers.concat(",");
-            }
-        }
+//            String tmpContactNo = TelephonyUtil.getPhoneNumber(positionArray[i], PickFriendFragment.super.getActivity());
+//            tmpContactNo = tmpContactNo.replace(" ", "");  // remove spaces
+//            tmpContactNo = tmpContactNo.replace("-", "");  // remove hyphen
+//            StringBuilder number = new StringBuilder();
+//            if (!tmpContactNo.contains("+")) {
+//                number.append(zipCode);
+//            }
+//            number.append(tmpContactNo);
+//
+//            eventMembers = eventMembers.concat(number.toString());
+//
+//            if (i!=(positionArray.length-1)) {
+//                eventMembers = eventMembers.concat(",");
+//            }
+//        }
         Intent intent = new Intent();
         intent.putExtra("eventMembers", eventMembers);
         intent.putExtra("contactPosition", contactPosition);

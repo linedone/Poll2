@@ -8,9 +8,7 @@ import com.ust.poll.MainActivity;
  * Created by ken on 12/12/15.
  */
 public class HideFragment extends MainActivity.PlaceholderFragment {
-
     public void HideFragment() {
-
         FragmentTransaction transaction;
         transaction =  getFragmentManager().beginTransaction();
 
@@ -27,26 +25,22 @@ public class HideFragment extends MainActivity.PlaceholderFragment {
         PollResultFragment pollResultFragment = (PollResultFragment)getFragmentManager().findFragmentByTag("PollResultFragment");
         SelectPollFragment selectPollFragment = (SelectPollFragment)getFragmentManager().findFragmentByTag("SelectPollFragment");
 
-
-
-
-
-        if ( activeEventFragment!= null) {
+        if (activeEventFragment!= null) {
             transaction.hide(activeEventFragment);
         }
-        if ( activePollFragment!= null) {
+        if (activePollFragment!= null) {
             transaction.hide(activePollFragment);
         }
-        if ( detailFriendListEventFragment!= null) {
+        if (detailFriendListEventFragment!= null) {
             transaction.hide(detailFriendListEventFragment);
         }
-        if ( detailGalleryEventFragment!= null) {
+        if (detailGalleryEventFragment!= null) {
             transaction.hide(detailGalleryEventFragment);
         }
-        if ( friendListFragment!= null) {
+        if (friendListFragment!= null) {
             transaction.hide(friendListFragment);
         }
-        if ( newEventFragment!= null) {
+        if (newEventFragment!= null) {
             transaction.hide(newEventFragment);
         }
         if (newPollFragment != null) {
@@ -67,13 +61,5 @@ public class HideFragment extends MainActivity.PlaceholderFragment {
         if (selectPollFragment != null) {
             transaction.hide(selectPollFragment);
         }
-
     }
-
-
-
-
-
-
-
 }
