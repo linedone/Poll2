@@ -53,6 +53,10 @@
     <string name="text_newpoll_deadline_date">Deadline Date</string>
     <string name="text_newpoll_deadline_time">Deadline Time</string>
 
+
+    <!-- New result Fragment -->
+    <string name="text_poll_result">Poll Result</string>
+
     <!-- New Event Fragment -->
     <string name="text_event_name">Event Title</string>
     <string name="text_event_date">Event Date</string>

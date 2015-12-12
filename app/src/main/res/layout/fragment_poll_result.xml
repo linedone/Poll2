@@ -18,7 +18,7 @@
         android:textStyle="bold"
         android:textSize="45sp"
         android:gravity="center"
-        android:text="POLL RESULT" />
+        android:text="@string/text_poll_result" />
 
 
     <ListView
@@ -28,6 +28,8 @@
         android:layout_below="@+id/Title"
         android:listSelector="@drawable/list_selector_flatcolor"
         android:background="#d1ecfe"
-        android:dividerHeight="1dp" />
+        android:divider="@color/white"
+        android:scrollbars="none"
+        android:dividerHeight="15dp" />
 
 </RelativeLayout>

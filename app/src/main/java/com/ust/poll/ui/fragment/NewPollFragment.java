@@ -266,6 +266,7 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
 
         //YEAH YEAH YEAH
     }
+
     private void hideFragments(FragmentTransaction transaction) {
 
 
