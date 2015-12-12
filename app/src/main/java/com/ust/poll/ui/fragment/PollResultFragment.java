@@ -41,6 +41,7 @@ import butterknife.ButterKnife;
 public class PollResultFragment extends MainActivity.PlaceholderFragment {
 
     private ProgressDialog progressDialog;
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a Z");  // 2015-12-13T11:31:00.000Z
 
     @Nullable
     @Bind(R.id.result_custom_list) ListView lv1;
@@ -64,7 +65,7 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
 
         // Expired Date
         ParseQuery expiredQuery = new ParseQuery(Poll.TABLE_NAME);
-        expiredQuery.whereLessThan(Poll.END_AT, new Date());  // Deadline_Date < Today(), "END_AT"<TODAY
+        expiredQuery.whereLessThan(Poll.END_AT, sdf.format(new Date()));  // Deadline_Date < Today(), "END_AT"<TODAY
 
         // Voted Result, but non-Expired
         ParseQuery votedQuery = new ParseQuery(Poll.TABLE_NAME);
