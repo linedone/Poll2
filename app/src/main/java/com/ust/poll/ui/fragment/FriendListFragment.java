@@ -34,7 +34,6 @@ import butterknife.ButterKnife;
 public class FriendListFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener {
     @Bind(R.id.listView) ListView listView;
     ArrayList<String> contactList = new ArrayList<String>();
-    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,7 +55,6 @@ public class FriendListFragment extends MainActivity.PlaceholderFragment impleme
     }
 
     private void retrieveSuccess(List<ParseUser> parseObjects, ParseException e) {
-        progressDialog = ProgressDialog.show(getActivity(), "Contact List", "Loading contacts...", true);
         if (e == null) {
             for (ParseUser parseItem : parseObjects) {
                 if (TelephonyUtil.getContactName(getActivity(), parseItem.getUsername()).compareTo("")!=0) {
@@ -70,8 +68,6 @@ public class FriendListFragment extends MainActivity.PlaceholderFragment impleme
         else {
             DialogHelper.getOkAlertDialog(getActivity(), "Error in connecting server..", e.getMessage()).show();
         }
-        progressDialog.dismiss();
-
     }
 
     @Override
