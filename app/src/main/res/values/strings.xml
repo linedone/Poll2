@@ -49,14 +49,14 @@
     <string name="action_logout">Logout</string>
 
     <!-- New Poll Fragment -->
-    <string name="text_btn_new_poll">New Poll</string>
+    <string name="text_btn_new_poll">NEW POLL</string>
     <string name="text_newpoll_deadline_date">Deadline Date</string>
     <string name="text_newpoll_deadline_time">Deadline Time</string>
     <string name="text_poll_pick_friend">Pick Friend</string>
 
 
     <!-- New result Fragment -->
-    <string name="text_poll_result">Poll Result</string>
+    <string name="text_poll_result">POLL RESULT</string>
 
     <!-- New Event Fragment -->
     <string name="text_event_name">Event Title</string>

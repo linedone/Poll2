@@ -29,7 +29,7 @@
         android:textStyle="bold"
         android:textSize="50sp"
         android:gravity="center"
-        android:text="Select POLL" />
+        android:text="SELECT POLL" />
 
     <TextView android:id="@+id/pollTitle"
         android:layout_width="fill_parent"

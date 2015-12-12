@@ -16,7 +16,7 @@
         android:textStyle="bold"
         android:textSize="50sp"
         android:gravity="center"
-        android:text="Friend LIST" />
+        android:text="FRIEND LIST" />
 
     <ListView
         android:layout_width="wrap_content"

@@ -134,12 +134,11 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
             }
 
             if (strMember!=null) {  // Construct a ListView
-
                 if (!strMember.contains(userPhoneNumber)) {
                     ActiveEventFragment fragment = new ActiveEventFragment();
                     Bundle bundle = new Bundle();
                     fragment.setArguments(bundle);
-                    getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
                     progressDialog.dismiss();
                 }
 
