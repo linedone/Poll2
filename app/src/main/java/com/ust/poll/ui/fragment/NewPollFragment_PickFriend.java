@@ -31,6 +31,7 @@ import com.ust.poll.MainActivity;
 import com.ust.poll.model.PhoneContactInfo;
 import com.ust.poll.model.Poll;
 import com.ust.poll.ui.dialog.DialogHelper;
+import com.ust.poll.util.TelephonyUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -139,6 +140,7 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
         ListView friendList = (ListView)getView().findViewById(R.id.friendList);
         int cntChoice = friendList.getCount();
 
+
         String checked = "";
         String unchecked = "";
 
@@ -190,67 +192,104 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
 
         String[] positionArray = checked.split("\\n");
 
-        String[] phone_Friend = new String[positionArray.length];
-        int friendCounter = 0;
-        for (int i = 0; i < positionArray.length; i++){
-            String tempPhoneno = getPhoneNumber(positionArray[i], NewPollFragment_PickFriend.super.getActivity());
-            Toast.makeText(NewPollFragment_PickFriend.super.getActivity(), "" + tempPhoneno.replace("+852", ""), Toast.LENGTH_SHORT).show();
-            phone_Friend[friendCounter] = tempPhoneno.replace(" ", "");
-            //Toast.makeText(NewPollFragment_PickFriend.super.getActivity(), "" + contactPhone.get(Integer.parseInt(positionArray[i])), Toast.LENGTH_SHORT).show();
-            friendCounter++;
+        Log.d("newpoll", ""+positionArray.length);
+        Boolean nextChecking = true;
+
+        if (positionArray.length <=1){
+            Toast.makeText(NewPollFragment_PickFriend.super.getActivity(), "At least select one friend", Toast.LENGTH_LONG).show();
+            nextChecking = false;
         }
 
-        //Log.d("test", "" + Integer.toString(day));
-        //Log.d("test", "" + phone_Friend);
-        //contactPhone.get(position);
+        if(nextChecking){
 
 
-        final Context ctx = this.getContext();
+            String zipCode = TelephonyUtil.GetCountryZipCode(getContext());
+            String[] phone_Friend = new String[positionArray.length];
+            int friendCounter = 0;
+            for (int i = 0; i < positionArray.length; i++){
+                String tempPhoneno = getPhoneNumber(positionArray[i], NewPollFragment_PickFriend.super.getActivity());
+                //Toast.makeText(NewPollFragment_PickFriend.super.getActivity(), "" + tempPhoneno.replace("+852", ""), Toast.LENGTH_SHORT).show();
+                //phone_Friend[friendCounter] = tempPhoneno.replace(" ", "");
 
-        ParseObject pollObject = new ParseObject(Poll.TABLE_NAME);
-        pollObject.put(Poll.TITLE, title);
+                tempPhoneno = tempPhoneno.replace(" ", "");  // remove spaces
+                phone_Friend[friendCounter] = tempPhoneno.replace("-", "");  // remove hyphen
 
-        pollObject.addAllUnique(Poll.OPTIONS, Arrays.asList(option1,
-                option2, option3, option4));
-
-        String deadDate = date + " " +  time;
-
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-        try {
-            Log.d("test", "" + date);
-            Date deadline = format.parse(deadDate);
-            pollObject.put(Poll.END_AT,deadline);
-            Log.d("test", "" + deadline);
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-        }
-
-
-        ParseUser user = ParseUser.getCurrentUser();
-        final String username = user.getUsername();
-
-        pollObject.put(Poll.FRIEND_PHONE, Arrays.asList(phone_Friend));
-
-
-        pollObject.put(Poll.CREATORPHONE, username);
-
-        pollObject.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                DialogHelper.fnCloseDialog();
-                if (e == null) {
-                    Toast.makeText(ctx,
-                            "Poll Successfully created.",
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    DialogHelper.getOkAlertDialog(ctx,
-                            "Error in connecting server..", e.getMessage())
-                            .show();
+                StringBuilder number = new StringBuilder();
+                if (!phone_Friend[friendCounter].contains("+")) {
+                    number.append(zipCode);
                 }
+                number.append(phone_Friend[friendCounter]);
+
+                phone_Friend[friendCounter] = number.toString();
+
+                //Toast.makeText(NewPollFragment_PickFriend.super.getActivity(), "" + contactPhone.get(Integer.parseInt(positionArray[i])), Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(NewPollFragment_PickFriend.super.getActivity(), "" + phone_Friend[friendCounter], Toast.LENGTH_SHORT).show();
+
+                friendCounter++;
             }
-        });
-        fnSendPushNotification(phone_Friend,title,getContactName(username));
+
+
+
+
+
+
+
+
+
+            //Log.d("test", "" + Integer.toString(day));
+            //Log.d("test", "" + phone_Friend);
+            //contactPhone.get(position);
+
+
+            final Context ctx = this.getContext();
+
+            ParseObject pollObject = new ParseObject(Poll.TABLE_NAME);
+            pollObject.put(Poll.TITLE, title);
+
+            pollObject.addAllUnique(Poll.OPTIONS, Arrays.asList(option1,
+                    option2, option3, option4));
+
+            String deadDate = date + " " +  time;
+
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            try {
+                Log.d("test", "" + date);
+                Date deadline = format.parse(deadDate);
+                pollObject.put(Poll.END_AT,deadline);
+                Log.d("test", "" + deadline);
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
+
+
+            ParseUser user = ParseUser.getCurrentUser();
+            final String username = user.getUsername();
+
+            pollObject.put(Poll.FRIEND_PHONE, Arrays.asList(phone_Friend));
+
+
+            pollObject.put(Poll.CREATORPHONE, username);
+
+            pollObject.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    DialogHelper.fnCloseDialog();
+                    if (e == null) {
+                        Toast.makeText(ctx,
+                                "Poll Successfully created.",
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        DialogHelper.getOkAlertDialog(ctx,
+                                "Error in connecting server..", e.getMessage())
+                                .show();
+                    }
+                }
+            });
+            fnSendPushNotification(phone_Friend,title,getContactName(username));
+        }
+
     }
 
 

@@ -85,6 +85,7 @@ public class NewPollFragment_DateTime extends MainActivity.PlaceholderFragment {
         newbundle.putInt("minute", minute);
         fragment.setArguments(newbundle);
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+
     }
 
 
