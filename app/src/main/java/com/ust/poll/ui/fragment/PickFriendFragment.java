@@ -129,6 +129,10 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
 
     @OnClick(R.id.btn_friend_list_submit)
     public void fnPickFriendSubmit(View view) {
+
+
+        HideFragment hideFrag = new HideFragment();
+        hideFrag.HideFragment();
         ListView friendList = (ListView)getView().findViewById(R.id.friendList);
         int cntChoice = friendList.getCount();
         String checked = "";

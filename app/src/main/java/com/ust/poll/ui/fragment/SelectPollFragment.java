@@ -277,10 +277,10 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
                                     public void done(ParseException e) {
                                         if (e == null) {
                                             // Saved successfully.
-                                            
-                                            FragmentTransaction transaction;
-                                            transaction =  getFragmentManager().beginTransaction();
-                                            hideFragments(transaction);
+
+
+                                            HideFragment hideFrag = new HideFragment();
+                                            hideFrag.HideFragment();
 
                                             Toast.makeText(getActivity().getBaseContext(),
                                                     "Poll has been submitted.",
@@ -325,62 +325,4 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
 
     }
 
-    private void hideFragments(FragmentTransaction transaction) {
-
-
-        ActiveEventFragment activeEventFragment = (ActiveEventFragment)getFragmentManager().findFragmentByTag("ActiveEventFragment");
-        ActivePollFragment activePollFragment = (ActivePollFragment)getFragmentManager().findFragmentByTag("ActivePollFragment");
-        DetailFriendListEventFragment detailFriendListEventFragment = (DetailFriendListEventFragment)getFragmentManager().findFragmentByTag("DetailFriendListEventFragment");
-        DetailGalleryEventFragment detailGalleryEventFragment = (DetailGalleryEventFragment)getFragmentManager().findFragmentByTag("DetailGalleryEventFragment");
-        FriendListFragment friendListFragment = (FriendListFragment)getFragmentManager().findFragmentByTag("FriendListFragment");
-        NewEventFragment newEventFragment = (NewEventFragment)getFragmentManager().findFragmentByTag("NewEventFragment");
-        NewPollFragment newPollFragment = (NewPollFragment)getFragmentManager().findFragmentByTag("NewPollFragment");
-        NewPollFragment_DateTime newPollFragment_DateTime = (NewPollFragment_DateTime)getFragmentManager().findFragmentByTag("NewPollFragment_DateTime");
-        NewPollFragment_PickFriend newPollFragment_PickFriend = (NewPollFragment_PickFriend)getFragmentManager().findFragmentByTag("NewPollFragment_PickFriend");
-        PickFriendFragment pickFriendFragment = (PickFriendFragment)getFragmentManager().findFragmentByTag("PickFriendFragment");
-        PollResultFragment pollResultFragment = (PollResultFragment)getFragmentManager().findFragmentByTag("PollResultFragment");
-        SelectPollFragment selectPollFragment = (SelectPollFragment)getFragmentManager().findFragmentByTag("SelectPollFragment");
-
-
-
-
-
-        if ( activeEventFragment!= null) {
-            transaction.hide(activeEventFragment);
-        }
-        if ( activePollFragment!= null) {
-            transaction.hide(activePollFragment);
-        }
-        if ( detailFriendListEventFragment!= null) {
-            transaction.hide(detailFriendListEventFragment);
-        }
-        if ( detailGalleryEventFragment!= null) {
-            transaction.hide(detailGalleryEventFragment);
-        }
-        if ( friendListFragment!= null) {
-            transaction.hide(friendListFragment);
-        }
-        if ( newEventFragment!= null) {
-            transaction.hide(newEventFragment);
-        }
-        if (newPollFragment != null) {
-            transaction.hide(newPollFragment);
-        }
-        if (newPollFragment_DateTime != null) {
-            transaction.hide(newPollFragment_DateTime);
-        }
-        if (newPollFragment_PickFriend != null) {
-            transaction.hide(newPollFragment_PickFriend);
-        }
-        if (pickFriendFragment != null) {
-            transaction.hide(pickFriendFragment);
-        }
-        if (pollResultFragment != null) {
-            transaction.hide(pollResultFragment);
-        }
-        if (selectPollFragment != null) {
-            transaction.hide(selectPollFragment);
-        }
-
-    }
 }
