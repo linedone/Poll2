@@ -289,7 +289,7 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
                                             ActivePollFragment fragment = new ActivePollFragment();
                                             Bundle newbundle = new Bundle();
                                             fragment.setArguments(newbundle);
-                                            getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+                                            getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
 
 
                                         } else {
