@@ -80,7 +80,7 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
         friendList.setOnItemClickListener(this);
 
         Bundle bundle = this.getArguments();
-        if (bundle!=null && bundle.getString("eventMembers")!=null) {
+        if (bundle!=null && bundle.getString("members")!=null) {
             String[] contactPosition = bundle.getString("contactPosition").split(",");
             for (int i=0; i<friendList.getCount(); i++) {
                 for (int j=0; j<contactPosition.length; j++) {
@@ -142,13 +142,13 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
         String checked = "";
         SparseBooleanArray sparseBooleanArray = friendList.getCheckedItemPositions();
         String contactPosition = "";
-        String eventMembers = "";
+        String members = "";
 
         for (int i=0; i<cntChoice; i++) {
             if (sparseBooleanArray.get(i)==true) {
                 String contact = friendList.getItemAtPosition(i).toString();
                 contact = contact.substring(contact.indexOf("[") + 1, contact.indexOf("]"));
-                eventMembers = eventMembers.concat(contact).concat(",");
+                members = members.concat(contact).concat(",");
 
                 checked += contact + "\n";
                 contactPosition = contactPosition.concat(String.valueOf(i));
@@ -156,10 +156,45 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
             }
         }
 
+//        String[] positionArray = checked.split("\\n");
+//
+//        String zipCode = TelephonyUtil.GetCountryZipCode(getContext());
+//
+//        for (int i=0; i<positionArray.length; i++){
+
+//            String tmpContactNo = TelephonyUtil.getPhoneNumber(positionArray[i], PickFriendFragment.super.getActivity());
+//            tmpContactNo = tmpContactNo.replace(" ", "");  // remove spaces
+//            tmpContactNo = tmpContactNo.replace("-", "");  // remove hyphen
+//            StringBuilder number = new StringBuilder();
+//            if (!tmpContactNo.contains("+")) {
+//                number.append(zipCode);
+//            }
+//            number.append(tmpContactNo);
+//
+//            eventMembers = eventMembers.concat(number.toString());
+//
+//            if (i!=(positionArray.length-1)) {
+//                eventMembers = eventMembers.concat(",");
+//            }
+//        }
+
+        Bundle bundle = this.getArguments();
+        String soption1 = bundle.getString("soption1");
+        String soption2 = bundle.getString("soption2");
+        String soption3 = bundle.getString("soption3");
+        String soption4 = bundle.getString("soption4");
+
+
+
         Intent intent = new Intent();
-        intent.putExtra("eventMembers", eventMembers);
+        intent.putExtra("members", members);
+        intent.putExtra("soption1", soption1);
+        intent.putExtra("soption2", soption2);
+        intent.putExtra("soption3", soption3);
+        intent.putExtra("soption4", soption4);
         intent.putExtra("contactPosition", contactPosition);
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+        //Log.d("", "");
         getFragmentManager().popBackStack();
     }
 }

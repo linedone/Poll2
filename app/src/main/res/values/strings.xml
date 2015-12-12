@@ -52,6 +52,7 @@
     <string name="text_btn_new_poll">New Poll</string>
     <string name="text_newpoll_deadline_date">Deadline Date</string>
     <string name="text_newpoll_deadline_time">Deadline Time</string>
+    <string name="text_poll_pick_friend">Pick Friend</string>
 
 
     <!-- New result Fragment -->

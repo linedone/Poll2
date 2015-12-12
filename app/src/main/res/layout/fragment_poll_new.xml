@@ -121,10 +121,24 @@
     </LinearLayout>
 
     <com.beardedhen.androidbootstrap.BootstrapButton
-        android:id="@+id/btn_new_poll_next"
-        android:layout_width="wrap_content"
+        android:id="@+id/btn_new_poll_friend"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="20dp"
+        android:onClick="fnPickfriend"
+        android:text="@string/text_poll_pick_friend"
+        app:bootstrapBrand="success"
+        app:bootstrapSize="lg"
+        app:buttonMode="regular"
+        app:showOutline="false"
+        app:roundedCorners="true"
+        android:layout_below="@+id/linear_button_group_option" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/btn_new_poll_next"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:onClick="fnLogin"
         android:text="@string/text_poll_next"
         app:bootstrapBrand="success"
@@ -132,9 +146,7 @@
         app:buttonMode="regular"
         app:showOutline="false"
         app:roundedCorners="true"
-        android:layout_below="@+id/linear_button_group_option"
-        android:layout_alignRight="@+id/txt_title"
-        android:layout_alignEnd="@+id/txt_title" />
+        android:layout_below="@+id/btn_new_poll_friend" />
 
 </RelativeLayout>
 

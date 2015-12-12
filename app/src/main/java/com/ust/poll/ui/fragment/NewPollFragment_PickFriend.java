@@ -192,7 +192,6 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
         }
 
 
-        //String[] positionArray = checked.split("\\n");
 
         Log.d("newpoll", ""+checked.size());
         Boolean nextChecking = true;
@@ -205,8 +204,8 @@ public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment
         if(nextChecking){
 
 
-            HideFragment hideFrag = new HideFragment();
-            hideFrag.HideFragment();
+            //HideFragment hideFrag = new HideFragment();
+            //hideFrag.HideFragment();
 
             String zipCode = TelephonyUtil.GetCountryZipCode(getContext());
             String[] phone_Friend = new String[checked.size()];

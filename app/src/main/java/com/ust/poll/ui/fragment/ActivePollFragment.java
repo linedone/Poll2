@@ -94,6 +94,7 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
 
         ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery(Poll.TABLE_NAME);
         parseQuery.whereContainedIn(Poll.FRIEND_PHONE, Arrays.asList(username));
+        Log.d("active+++", username);
         //parseQuery.whereContainedIn(Poll.FRIEND_ID, Arrays.asList(userid));
         parseQuery.whereGreaterThan(Poll.END_AT, new Date());
         parseQuery.orderByAscending(Poll.END_AT);
