@@ -156,27 +156,6 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
             }
         }
 
-//        String[] positionArray = checked.split("\\n");
-//
-//        String zipCode = TelephonyUtil.GetCountryZipCode(getContext());
-//
-//        for (int i=0; i<positionArray.length; i++){
-
-//            String tmpContactNo = TelephonyUtil.getPhoneNumber(positionArray[i], PickFriendFragment.super.getActivity());
-//            tmpContactNo = tmpContactNo.replace(" ", "");  // remove spaces
-//            tmpContactNo = tmpContactNo.replace("-", "");  // remove hyphen
-//            StringBuilder number = new StringBuilder();
-//            if (!tmpContactNo.contains("+")) {
-//                number.append(zipCode);
-//            }
-//            number.append(tmpContactNo);
-//
-//            eventMembers = eventMembers.concat(number.toString());
-//
-//            if (i!=(positionArray.length-1)) {
-//                eventMembers = eventMembers.concat(",");
-//            }
-//        }
         Intent intent = new Intent();
         intent.putExtra("eventMembers", eventMembers);
         intent.putExtra("contactPosition", contactPosition);

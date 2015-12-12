@@ -335,6 +335,6 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
         Bundle bundle = new Bundle();
         bundle.putString("objectId", objectId);
         fragment.setArguments(bundle);
-        getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+        getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
     }
 }

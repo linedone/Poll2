@@ -44,17 +44,16 @@ public class FriendListFragment extends MainActivity.PlaceholderFragment impleme
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        progressDialog = ProgressDialog.show(getActivity(), "", "Loading contacts...", true);
         ParseQuery<ParseUser> parseQuery = ParseUser.getQuery();
         parseQuery.findInBackground(new FindCallback<ParseUser>() {
             public void done(List<ParseUser> parseObjects, ParseException e) {
                 retrieveSuccess(parseObjects, e);
             }
         });
-        progressDialog.dismiss();
     }
 
     private void retrieveSuccess(List<ParseUser> parseObjects, ParseException e) {
+        progressDialog = ProgressDialog.show(getActivity(), "", "Loading contacts...", true);
         if (e == null) {
             for (ParseUser parseItem : parseObjects) {
                 if (getContactName(parseItem.getUsername()).compareTo("")!=0) {
@@ -68,6 +67,8 @@ public class FriendListFragment extends MainActivity.PlaceholderFragment impleme
         else {
             DialogHelper.getOkAlertDialog(getActivity(), "Error in connecting server..", e.getMessage()).show();
         }
+        progressDialog.dismiss();
+
     }
 
     @Override

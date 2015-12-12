@@ -10,8 +10,6 @@ public class NewsItem {
 	private String pollId;
 	private String allOpt;
 
-
-
 	public String getpollID() {
 		return pollId;
 	}
@@ -44,7 +42,6 @@ public class NewsItem {
 		this.date = date;
 	}
 
-
 	public String getallOpt() {
 		return allOpt;
 	}
@@ -53,12 +50,8 @@ public class NewsItem {
 		this.allOpt = allOpt;
 	}
 
-
-
-
 	@Override
 	public String toString() {
-		return "[ headline=" + headline + ", reporter Name=" + 
-				reporterName + " , date=" + date + " , Option=" + allOpt +"]";
+		return "[ headline=" + headline + ", reporter Name=" + reporterName + " , date=" + date + " , Option=" + allOpt +"]";
 	}
 }
