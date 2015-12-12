@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Lets Meet</string>
-    <string name="app_desc">Poll App</string>
+    <string name="app_desc">Meeting with Friends</string>
 
     <!-- Parse API -->
     <string name="parse_app_id">Hw4xO8CIqVxU0RhCH1z623XBosgjM6wz3cKmVBMR</string>

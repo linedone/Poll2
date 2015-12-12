@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.linedone.poll.R;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseInstallation;
@@ -199,6 +200,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
     }
 
     private void removeDBRecord(String removeObjectId, int position) {
+        final String objectId = removeObjectId;
         progressDialog = ProgressDialog.show(getActivity(), "", "Removing record...", true);
         ParseObject point = ParseObject.createWithoutData("Event", removeObjectId);
 
@@ -209,11 +211,34 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
         point.saveInBackground(new SaveCallback() {
             public void done(ParseException e) {
                 if (e == null) {
+                    fnSendPushNotification(objectId);
                     Toast.makeText(getActivity().getApplicationContext(), "Event has been removed!", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), "Server connection failure...", Toast.LENGTH_LONG).show();
                 }
                 progressDialog.dismiss();
+            }
+        });
+    }
+
+    private void fnSendPushNotification(String objectId) {
+        ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery("Event");
+        parseQuery.getInBackground(objectId, new GetCallback<ParseObject>() {
+            public void done(ParseObject parseObject, ParseException e) {
+                if (e == null) {
+                    String phoneList = parseObject.get("EventMembers").toString();
+                    String[] userArray = phoneList.split(",");
+
+                    for (int i = 0; i < userArray.length; i++) {
+                        ParsePush push = new ParsePush();
+                        ParseQuery query = ParseInstallation.getQuery();
+                        query.whereEqualTo("username", userArray[i]);
+                        Log.d("fnSendPushNotification", userArray[i]);
+                        push.setQuery(query);
+                        push.setMessage("Sorry, I ["+userPhoneNumber+"] cannot attend the event: " + parseObject.get("EventTitle").toString());
+                        push.sendInBackground();
+                    }
+                }
             }
         });
     }

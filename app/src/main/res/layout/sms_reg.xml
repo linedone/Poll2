@@ -17,7 +17,7 @@
         android:layout_marginTop="25dp"
         android:textColor="#33b5e5"
         android:textStyle="bold"
-        android:textSize="50sp"
+        android:textSize="30sp"
         android:gravity="center"
         android:layout_above="@+id/txt_phone_no"
         android:text="@string/app_desc" />
