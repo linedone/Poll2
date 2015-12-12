@@ -128,6 +128,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle bundle) {
+        // Empty
+    }
+
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
