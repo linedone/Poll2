@@ -1,21 +1,19 @@
 package com.ust.poll.ui.fragment;
 
-import android.content.Context;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Contacts;
+import android.provider.BaseColumns;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import com.ust.poll.activity.LoginActivity;
 import com.ust.poll.MainActivity;
 import com.linedone.poll.R;
 import com.ust.poll.ui.dialog.DialogHelper;
@@ -29,13 +27,9 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-/**
- * Created by Ken on 10/7/2015.
- */
-public class FriendListFragment extends MainActivity.PlaceholderFragment {
-    @Bind(R.id.listView)
-    ListView listView;
+public class FriendListFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener {
+    @Bind(R.id.listView) ListView listView;
+    ArrayList<String> contactList = new ArrayList<String>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,75 +40,68 @@ public class FriendListFragment extends MainActivity.PlaceholderFragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_example) {
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            startActivityForResult(intent, 1);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        final ArrayList<String> list = new ArrayList<String>();
-        final Context ctx = this.getActivity();
 
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        //query.whereEqualTo("gender", "female");
-        query.findInBackground(new FindCallback<ParseUser>() {
-            public void done(List<ParseUser> objects, ParseException e) {
-                if (e == null) {
-                    for (ParseUser p : objects) {
-                        list.add(getContactName(p.getUsername()));
-                    }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(ctx,android.R.layout.simple_list_item_1, android.R.id.text1, list);
-                    listView.setAdapter(adapter);
-                }
-                else {
-                    DialogHelper.getOkAlertDialog(getActivity(),
-                            "Error in connecting server..", e.getMessage())
-                            .show();
-                }
+        ParseQuery<ParseUser> parseQuery = ParseUser.getQuery();
+        parseQuery.findInBackground(new FindCallback<ParseUser>() {
+            public void done(List<ParseUser> parseObjects, ParseException e) {
+                retrieveSuccess(parseObjects, e);
             }
         });
     }
 
+    private void retrieveSuccess(List<ParseUser> parseObjects, ParseException e) {
+        if (e == null) {
+            for (ParseUser parseItem : parseObjects) {
+                if (getContactName(parseItem.getUsername()).compareTo("")!=0) {
+                    contactList.add(getContactName(parseItem.getUsername()) + "[" + parseItem.getUsername().toString() + "]");
+                }
+            }
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, android.R.id.text1, contactList);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(this);
+        }
+        else {
+            DialogHelper.getOkAlertDialog(getActivity(), "Error in connecting server..", e.getMessage()).show();
+        }
+    }
 
-    public String getContactName(final String phoneNumber)
-    {
-        Uri uri;
-        String[] projection;
-        Uri mBaseUri = Contacts.Phones.CONTENT_FILTER_URL;
-        projection = new String[] { android.provider.Contacts.People.NAME };
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String contact = (String)this.listView.getItemAtPosition(position);
+        Log.i("Contact", contact);
+        String number = contact.substring(contact.indexOf("[") + 1, contact.indexOf("]"));
+
         try {
-            Class<?> c =Class.forName("android.provider.ContactsContract$PhoneLookup");
-            mBaseUri = (Uri) c.getField("CONTENT_FILTER_URI").get(mBaseUri);
-            projection = new String[] { "display_name" };
+            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number)));
         }
         catch (Exception e) {
+            e.printStackTrace();
         }
+    }
 
-
-        uri = Uri.withAppendedPath(mBaseUri, Uri.encode(phoneNumber));
-        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
-
+    public String getContactName(final String number) {
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
         String contactName = "";
 
-        if (cursor.moveToFirst())
-        {
-            contactName = cursor.getString(0);
-        }
+        ContentResolver contentResolver = getActivity().getContentResolver();
+        Cursor contactLookup = contentResolver.query(uri, new String[]{
+                BaseColumns._ID,
+                ContactsContract.PhoneLookup.DISPLAY_NAME
+        }, null, null, null);
 
-        cursor.close();
-        cursor = null;
+        try {
+            if (contactLookup != null && contactLookup.getCount() > 0) {
+                contactLookup.moveToNext();
+                contactName = contactLookup.getString(contactLookup.getColumnIndex(ContactsContract.Data.DISPLAY_NAME));
+            }
+        }
+        finally {
+            if (contactLookup != null) {
+                contactLookup.close();
+            }
+        }
 
         return contactName;
     }
