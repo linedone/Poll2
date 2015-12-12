@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.BaseColumns;
+import android.provider.Contacts;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -35,6 +36,7 @@ import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 import com.ust.poll.MainActivity;
 import com.ust.poll.util.MediaUtil;
+import com.ust.poll.util.TelephonyUtil;
 
 import org.w3c.dom.Text;
 
@@ -128,7 +130,7 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
             String[] arrayMemberPhones = strMember.split(",");
             String[] arrayMemberNames = new String[arrayMemberPhones.length];
             for (int i=0; i<arrayMemberPhones.length; i++){
-                arrayMemberNames[i] = getContactName(arrayMemberPhones[i]) + " [" + arrayMemberPhones[i] + "]";
+                arrayMemberNames[i] = TelephonyUtil.getContactName(getActivity(), arrayMemberPhones[i]) + " [" + arrayMemberPhones[i] + "]";
             }
 
             if (strMember!=null) {  // Construct a ListView
@@ -155,31 +157,6 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
             Toast.makeText(getActivity().getApplicationContext(), "Querying failure...", Toast.LENGTH_LONG).show();
             Log.e("Database", "Error: " + e.getMessage());
         }
-    }
-
-    public String getContactName(final String number) {
-        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
-        String contactName = "";
-
-        ContentResolver contentResolver = getActivity().getContentResolver();
-        Cursor contactLookup = contentResolver.query(uri, new String[]{
-                BaseColumns._ID,
-                ContactsContract.PhoneLookup.DISPLAY_NAME
-        }, null, null, null);
-
-        try {
-            if (contactLookup != null && contactLookup.getCount() > 0) {
-                contactLookup.moveToNext();
-                contactName = contactLookup.getString(contactLookup.getColumnIndex(ContactsContract.Data.DISPLAY_NAME));
-            }
-        }
-        finally {
-            if (contactLookup != null) {
-                contactLookup.close();
-            }
-        }
-
-        return contactName;
     }
 
     @Override

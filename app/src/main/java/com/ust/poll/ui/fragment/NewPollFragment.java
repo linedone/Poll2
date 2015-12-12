@@ -4,12 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +18,9 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.linedone.poll.R;
 import com.ust.poll.MainActivity;
-import com.ust.poll.model.Poll;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import butterknife.Bind;
@@ -155,18 +148,6 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
 
     @OnClick(R.id.btn_new_poll_next)
     public void fnNewPoll(View view) {
-
-        HideFragment hideFrag = new HideFragment();
-        hideFrag.HideFragment();
-
-
-        //Fragment fragment = new NewPollFragment_DateTime();
-        //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        // FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        //fragmentTransaction.replace(R.id.container, fragment);
-        // fragmentTransaction.addToBackStack(null);
-        //fragmentTransaction.commit();
-
         boolean nextChecking = true;
 
         if(txt_deadlineDate.getText().toString().length() == 0 ){

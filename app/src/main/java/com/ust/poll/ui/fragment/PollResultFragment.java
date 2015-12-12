@@ -1,13 +1,8 @@
 package com.ust.poll.ui.fragment;
 
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.BaseColumns;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +22,7 @@ import com.ust.poll.model.Poll;
 import com.ust.poll.model.Polled;
 import com.ust.poll.model.Result;
 import com.ust.poll.ui.adaptor.CustomListAdapter;
+import com.ust.poll.util.TelephonyUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -111,7 +107,7 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
 
                 NewsItem newsData = new NewsItem();
                 newsData.setHeadline("" + t);
-                newsData.setReporterName("" + getContactName(cph));
+                newsData.setReporterName("" + TelephonyUtil.getContactName(getActivity(), cph));
                 newsData.setDate("" + dt);
                 newsData.setpollID(id);
                 //Log.d("active", "" + t);
@@ -156,31 +152,6 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
             Toast.makeText(getActivity().getApplicationContext(), "Querying failure...", Toast.LENGTH_LONG).show();
             Log.e("Database", "Error: " + e.getMessage());
         }
-    }
-
-    public String getContactName(final String number) {
-        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
-        String contactName = "";
-
-        ContentResolver contentResolver = getActivity().getContentResolver();
-        Cursor contactLookup = contentResolver.query(uri, new String[]{
-                BaseColumns._ID,
-                ContactsContract.PhoneLookup.DISPLAY_NAME
-        }, null, null, null);
-
-        try {
-            if (contactLookup != null && contactLookup.getCount() > 0) {
-                contactLookup.moveToNext();
-                contactName = contactLookup.getString(contactLookup.getColumnIndex(ContactsContract.Data.DISPLAY_NAME));
-            }
-        }
-        finally {
-            if (contactLookup != null) {
-                contactLookup.close();
-            }
-        }
-
-        return contactName;
     }
 
     public ArrayList displayDuplicate(String[] ar) {

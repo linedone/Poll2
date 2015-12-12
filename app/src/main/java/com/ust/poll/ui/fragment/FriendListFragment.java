@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
+import android.provider.Contacts;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,12 +23,14 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.ust.poll.util.TelephonyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 public class FriendListFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener {
     @Bind(R.id.listView) ListView listView;
     ArrayList<String> contactList = new ArrayList<String>();
@@ -36,7 +39,7 @@ public class FriendListFragment extends MainActivity.PlaceholderFragment impleme
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_poll_frd, container, false);
-        ButterKnife.bind(this,rootView);
+        ButterKnife.bind(this, rootView);
 
         return rootView;
     }
@@ -53,11 +56,11 @@ public class FriendListFragment extends MainActivity.PlaceholderFragment impleme
     }
 
     private void retrieveSuccess(List<ParseUser> parseObjects, ParseException e) {
-        progressDialog = ProgressDialog.show(getActivity(), "", "Loading contacts...", true);
+        progressDialog = ProgressDialog.show(getActivity(), "Contact List", "Loading contacts...", true);
         if (e == null) {
             for (ParseUser parseItem : parseObjects) {
-                if (getContactName(parseItem.getUsername()).compareTo("")!=0) {
-                    contactList.add(getContactName(parseItem.getUsername()) + "[" + parseItem.getUsername().toString() + "]");
+                if (TelephonyUtil.getContactName(getActivity(), parseItem.getUsername()).compareTo("")!=0) {
+                    contactList.add(TelephonyUtil.getContactName(getActivity(), parseItem.getUsername()) + "[" + parseItem.getUsername().toString() + "]");
                 }
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, android.R.id.text1, contactList);
@@ -83,30 +86,5 @@ public class FriendListFragment extends MainActivity.PlaceholderFragment impleme
         catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public String getContactName(final String number) {
-        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
-        String contactName = "";
-
-        ContentResolver contentResolver = getActivity().getContentResolver();
-        Cursor contactLookup = contentResolver.query(uri, new String[]{
-                BaseColumns._ID,
-                ContactsContract.PhoneLookup.DISPLAY_NAME
-        }, null, null, null);
-
-        try {
-            if (contactLookup != null && contactLookup.getCount() > 0) {
-                contactLookup.moveToNext();
-                contactName = contactLookup.getString(contactLookup.getColumnIndex(ContactsContract.Data.DISPLAY_NAME));
-            }
-        }
-        finally {
-            if (contactLookup != null) {
-                contactLookup.close();
-            }
-        }
-
-        return contactName;
     }
 }
