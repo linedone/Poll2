@@ -48,7 +48,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
     private ProgressDialog progressDialog;
     String imgDecodableString;
     byte[] imgFile;
-    String eventMembers;
+    String members;
     String contactPosition;
 
     @Bind(R.id.txt_etitle) BootstrapEditText txt_etitle;
@@ -176,8 +176,8 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==FRAGMENT_CODE && resultCode==getActivity().RESULT_OK) {
             if(data != null) {
-                if(data.getStringExtra("eventMembers") != null) {
-                    eventMembers = data.getStringExtra("eventMembers");
+                if(data.getStringExtra("members") != null) {
+                    eventMembers = data.getStringExtra("members");
                     contactPosition = data.getStringExtra("contactPosition");
                     Log.i("PickFriend", "Data passed from PickFriend Fragment = " + eventMembers);
                 }
@@ -254,7 +254,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
         fragment.setTargetFragment(this, FRAGMENT_CODE);
         Bundle bundle = new Bundle();
         if (eventMembers!=null) {
-            bundle.putString("eventMembers", eventMembers);
+            bundle.putString("members", eventMembers);
             bundle.putString("contactPosition", contactPosition);
         }
         fragment.setArguments(bundle);
