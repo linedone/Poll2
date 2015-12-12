@@ -48,7 +48,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
     private ProgressDialog progressDialog;
     String imgDecodableString;
     byte[] imgFile;
-    String members;
+    String eventMembers;
     String contactPosition;
 
     @Bind(R.id.txt_etitle) BootstrapEditText txt_etitle;
