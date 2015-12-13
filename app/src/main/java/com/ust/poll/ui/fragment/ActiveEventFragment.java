@@ -174,7 +174,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
         final int newPosition = position;
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this.getContext());
-        alertDialog.setTitle("Are you sure remove this event? This action cannot be undone!!! \nPress 'YES' to confirm.");
+        alertDialog.setTitle("Type 'YES' to delete this event.");
         final EditText inputConfirm = new EditText(this.getContext());
         inputConfirm.setInputType(InputType.TYPE_CLASS_TEXT);
         alertDialog.setView(inputConfirm);
@@ -213,7 +213,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
         point.saveInBackground(new SaveCallback() {
             public void done(ParseException e) {
                 if (e == null) {
-                    fnSendPushNotification(objectId);
+//                    fnSendPushNotification(objectId);
                     Toast.makeText(getActivity().getApplicationContext(), "Event has been removed!", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), "Server connection failure...", Toast.LENGTH_LONG).show();
@@ -223,25 +223,25 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
         });
     }
 
-    private void fnSendPushNotification(String objectId) {
-        ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery("Event");
-        parseQuery.getInBackground(objectId, new GetCallback<ParseObject>() {
-            public void done(ParseObject parseObject, ParseException e) {
-                if (e == null) {
-                    String phoneList = parseObject.get("EventMembers").toString();
-                    String[] userArray = phoneList.split(",");
-
-                    for (int i = 0; i < userArray.length; i++) {
-                        ParsePush push = new ParsePush();
-                        ParseQuery query = ParseInstallation.getQuery();
-                        query.whereEqualTo("username", userArray[i]);
-                        Log.d("fnSendPushNotification", userArray[i]);
-                        push.setQuery(query);
-                        push.setMessage("Sorry, I ["+userPhoneNumber+"] cannot attend the event: " + parseObject.get("EventTitle").toString());
-                        push.sendInBackground();
-                    }
-                }
-            }
-        });
-    }
+//    private void fnSendPushNotification(String objectId) {
+//        ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery("Event");
+//        parseQuery.getInBackground(objectId, new GetCallback<ParseObject>() {
+//            public void done(ParseObject parseObject, ParseException e) {
+//                if (e == null) {
+//                    String phoneList = parseObject.get("EventMembers").toString();
+//                    String[] userArray = phoneList.split(",");
+//
+//                    for (int i = 0; i < userArray.length; i++) {
+//                        ParsePush push = new ParsePush();
+//                        ParseQuery query = ParseInstallation.getQuery();
+//                        query.whereEqualTo("username", userArray[i]);
+//                        Log.d("fnSendPushNotification", userArray[i]);
+//                        push.setQuery(query);
+//                        push.setMessage("Sorry, I ["+userPhoneNumber+"] cannot attend the event: " + parseObject.get("EventTitle").toString());
+//                        push.sendInBackground();
+//                    }
+//                }
+//            }
+//        });
+//    }
 }
