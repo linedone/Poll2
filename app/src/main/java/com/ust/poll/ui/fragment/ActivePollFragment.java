@@ -120,8 +120,6 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
         });
     }
 
-
-
     public void retrieveEventSuccess(List<ParseObject> parseObjects, ParseException e) {
         if (e==null) {
             int counter = 0;
@@ -252,7 +250,6 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
         catch (Exception e) {
         }
 
-
         uri = Uri.withAppendedPath(mBaseUri, Uri.encode(phoneNumber));
         Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
 
@@ -271,8 +268,6 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
 
 
     private void hideFragments(FragmentTransaction transaction) {
-
-
         ActiveEventFragment activeEventFragment = (ActiveEventFragment)getFragmentManager().findFragmentByTag("ActiveEventFragment");
         ActivePollFragment activePollFragment = (ActivePollFragment)getFragmentManager().findFragmentByTag("ActivePollFragment");
         DetailFriendListEventFragment detailFriendListEventFragment = (DetailFriendListEventFragment)getFragmentManager().findFragmentByTag("DetailFriendListEventFragment");
@@ -280,15 +275,9 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
         FriendListFragment friendListFragment = (FriendListFragment)getFragmentManager().findFragmentByTag("FriendListFragment");
         NewEventFragment newEventFragment = (NewEventFragment)getFragmentManager().findFragmentByTag("NewEventFragment");
         NewPollFragment newPollFragment = (NewPollFragment)getFragmentManager().findFragmentByTag("NewPollFragment");
-        NewPollFragment_DateTime newPollFragment_DateTime = (NewPollFragment_DateTime)getFragmentManager().findFragmentByTag("NewPollFragment_DateTime");
-        NewPollFragment_PickFriend newPollFragment_PickFriend = (NewPollFragment_PickFriend)getFragmentManager().findFragmentByTag("NewPollFragment_PickFriend");
         PickFriendFragment pickFriendFragment = (PickFriendFragment)getFragmentManager().findFragmentByTag("PickFriendFragment");
         PollResultFragment pollResultFragment = (PollResultFragment)getFragmentManager().findFragmentByTag("PollResultFragment");
         SelectPollFragment selectPollFragment = (SelectPollFragment)getFragmentManager().findFragmentByTag("SelectPollFragment");
-
-
-
-
 
         if ( activeEventFragment!= null) {
             transaction.hide(activeEventFragment);
@@ -311,12 +300,6 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
         if (newPollFragment != null) {
             transaction.hide(newPollFragment);
         }
-        if (newPollFragment_DateTime != null) {
-            transaction.hide(newPollFragment_DateTime);
-        }
-        if (newPollFragment_PickFriend != null) {
-            transaction.hide(newPollFragment_PickFriend);
-        }
         if (pickFriendFragment != null) {
             transaction.hide(pickFriendFragment);
         }
@@ -326,7 +309,5 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
         if (selectPollFragment != null) {
             transaction.hide(selectPollFragment);
         }
-
     }
-
 }

@@ -248,7 +248,7 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
     public Uri getPhotoFileUri(String fileName) {
         Uri resource;
         if (isExternalStorageAvailable()) {  // Only continue if the SD Card is mounted
-            File storage = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "LETSMEET");
+            File storage = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Lets Meet");
             // Create the storage directory if it does not exist
             if (!storage.exists() && !storage.mkdirs()){
                 Log.d("Camera", "Create directory failed!");

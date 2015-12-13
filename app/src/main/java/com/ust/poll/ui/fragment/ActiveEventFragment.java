@@ -174,7 +174,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
         final int newPosition = position;
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this.getContext());
-        alertDialog.setTitle("Unable to attend the event. \nPress 'YES' to confirm.");
+        alertDialog.setTitle("Are you sure remove this event? \nThis action cannot be undone!!! \nPress 'YES' to confirm.");
         final EditText inputConfirm = new EditText(this.getContext());
         inputConfirm.setInputType(InputType.TYPE_CLASS_TEXT);
         alertDialog.setView(inputConfirm);
