@@ -28,6 +28,7 @@ import com.ust.poll.ui.fragment.FriendListFragment;
 import com.ust.poll.ui.fragment.MainFragment;
 import com.ust.poll.ui.fragment.NewEventFragment;
 import com.ust.poll.ui.fragment.NewPollFragment;
+import com.ust.poll.ui.fragment.PickFriendFragment;
 import com.ust.poll.ui.fragment.PollResultFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -106,9 +107,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                     })
                     .setNegativeButton("No", null).show();
         }
-        //else if (!backCheck && doNothing){
-
-        //}
+        else if (!backCheck && doNothing){
+            getFragmentManager().popBackStack();
+        }
         else {
             super.onBackPressed();
         }

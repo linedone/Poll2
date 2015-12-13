@@ -10,8 +10,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,14 +57,24 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
         return rootView;
     }
 
+
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int itemPosition = position;  // ListView Clicked item index
     }
 
+
+
+
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+
+
+
+
 
         ArrayList<PhoneContactInfo> arrContacts = getContactsFromDeviceContactList();
         Iterator iterator = arrContacts.iterator();
@@ -91,19 +103,20 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
         friendList.setOnItemClickListener(this);
 
         Bundle bundle = this.getArguments();
+        String soption1 = bundle.getString("soption1");
+        String soption2 = bundle.getString("soption2");
+        String soption3 = bundle.getString("soption3");
+        String soption4 = bundle.getString("soption4");
+
+
+
+        txtOption1.setText(soption1);
+        txtOption2.setText(soption2);
+        txtOption3.setText(soption3);
+        txtOption4.setText(soption4);
         if (bundle!=null && bundle.getString("members")!=null) {
 
-            String soption1 = bundle.getString("soption1");
-            String soption2 = bundle.getString("soption2");
-            String soption3 = bundle.getString("soption3");
-            String soption4 = bundle.getString("soption4");
 
-
-
-            txtOption1.setText(soption1);
-            txtOption2.setText(soption2);
-            txtOption3.setText(soption3);
-            txtOption4.setText(soption4);
 
             //Log.d("testing", ""+soption1);
 
@@ -117,6 +130,8 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
             }
         }
     }
+
+
 
     public ArrayList<PhoneContactInfo> getContactsFromDeviceContactList() {
         ArrayList<PhoneContactInfo> arrContacts = new ArrayList<PhoneContactInfo>();
@@ -197,4 +212,7 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
         getFragmentManager().popBackStack();
     }
+
+
+
 }

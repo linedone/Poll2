@@ -192,13 +192,15 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
             if (members!=null) {
 
 
-                bundle.putString("soption1", option1.getText().toString());
-                bundle.putString("soption2", option2.getText().toString());
-                bundle.putString("soption3", option3.getText().toString());
-                bundle.putString("soption4", option4.getText().toString());
+
                 bundle.putString("members", members);
                 bundle.putString("contactPosition", contactPosition);
         }
+
+        bundle.putString("soption1", option1.getText().toString());
+        bundle.putString("soption2", option2.getText().toString());
+        bundle.putString("soption3", option3.getText().toString());
+        bundle.putString("soption4", option4.getText().toString());
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
     }
@@ -237,8 +239,8 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
     @OnClick(R.id.btn_new_poll_next)
     public void fnNewPoll(View view) {
 
-        HideFragment hideFrag = new HideFragment();
-        hideFrag.HideFragment();
+        //HideFragment hideFrag = new HideFragment();
+        //hideFrag.HideFragment();
 
 
         //Fragment fragment = new NewPollFragment_DateTime();
@@ -311,17 +313,23 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
             nextChecking = false;
         }
 
+        if(members != null){
+            String[] pollmemberArray = members.split(",");
 
-        String[] pollmemberArray = members.split(",");
+            //ArrayList memeberArray = new ArrayList();
 
-        //ArrayList memeberArray = new ArrayList();
+            //memeberArray.add(Arrays.asList(pollmemberArray));
+            //memeberArray.removeAll(Arrays.asList(null,""));
 
-        //memeberArray.add(Arrays.asList(pollmemberArray));
-        //memeberArray.removeAll(Arrays.asList(null,""));
+            if(pollmemberArray.length<=0 || pollmemberArray[0].equals("")){
+                Toast.makeText(NewPollFragment.super.getActivity(), "Friend must be more than one!", Toast.LENGTH_LONG).show();
+                nextChecking = false;
+            }
+        }else{
 
-        if(pollmemberArray.length<=0){
-            Toast.makeText(NewPollFragment.super.getActivity(), "Friend must be more than one!", Toast.LENGTH_LONG).show();
-            nextChecking = false;
+                Toast.makeText(NewPollFragment.super.getActivity(), "Friend must be more than one!", Toast.LENGTH_LONG).show();
+                nextChecking = false;
+
         }
 
 
@@ -351,31 +359,33 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
                 e.printStackTrace();
             }
 
+            if(members != null){
+                String[] pollmemberArray = members.split(",");
+                ParseUser user = ParseUser.getCurrentUser();
+                final String username = user.getUsername();
 
-            ParseUser user = ParseUser.getCurrentUser();
-            final String username = user.getUsername();
-
-            pollObject.put(Poll.FRIEND_PHONE, Arrays.asList(pollmemberArray));
+                pollObject.put(Poll.FRIEND_PHONE, Arrays.asList(pollmemberArray));
 
 
-            pollObject.put(Poll.CREATORPHONE, username);
+                pollObject.put(Poll.CREATORPHONE, username);
 
-            pollObject.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(com.parse.ParseException e) {
-                    DialogHelper.fnCloseDialog();
-                    if (e == null) {
-                        Toast.makeText(ctx,
-                                "Poll Successfully created.",
-                                Toast.LENGTH_LONG).show();
-                    } else {
-                        DialogHelper.getOkAlertDialog(ctx,
-                                "Error in connecting server..", e.getMessage())
-                                .show();
+                pollObject.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(com.parse.ParseException e) {
+                        DialogHelper.fnCloseDialog();
+                        if (e == null) {
+                            Toast.makeText(ctx,
+                                    "Poll Successfully created.",
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            DialogHelper.getOkAlertDialog(ctx,
+                                    "Error in connecting server..", e.getMessage())
+                                    .show();
+                        }
                     }
-                }
-            });
-            fnSendPushNotification(pollmemberArray,txt_title.getText().toString(),getContactName(username));
+                });
+                fnSendPushNotification(pollmemberArray,txt_title.getText().toString(),getContactName(username));
+            }
         }
 
 
