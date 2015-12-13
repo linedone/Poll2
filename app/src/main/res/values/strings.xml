@@ -57,6 +57,8 @@
 
     <!-- New result Fragment -->
     <string name="text_poll_result">POLL RESULT</string>
+    <string name="text_result_chartback">Back</string>
+
 
     <!-- New Event Fragment -->
     <string name="text_event_name">Event Title</string>

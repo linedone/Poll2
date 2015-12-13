@@ -42,8 +42,11 @@ public class Result implements Comparable {
 
 	@Override
 	public String toString() {
-		return "Option:" + title + ", voted:" + count + "";
+		return title + "!#####!" + count;
 	}
+
+
+
 
 
 	@Override

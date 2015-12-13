@@ -3,6 +3,10 @@
 
 package com.ust.poll.model;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class NewsItem {
 
 	private String headline;
@@ -10,6 +14,15 @@ public class NewsItem {
 	private String date;
 	private String pollId;
 	private String allOpt;
+	private ArrayList result;
+
+	public ArrayList getResult() {
+		return result;
+	}
+
+	public void setResult(ArrayList result) {
+		this.result = result;
+	}
 
 	public String getpollID() {
 		return pollId;

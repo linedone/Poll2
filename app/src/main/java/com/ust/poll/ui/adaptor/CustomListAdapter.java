@@ -51,6 +51,16 @@ public class CustomListAdapter extends BaseAdapter {
 			holder.reporterNameView = (TextView) convertView.findViewById(R.id.reporter);
 			holder.reportedDateView = (TextView) convertView.findViewById(R.id.date);
 			holder.reportedIdView = (TextView) convertView.findViewById(R.id.pollid);
+
+			holder.option1Result = (TextView) convertView.findViewById(R.id.option1Result);
+
+			holder.option2Result = (TextView) convertView.findViewById(R.id.option2Result);
+
+			holder.option3Result = (TextView) convertView.findViewById(R.id.option3Result);
+
+			holder.option4Result = (TextView) convertView.findViewById(R.id.option4Result);
+
+
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -65,6 +75,33 @@ public class CustomListAdapter extends BaseAdapter {
 
 			holder.resultView.setVisibility(View.VISIBLE);
 			holder.resultView.setText("Poll Result : " + listData.get(position).getallOpt());
+
+			//for(int i = 0; i < listData.get(position).getResult().size(); i++) {
+			holder.option1Result.setText("");
+			holder.option2Result.setText("");
+			holder.option3Result.setText("");
+			holder.option4Result.setText("");
+
+			if(listData.get(position).getResult().size() >= 1){
+				holder.option1Result.setText("" + listData.get(position).getResult().get(0));
+			}
+			if(listData.get(position).getResult().size() >= 2){
+				holder.option2Result.setText("" + listData.get(position).getResult().get(1));
+			}
+			if(listData.get(position).getResult().size() >= 3){
+				holder.option3Result.setText("" + listData.get(position).getResult().get(2));
+			}
+			if(listData.get(position).getResult().size() >= 4){
+				holder.option4Result.setText("" + listData.get(position).getResult().get(3));
+			}
+
+			//holder.option2Result.setText("" + listData.get(position).getResult().get(1));
+			//	holder.option3Result.setText("" + listData.get(position).getResult().get(2));
+			//	holder.option4Result.setText("" + listData.get(position).getResult().get(3));
+
+			//}
+
+
 		}
 
 		holder.reporterNameView.setText("Created By, " + listData.get(position).getReporterName());
@@ -80,6 +117,10 @@ public class CustomListAdapter extends BaseAdapter {
 		TextView reportedDateView;
 		TextView reportedIdView;
 		TextView resultView;
+		TextView option1Result;
+		TextView option2Result;
+		TextView option3Result;
+		TextView option4Result;
 	}
 
 }

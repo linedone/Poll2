@@ -5,15 +5,33 @@ package com.ust.poll.ui.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.BootstrapEditText;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.Chart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -27,6 +45,7 @@ import com.ust.poll.model.Result;
 import com.ust.poll.ui.adaptor.CustomListAdapter;
 import com.ust.poll.util.TelephonyUtil;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +55,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class PollResultFragment extends MainActivity.PlaceholderFragment {
 
@@ -43,7 +63,18 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a Z");  // 2015-12-13T11:31:00.000Z
 
     @Nullable
-    @Bind(R.id.result_custom_list) ListView lv1;
+    @Bind(R.id.btn_new_poll_next)
+    BootstrapButton btn_new_poll_next;
+
+    @Bind(R.id.result_custom_list)
+    ListView lv1;
+
+
+    private PieChart mChart;
+    // we're going to display pie chart for smartphones martket shares
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,9 +87,189 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+
+        mChart = (PieChart) getView().findViewById(R.id.chart);
+
+
+        lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
+                //view.setSelected(true);
+                // ListView Clicked item index
+                int itemPosition = position;
+
+                String optTitle = ((TextView) view.findViewById(R.id.title)).getText().toString();
+                //String result = ((TextView) view.findViewById(R.id.result)).getText().toString();
+                //String[] pollResult = result.split("\n");
+
+                //ArrayList titleOpt = new ArrayList();
+                //ArrayList votedOpt = new ArrayList();
+
+
+                //String[] titleArray = (String[]) titleOpt.toArray(new String[titleOpt.size()]);
+                //String[] votedArray = (String[]) titleOpt.toArray(new String[votedOpt.size()]);
+
+
+                //Log.d("test", "wahahahahahhaha");
+
+                ArrayList<String> titlelist = new ArrayList<String>();
+                ArrayList<Float> countlist = new ArrayList<Float>();
+
+                //int optionCount = 0;
+                if (!((TextView) view.findViewById(R.id.option1Result)).getText().toString().isEmpty()) {
+                    //optionCount++;
+                    String[] tmpOpt1Arry = ((TextView) view.findViewById(R.id.option1Result)).getText().toString().split("!#####!");
+                    titlelist.add(tmpOpt1Arry[0]);
+                    countlist.add(Float.valueOf(tmpOpt1Arry[1]));
+
+                }
+
+                if (!((TextView) view.findViewById(R.id.option2Result)).getText().toString().isEmpty()) {
+                    //optionCount++;
+                    String[] tmpOpt2Arry = ((TextView) view.findViewById(R.id.option2Result)).getText().toString().split("!#####!");
+                    titlelist.add(tmpOpt2Arry[0]);
+                    countlist.add(Float.valueOf(tmpOpt2Arry[1]));
+                }
+
+                if (!((TextView) view.findViewById(R.id.option3Result)).getText().toString().isEmpty()) {
+                    //optionCount++;
+                    String[] tmpOpt3Arry = ((TextView) view.findViewById(R.id.option3Result)).getText().toString().split("!#####!");
+                    titlelist.add(tmpOpt3Arry[0]);
+                    countlist.add(Float.valueOf(tmpOpt3Arry[1]));
+                }
+
+                if (!((TextView) view.findViewById(R.id.option4Result)).getText().toString().isEmpty()) {
+                    //optionCount++;
+                    String[] tmpOpt4Arry = ((TextView) view.findViewById(R.id.option4Result)).getText().toString().split("!#####!");
+                    titlelist.add(tmpOpt4Arry[0]);
+                    countlist.add(Float.valueOf(tmpOpt4Arry[1]));
+                }
+
+                Float[] countArray = countlist.toArray(new Float[countlist.size()]);
+                String[] titleArray = titlelist.toArray(new String[titlelist.size()]);
+
+
+                Log.d("test", "a" + ((TextView) view.findViewById(R.id.option1Result)).getText().toString());
+                Log.d("test", "b" + ((TextView) view.findViewById(R.id.option2Result)).getText().toString());
+                Log.d("test", "c" + ((TextView) view.findViewById(R.id.option3Result)).getText().toString());
+                Log.d("test", "d" + ((TextView) view.findViewById(R.id.option4Result)).getText().toString());
+                //Log.d("test", ""+votedArray[0]);
+
+
+
+
+                TextView resultTitle = (TextView) getView().findViewById(R.id.Title);
+                btn_new_poll_next.setVisibility(View.VISIBLE);
+                mChart.setVisibility(View.VISIBLE);
+                lv1.setVisibility(View.INVISIBLE);
+                resultTitle.setVisibility(View.INVISIBLE);
+                // add data
+                addData(countArray, titleArray, optTitle);
+
+                // customize legends
+                Legend l = mChart.getLegend();
+                l.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
+                l.setXEntrySpace(7);
+                l.setYEntrySpace(5);
+
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+        // add data
+        //addData();
+
+        // customize legends
+        //Legend l = mChart.getLegend();
+        //l.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
+        //l.setXEntrySpace(7);
+        //l.setYEntrySpace(5);
+
+
+
         final ArrayList<String> list = new ArrayList<String>();
         final Context ctx = this.getActivity();
         //DialogHelper.fnShowDialog(this.getContext());
+
+
+
+
+
+/*
+
+        BarChart chart = (BarChart) getView().findViewById(R.id.chart);
+
+        ArrayList<String> xAxis = new ArrayList<>();
+        xAxis.add("");
+
+        ArrayList<BarDataSet> dataSets = null;
+
+
+        ArrayList<BarEntry> valueSet1 = new ArrayList<>();
+        BarEntry v1e1 = new BarEntry(5, 0); // Jan
+        valueSet1.add(v1e1);
+        BarDataSet barDataSet1 = new BarDataSet(valueSet1, "aaaaaaaaaaaaaaaa");
+        barDataSet1.setValueTextSize(3);
+        barDataSet1.setColor(Color.rgb(0, 155, 0));
+
+        ArrayList<BarEntry> valueSet2 = new ArrayList<>();
+        BarEntry v2e1 = new BarEntry(15, 0); // Jan
+        valueSet2.add(v2e1);
+        BarDataSet barDataSet2 = new BarDataSet(valueSet2, "bbbbbbbbbbbbbbbb");
+        barDataSet2.setValueTextSize(2);
+        barDataSet2.setColor(Color.rgb(0, 0, 155));
+
+
+        ArrayList<BarEntry> valueSet3 = new ArrayList<>();
+        BarEntry v3e1 = new BarEntry(25, 0); // Jan
+        valueSet3.add(v3e1);
+        BarDataSet barDataSet3 = new BarDataSet(valueSet3, "cccccccccccccccc");
+
+        barDataSet3.setValueTextSize(1);
+        barDataSet3.setColor(Color.rgb(155, 0, 0));
+
+
+        ArrayList<BarEntry> valueSet4 = new ArrayList<>();
+        BarEntry v4e1 = new BarEntry(25, 0); // Jan
+        valueSet4.add(v4e1);
+        BarDataSet barDataSet4 = new BarDataSet(valueSet4, "ddddddddddddddddd");
+        barDataSet4.setValueTextSize(1);
+        barDataSet4.setColor(Color.rgb(50, 50, 50));
+
+
+
+
+        dataSets = new ArrayList<>();
+        dataSets.add(barDataSet1);
+        dataSets.add(barDataSet2);
+        dataSets.add(barDataSet3);
+        dataSets.add(barDataSet4);
+
+
+
+
+
+
+        BarData data = new BarData(xAxis, dataSets);
+        chart.setData(data);
+        chart.setDescription("My Chart");
+        chart.animateXY(2000, 2000);
+        chart.invalidate();
+
+*/
+
 
         progressDialog = ProgressDialog.show(getActivity(), "", "Loading records...", true);
 
@@ -66,9 +277,8 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
         ParseQuery expiredQuery = new ParseQuery(Poll.TABLE_NAME);
         expiredQuery.whereLessThan(Poll.END_AT, new Date());  // Deadline_Date < Today(), "END_AT"<TODAY
 
-
         Log.d("sssssss", "" + sdf.format(new Date()));
-        Log.d("sssssss", ""+sdf.format(new Date()));
+        Log.d("sssssss", "" + sdf.format(new Date()));
 
         // Voted Result, but non-Expired
         ParseQuery votedQuery = new ParseQuery(Poll.TABLE_NAME);
@@ -84,13 +294,106 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 if (e == null) {
                     retrievePollResultSuccess(parseObjects, e);
-                }
-                else {
+                } else {
                     progressDialog.dismiss();
                 }
             }
         });
+
+
+
+
+
+
     }
+
+
+
+    private void addData(Float[] yData, String[] xData, String titleOpt) {
+
+
+        //float[] yData = { 5, 10, 15, 30 };
+        //String[] xData = { "Sonyaaaaaaaaaaa", "Huawaaaaaaei", "aaaaaaaLG", "Apaaaaaaaaaple" };
+
+        mChart.setDescription(""+titleOpt);
+
+        //mainLayout = (RelativeLayout) getView().findViewById(R.id.chart);
+
+        //mChart = new PieChart(getActivity());
+
+
+        // add pie chart to main layout
+        //mainLayout.addView(mChart);
+        //mainLayout.setBackgroundColor(Color.parseColor("#55656C"));
+
+        // configure pie chart
+        mChart.setUsePercentValues(true);
+
+        // enable hole and configure
+        mChart.setDrawHoleEnabled(true);
+        mChart.setHoleColorTransparent(true);
+        mChart.setHoleRadius(7);
+        mChart.setTransparentCircleRadius(10);
+
+        // enable rotation of the chart by touch
+        mChart.setRotationAngle(0);
+        mChart.setRotationEnabled(true);
+
+        // set a chart value selected listener
+
+        ArrayList<Entry> yVals1 = new ArrayList<Entry>();
+
+        for (int i = 0; i < yData.length; i++)
+            yVals1.add(new Entry(yData[i], i));
+
+        ArrayList<String> xVals = new ArrayList<String>();
+
+        for (int i = 0; i < xData.length; i++)
+            xVals.add(xData[i]);
+
+        // create pie data set
+        PieDataSet dataSet = new PieDataSet(yVals1, "");
+        dataSet.setSliceSpace(3);
+        dataSet.setSelectionShift(5);
+
+        // add many colors
+        ArrayList<Integer> colors = new ArrayList<Integer>();
+
+        for (int c : ColorTemplate.VORDIPLOM_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.JOYFUL_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.COLORFUL_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.LIBERTY_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.PASTEL_COLORS)
+            colors.add(c);
+
+        colors.add(ColorTemplate.getHoloBlue());
+        dataSet.setColors(colors);
+
+        // instantiate pie data object now
+        PieData data = new PieData(xVals, dataSet);
+        data.setValueFormatter(new PercentFormatter());
+        data.setValueTextSize(11f);
+        data.setValueTextColor(Color.GRAY);
+
+        mChart.setData(data);
+
+        // undo all highlights
+        mChart.highlightValues(null);
+
+        mChart.animateXY(2000, 2000);
+        // update pie chart
+        mChart.invalidate();
+    }
+
+
 
     public void retrievePollResultSuccess(List<ParseObject> parseObjects, ParseException e) {
         if (e==null) {
@@ -122,6 +425,7 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
                 String allOption = "";
                 ArrayList sortedResult = new ArrayList();
 
+
                 ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery(Polled.TABLE_NAME);
                 parseQuery.whereEqualTo(Polled.POLLID, id);
 
@@ -135,18 +439,29 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
 
                     sortedResult = displayDuplicate(optArray);
 
+
+
                     allOption = "";
                     for(int i = 0; i < sortedResult.size(); i++) {
-                        allOption += "\n" + sortedResult.get(i).toString();
+
+                        String[] tmpArray = sortedResult.get(i).toString().split("!#####!");
+
+                        allOption += "\n Option: " + tmpArray[0]+", voted"+tmpArray[1];
+                        Log.d("result+++++++", "" + sortedResult.get(i));
                     }
                     //Log.d("result------", "" + allOpt);
                 } catch (ParseException e1) {
                     e1.printStackTrace();
                     progressDialog.dismiss();
                 }
+                newsData.setResult(sortedResult);
+                //for(int i = 0; i < sortedResult.size(); i++) {
 
-                newsData.setallOpt(""+allOption);
-                Log.d("result------", "" + allOption);
+                //    Log.d("result------", "" + sortedResult.get(i));
+                //}
+
+                newsData.setallOpt("" + allOption);
+                //Log.d("result------", "" + sortedResult.size());
                 results.add(newsData);
             }
 
@@ -187,5 +502,31 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
             Log.d("result", "" + resultList.get(i).toString());
         }
         return resultList;
+    }
+
+    public static String[] cleanString(final String[] v) {
+        int r, w;
+        final int n = r = w = v.length;
+        while (r > 0) {
+            final String s = v[--r];
+            if (!s.equals("null")) {
+                v[--w] = s;
+            }
+        }
+        return Arrays.copyOfRange(v, w, n);
+    }
+
+
+
+
+    @OnClick(R.id.btn_new_poll_next)
+    public void fnBackChart(View view) {
+
+        TextView resultTitle = (TextView) getView().findViewById(R.id.Title);
+        mChart.setVisibility(View.INVISIBLE);
+        btn_new_poll_next.setVisibility(View.INVISIBLE);
+        lv1.setVisibility(View.VISIBLE);
+        resultTitle.setVisibility(View.VISIBLE);
+
     }
 }

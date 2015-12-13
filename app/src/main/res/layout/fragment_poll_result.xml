@@ -1,3 +1,6 @@
+
+
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -9,6 +12,15 @@
 
     <TextView android:id="@+id/section_label" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/btn_new_poll_next"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:onClick="fnBackChart"
+        android:visibility="invisible"
+        android:text="@string/text_result_chartback" />
 
     <TextView android:id="@+id/Title"
         android:layout_width="fill_parent"
@@ -32,5 +44,12 @@
         android:divider="#d1ecfe"
         android:scrollbars="none"
         android:dividerHeight="1dp" />
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/chart"
+        android:visibility="invisible"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </RelativeLayout>
