@@ -1,17 +1,15 @@
+// CSIT 6000B    #  CHAN Shing Chuen     20286820     scchanak@connect.ust.hk
+// CSIT 6000B    #  MA Ka Kin            20286533     kkmaab@connect.ust.hk
+
 package com.ust.poll.ui.fragment;
 
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.BaseColumns;
-import android.provider.Contacts;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -38,10 +35,7 @@ import com.ust.poll.MainActivity;
 import com.ust.poll.util.MediaUtil;
 import com.ust.poll.util.TelephonyUtil;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;

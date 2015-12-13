@@ -1,6 +1,7 @@
-package com.ust.poll.ui.fragment;
+// CSIT 6000B    #  CHAN Shing Chuen     20286820     scchanak@connect.ust.hk
+// CSIT 6000B    #  MA Ka Kin            20286533     kkmaab@connect.ust.hk
 
-import android.support.v4.app.FragmentTransaction;
+package com.ust.poll.ui.fragment;
 
 import com.ust.poll.MainActivity;
 

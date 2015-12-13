@@ -1,8 +1,10 @@
+// CSIT 6000B    #  CHAN Shing Chuen     20286820     scchanak@connect.ust.hk
+// CSIT 6000B    #  MA Ka Kin            20286533     kkmaab@connect.ust.hk
+
 package com.ust.poll.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +19,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by Ken on 10/7/2015.
- */
 public class NewPollFragment_DateTime extends MainActivity.PlaceholderFragment {
     @Nullable
     @Bind(R.id.txt_title)

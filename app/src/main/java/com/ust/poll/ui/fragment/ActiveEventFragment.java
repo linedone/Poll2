@@ -1,3 +1,6 @@
+// CSIT 6000B    #  CHAN Shing Chuen     20286820     scchanak@connect.ust.hk
+// CSIT 6000B    #  MA Ka Kin            20286533     kkmaab@connect.ust.hk
+
 package com.ust.poll.ui.fragment;
 
 import android.app.AlertDialog;
@@ -30,7 +33,6 @@ import com.parse.SaveCallback;
 import com.ust.poll.MainActivity;
 import com.ust.poll.ui.adaptor.EventAdapter;
 import com.ust.poll.util.MediaUtil;
-import com.ust.poll.util.TelephonyUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

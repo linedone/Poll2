@@ -1,3 +1,6 @@
+// CSIT 6000B    #  CHAN Shing Chuen     20286820     scchanak@connect.ust.hk
+// CSIT 6000B    #  MA Ka Kin            20286533     kkmaab@connect.ust.hk
+
 package com.ust.poll.ui.fragment;
 
 import android.app.DatePickerDialog;
@@ -9,11 +12,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Contacts;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,11 +36,7 @@ import com.ust.poll.MainActivity;
 import com.ust.poll.model.Poll;
 import com.ust.poll.ui.dialog.DialogHelper;
 
-import org.w3c.dom.Element;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;

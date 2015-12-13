@@ -1,8 +1,8 @@
+// CSIT 6000B    #  CHAN Shing Chuen     20286820     scchanak@connect.ust.hk
+// CSIT 6000B    #  MA Ka Kin            20286533     kkmaab@connect.ust.hk
+
 package com.ust.poll.model;
 
-/**
- * Created by CSH529 on 10/29/2015.
- */
 public class Poll {
     public static final String TABLE_NAME = "POLL";
     public static final String POLLED_TABLE_NAME = "POLLED";

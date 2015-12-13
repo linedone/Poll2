@@ -1,3 +1,6 @@
+// CSIT 6000B    #  CHAN Shing Chuen     20286820     scchanak@connect.ust.hk
+// CSIT 6000B    #  MA Ka Kin            20286533     kkmaab@connect.ust.hk
+
 package com.ust.poll.sms;
 
 import android.content.BroadcastReceiver;
@@ -6,7 +9,6 @@ import android.content.Intent;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-import com.ust.poll.MainActivity;
 import com.ust.poll.activity.LoginActivity;
 
 /**

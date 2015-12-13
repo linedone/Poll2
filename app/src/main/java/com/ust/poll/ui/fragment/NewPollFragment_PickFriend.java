@@ -1,6 +1,8 @@
+// CSIT 6000B    #  CHAN Shing Chuen     20286820     scchanak@connect.ust.hk
+// CSIT 6000B    #  MA Ka Kin            20286533     kkmaab@connect.ust.hk
+
 package com.ust.poll.ui.fragment;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -8,7 +10,6 @@ import android.os.Bundle;
 import android.provider.Contacts;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -44,9 +45,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by Ken on 10/7/2015.
- */
 public class NewPollFragment_PickFriend extends MainActivity.PlaceholderFragment {
     @Nullable
     @Bind(R.id.txt_title)

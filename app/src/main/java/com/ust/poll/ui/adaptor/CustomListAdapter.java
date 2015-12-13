@@ -1,3 +1,6 @@
+// CSIT 6000B    #  CHAN Shing Chuen     20286820     scchanak@connect.ust.hk
+// CSIT 6000B    #  MA Ka Kin            20286533     kkmaab@connect.ust.hk
+
 package com.ust.poll.ui.adaptor;
 
 import android.content.Context;
@@ -8,8 +11,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.linedone.poll.R;
-import com.parse.FindCallback;
-import com.parse.ParseObject;
 import com.ust.poll.model.NewsItem;
 
 import java.util.ArrayList;

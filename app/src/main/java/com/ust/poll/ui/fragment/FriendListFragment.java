@@ -1,14 +1,11 @@
+// CSIT 6000B    #  CHAN Shing Chuen     20286820     scchanak@connect.ust.hk
+// CSIT 6000B    #  MA Ka Kin            20286533     kkmaab@connect.ust.hk
+
 package com.ust.poll.ui.fragment;
 
-import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.BaseColumns;
-import android.provider.Contacts;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,8 +54,9 @@ public class FriendListFragment extends MainActivity.PlaceholderFragment impleme
     private void retrieveSuccess(List<ParseUser> parseObjects, ParseException e) {
         if (e == null) {
             for (ParseUser parseItem : parseObjects) {
-                if (TelephonyUtil.getContactName(getActivity(), parseItem.getUsername()).compareTo("")!=0) {
-                    contactList.add(TelephonyUtil.getContactName(getActivity(), parseItem.getUsername()) + "[" + parseItem.getUsername().toString() + "]");
+                String contactName = TelephonyUtil.getContactName(getActivity(), parseItem.getUsername());
+                if (contactName.compareTo("")!=0) {
+                    contactList.add(contactName + "[" + parseItem.getUsername().toString() + "]");
                 }
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, android.R.id.text1, contactList);

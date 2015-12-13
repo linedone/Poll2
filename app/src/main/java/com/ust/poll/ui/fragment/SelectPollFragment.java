@@ -1,25 +1,18 @@
+// CSIT 6000B    #  CHAN Shing Chuen     20286820     scchanak@connect.ust.hk
+// CSIT 6000B    #  MA Ka Kin            20286533     kkmaab@connect.ust.hk
+
 package com.ust.poll.ui.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +26,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.ust.poll.MainActivity;
-import com.ust.poll.activity.LoginActivity;
 import com.ust.poll.model.Poll;
 import com.ust.poll.model.Polled;
 import com.ust.poll.ui.dialog.DialogHelper;
@@ -58,17 +50,13 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
 
 
 
-    @Bind(R.id.btn_select_op1)
-    BootstrapButton btn_select_op1;
+    @Bind(R.id.btn_select_op1) BootstrapButton btn_select_op1;
 
-    @Bind(R.id.btn_select_op2)
-    BootstrapButton btn_select_op2;
+    @Bind(R.id.btn_select_op2) BootstrapButton btn_select_op2;
 
-    @Bind(R.id.btn_select_op3)
-    BootstrapButton btn_select_op3;
+    @Bind(R.id.btn_select_op3) BootstrapButton btn_select_op3;
 
-    @Bind(R.id.btn_select_op4)
-    BootstrapButton btn_select_op4;
+    @Bind(R.id.btn_select_op4) BootstrapButton btn_select_op4;
 
 
     @Override

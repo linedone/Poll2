@@ -1,3 +1,6 @@
+// CSIT 6000B    #  CHAN Shing Chuen     20286820     scchanak@connect.ust.hk
+// CSIT 6000B    #  MA Ka Kin            20286533     kkmaab@connect.ust.hk
+
 package com.ust.poll.model;
 
 import java.io.Serializable;
@@ -14,7 +17,6 @@ public class NewPoll implements Serializable {
     private String option4;
     private String friend;
     private Boolean pollchecked;
-
 
     public NewPoll(){
 

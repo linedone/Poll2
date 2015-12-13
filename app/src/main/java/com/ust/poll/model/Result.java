@@ -1,3 +1,6 @@
+// CSIT 6000B    #  CHAN Shing Chuen     20286820     scchanak@connect.ust.hk
+// CSIT 6000B    #  MA Ka Kin            20286533     kkmaab@connect.ust.hk
+
 package com.ust.poll.model;
 
 public class Result implements Comparable {
@@ -19,8 +22,6 @@ public class Result implements Comparable {
 		this.title = title;
 	}
 
-
-
 	public Integer getCount() {
 		return count;
 	}
@@ -41,16 +42,13 @@ public class Result implements Comparable {
 
 	@Override
 	public String toString() {
-		return "Option:" + title + ", voted:" +
-				count + "";
+		return "Option:" + title + ", voted:" + count + "";
 	}
 
 
 	@Override
 	public int compareTo(Object another) {
-
 		int compareage=((Result)another).getCount();
 		return compareage-this.count;
-
 	}
 }
