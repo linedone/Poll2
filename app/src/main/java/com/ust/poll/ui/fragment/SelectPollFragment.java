@@ -250,6 +250,7 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
 
                                 ParseObject point = ParseObject.createWithoutData(Poll.TABLE_NAME, p.getObjectId());
 
+
                                 list11 = p.getList(Poll.FRIEND_PHONE);
                                 list11.remove(username);
                                 String[] tempPhone = list11.toArray(new String[0]);
@@ -259,7 +260,7 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
                                 } else {
                                     point.put(Poll.FRIEND_PHONE, Arrays.asList(tempPhone));
                                 }
-                                point.put(Poll.FRIEND_ID, Arrays.asList(userid));
+                                point.addAll(Poll.FRIEND_ID, Arrays.asList(userid));
                                 // Save
                                 point.saveInBackground(new SaveCallback() {
                                     public void done(ParseException e) {

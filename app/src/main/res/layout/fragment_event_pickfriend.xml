@@ -64,6 +64,32 @@
             app:buttonMode="regular"
             app:showOutline="false"
             app:roundedCorners="true" />
+
+
+        <TextView
+            android:id="@+id/txt_option1"
+            android:visibility="invisible"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txt_option2"
+            android:visibility="invisible"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txt_option3"
+            android:visibility="invisible"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txt_option4"
+            android:visibility="invisible"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
     <!-- End of List View -->
 </LinearLayout>

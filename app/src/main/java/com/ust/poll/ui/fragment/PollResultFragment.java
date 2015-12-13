@@ -64,7 +64,11 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
 
         // Expired Date
         ParseQuery expiredQuery = new ParseQuery(Poll.TABLE_NAME);
-        expiredQuery.whereLessThan(Poll.END_AT, sdf.format(new Date()));  // Deadline_Date < Today(), "END_AT"<TODAY
+        expiredQuery.whereLessThan(Poll.END_AT, new Date());  // Deadline_Date < Today(), "END_AT"<TODAY
+
+
+        Log.d("sssssss", "" + sdf.format(new Date()));
+        Log.d("sssssss", ""+sdf.format(new Date()));
 
         // Voted Result, but non-Expired
         ParseQuery votedQuery = new ParseQuery(Poll.TABLE_NAME);
@@ -113,7 +117,7 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
                 newsData.setReporterName("" + TelephonyUtil.getContactName(getActivity(), cph));
                 newsData.setDate("" + dt);
                 newsData.setpollID(id);
-                //Log.d("active", "" + t);
+                Log.d("activesssssssss", "" + t);
 
                 String allOption = "";
                 ArrayList sortedResult = new ArrayList();

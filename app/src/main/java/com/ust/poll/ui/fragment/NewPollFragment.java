@@ -63,10 +63,10 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
     String members;
     String contactPosition;
 
-    String soption1;
-    String soption2;
-    String soption3;
-    String soption4;
+    String soption1 = "";
+    String soption2 = "";
+    String soption3 = "";
+    String soption4 = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,16 +80,43 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        if(!soption1.isEmpty())
+            option1.setText(soption1);
+
+        if(!soption2.isEmpty())
+            option2.setText(soption2);
+
+        if(!soption3.isEmpty())
+            option3.setText(soption3);
+
+        if(!soption4.isEmpty())
+            option4.setText(soption4);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //Bundle bundle = this.getArguments();
+        soption1 = data.getStringExtra("soption1");
+        //option1.setVisibility(View.INVISIBLE);
+        Log.d("eeeeeee", "" + soption1);
+
+        soption2 = data.getStringExtra("soption2");
+        //option2.setText(soption2);
+
+        soption3 = data.getStringExtra("soption3");
+        //option3.setText(soption3);
+
+        soption4 = data.getStringExtra("soption4");
+        //option4.setText(soption4);
+
         if(requestCode==FRAGMENT_CODE && resultCode==getActivity().RESULT_OK) {
             if(data != null) {
+
+
+
                 if(data.getStringExtra("members") != null) {
-                    soption1 = data.getStringExtra("soption1");
-                    soption2 = data.getStringExtra("soption2");
-                    soption3 = data.getStringExtra("soption3");
-                    soption4 = data.getStringExtra("soption4");
+
+
                     members = data.getStringExtra("members");
                     contactPosition = data.getStringExtra("contactPosition");
                     Log.d("Poll PickFriend", "Data passed from PickFriend Fragment = " + members);

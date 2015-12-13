@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
     @Override
     public void onBackPressed() {
         Boolean backCheck = true;
+        Boolean doNothing = false;
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.getFragments().toString().contains("");
@@ -78,12 +79,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         Log.d("MainActivity", "" + fragmentManager.getFragments().toString());
 
         if (fragmentManager.getFragments().toString().contains("SelectPollFragment")){
-            backCheck = false;
-        }
-        else if (fragmentManager.getFragments().toString().contains("NewPollFragment_DateTime")) {
-            backCheck = false;
-        }
-        else if (fragmentManager.getFragments().toString().contains("NewPollFragment_PickFriend")) {
             backCheck = false;
         }
         else if (fragmentManager.getFragments().toString().contains("DetailFriendListEventFragment")) {
@@ -94,12 +89,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         }
         else if (fragmentManager.getFragments().toString().contains("PickFriendFragment")) {
             backCheck = false;
+            doNothing = true;
         }
         else {
 
         }
 
-        if (backCheck){
+        if (backCheck && !doNothing){
             new AlertDialog.Builder(this)
                     .setMessage("Are you sure you want to exit?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -110,6 +106,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                     })
                     .setNegativeButton("No", null).show();
         }
+        //else if (!backCheck && doNothing){
+
+        //}
         else {
             super.onBackPressed();
         }

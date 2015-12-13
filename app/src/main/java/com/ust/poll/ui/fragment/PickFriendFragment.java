@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.widget.TextView;
+
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.linedone.poll.R;
 import com.ust.poll.MainActivity;
@@ -37,6 +40,12 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
     ArrayList contactNumber = new ArrayList();
     ArrayList contactPerson = new ArrayList();
     @Bind(R.id.btn_friend_list_submit) BootstrapButton btnSubmitFriendList;
+    @Bind(R.id.txt_option1) TextView txtOption1;
+    @Bind(R.id.txt_option2) TextView txtOption2;
+    @Bind(R.id.txt_option3) TextView txtOption3;
+    @Bind(R.id.txt_option4) TextView txtOption4;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,6 +92,21 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
 
         Bundle bundle = this.getArguments();
         if (bundle!=null && bundle.getString("members")!=null) {
+
+            String soption1 = bundle.getString("soption1");
+            String soption2 = bundle.getString("soption2");
+            String soption3 = bundle.getString("soption3");
+            String soption4 = bundle.getString("soption4");
+
+
+
+            txtOption1.setText(soption1);
+            txtOption2.setText(soption2);
+            txtOption3.setText(soption3);
+            txtOption4.setText(soption4);
+
+            //Log.d("testing", ""+soption1);
+
             String[] contactPosition = bundle.getString("contactPosition").split(",");
             for (int i=0; i<friendList.getCount(); i++) {
                 for (int j=0; j<contactPosition.length; j++) {
@@ -158,18 +182,17 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
             }
         }
 
-        Bundle bundle = this.getArguments();
-        String soption1 = bundle.getString("soption1");
-        String soption2 = bundle.getString("soption2");
-        String soption3 = bundle.getString("soption3");
-        String soption4 = bundle.getString("soption4");
+        //Bundle bundle = this.getArguments();
+
 
         Intent intent = new Intent();
         intent.putExtra("members", members);
-        intent.putExtra("soption1", soption1);
-        intent.putExtra("soption2", soption2);
-        intent.putExtra("soption3", soption3);
-        intent.putExtra("soption4", soption4);
+        intent.putExtra("soption1", txtOption1.getText().toString());
+        Log.d("wahahaha", "" + txtOption1.getText().toString());
+
+        intent.putExtra("soption2", txtOption2.getText().toString());
+        intent.putExtra("soption3", txtOption3.getText().toString());
+        intent.putExtra("soption4", txtOption4.getText().toString());
         intent.putExtra("contactPosition", contactPosition);
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
         getFragmentManager().popBackStack();
