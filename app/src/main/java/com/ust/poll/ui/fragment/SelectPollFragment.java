@@ -211,7 +211,6 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
                                 }
                                 point.addAll(Poll.FRIEND_ID, Arrays.asList(userid));
                                 // Save
-                                progressDialog = ProgressDialog.show(getActivity(), "", "Saving record...", true);
                                 point.saveInBackground(new SaveCallback() {
                                     public void done(ParseException e) {
                                         if (e == null) {
@@ -222,7 +221,6 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
                                             fragment.setArguments(newbundle);
                                             getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
                                         }
-                                        progressDialog.dismiss();
                                     }
                                 });
                             }
