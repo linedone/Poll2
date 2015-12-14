@@ -174,7 +174,6 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         mTimePicker.show();
     }
 
-
     @OnClick(R.id.btn_new_poll_friend)
     public void fnPickFriends(View view) {
         PickFriendFragment fragment = new PickFriendFragment();
@@ -192,9 +191,6 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
     }
-
-
-
 
     @OnClick({ R.id.option1, R.id.option2, R.id.option3, R.id.option4 })
     public void fnOption(View view) {
