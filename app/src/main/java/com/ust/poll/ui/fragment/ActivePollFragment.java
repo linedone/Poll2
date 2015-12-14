@@ -34,6 +34,7 @@ import com.ust.poll.activity.LoginActivity;
 import com.ust.poll.model.NewsItem;
 import com.ust.poll.model.Poll;
 import com.ust.poll.ui.adaptor.CustomListAdapter;
+import com.ust.poll.util.TelephonyUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,36 +45,28 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ActivePollFragment extends MainActivity.PlaceholderFragment {
+public class ActivePollFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener {
 
     private ProgressDialog progressDialog;
 
     @Nullable
-    @Bind(R.id.custom_list)
-    ListView lv1;
+    @Bind(R.id.custom_list) ListView lv1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.fragment_poll_active, container, false);
         ButterKnife.bind(this, rootView);
 
         //getActivity().setTheme(R.style.AppTheme2);
         return rootView;
-
     }
-
 
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //Log.d("active", "testing12345");
         //new getActlistTask().execute();
-
-
         progressDialog = ProgressDialog.show(getActivity(), "", "Loading records...", true);
-
 
         ParseUser user = ParseUser.getCurrentUser();
         final String username = user.getUsername();
@@ -90,34 +83,24 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 if (e == null) {
                     retrieveEventSuccess(parseObjects, e);
-                }
-                else{
+                } else {
                     progressDialog.dismiss();
                 }
             }
         });
+        lv1.setOnItemClickListener(this);
+    }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
+        int itemPosition = position;
 
-
-
-        lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
-                //view.setSelected(true);
-                // ListView Clicked item index
-                int itemPosition = position;
-
-                SelectPollFragment fragment = new SelectPollFragment();
-                Bundle bundle = new Bundle();
-                //bundle.putString("pollID", s.get(itemPosition));
-                bundle.putString("pollID", ((TextView) view.findViewById(R.id.pollid)).getText().toString());
-                fragment.setArguments(bundle);
-                getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
-
-
-            }
-        });
+        SelectPollFragment fragment = new SelectPollFragment();
+        Bundle bundle = new Bundle();
+        //bundle.putString("pollID", s.get(itemPosition));
+        bundle.putString("pollID", ((TextView) view.findViewById(R.id.pollid)).getText().toString());
+        fragment.setArguments(bundle);
+        getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
     }
 
     public void retrieveEventSuccess(List<ParseObject> parseObjects, ParseException e) {
@@ -142,11 +125,11 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
 
                 NewsItem newsData = new NewsItem();
                 newsData.setHeadline("" + t);
-                newsData.setReporterName("" + getContactName(cph));
+                newsData.setReporterName("" + TelephonyUtil.getContactName(getActivity(), cph));
                 newsData.setDate("" + dt);
                 newsData.setpollID(id);
                 results.add(newsData);
-                Log.d("active------", "" + t);
+//                Log.d("active------", "" + t);
 /*
                 ParseQuery<ParseObject> polledquery = ParseQuery.getQuery(Polled.TABLE_NAME);
                 polledquery.whereEqualTo(Polled.POLLID, id);
@@ -204,8 +187,6 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
             transaction =  getFragmentManager().beginTransaction();
             hideFragments(transaction);
             progressDialog.dismiss();
-
-
         }
         else {
             progressDialog.dismiss();
@@ -214,58 +195,51 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment {
         }
     }
 
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        super.onCreateOptionsMenu(menu, inflater);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        if (id == R.id.action_example) {
+//            Intent intent = new Intent(getActivity(), LoginActivity.class);
+//            startActivityForResult(intent, 1);
+//            return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_example) {
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            startActivityForResult(intent, 1);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
-
-    public String getContactName(final String phoneNumber)
-    {
-        Uri uri;
-        String[] projection;
-        Uri mBaseUri = Contacts.Phones.CONTENT_FILTER_URL;
-        projection = new String[] { android.provider.Contacts.People.NAME };
-        try {
-            Class<?> c =Class.forName("android.provider.ContactsContract$PhoneLookup");
-            mBaseUri = (Uri) c.getField("CONTENT_FILTER_URI").get(mBaseUri);
-            projection = new String[] { "display_name" };
-        }
-        catch (Exception e) {
-        }
-
-        uri = Uri.withAppendedPath(mBaseUri, Uri.encode(phoneNumber));
-        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
-
-        String contactName = "";
-
-        if (cursor.moveToFirst())
-        {
-            contactName = cursor.getString(0);
-        }
-
-        cursor.close();
-        cursor = null;
-
-        return contactName;
-    }
-
+//    public String getContactName(final String phoneNumber)
+//    {
+//        Uri uri;
+//        String[] projection;
+//        Uri mBaseUri = Contacts.Phones.CONTENT_FILTER_URL;
+//        projection = new String[] { android.provider.Contacts.People.NAME };
+//        try {
+//            Class<?> c =Class.forName("android.provider.ContactsContract$PhoneLookup");
+//            mBaseUri = (Uri) c.getField("CONTENT_FILTER_URI").get(mBaseUri);
+//            projection = new String[] { "display_name" };
+//        }
+//        catch (Exception e) {
+//        }
+//
+//        uri = Uri.withAppendedPath(mBaseUri, Uri.encode(phoneNumber));
+//        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+//
+//        String contactName = "";
+//
+//        if (cursor.moveToFirst())
+//        {
+//            contactName = cursor.getString(0);
+//        }
+//
+//        cursor.close();
+//        cursor = null;
+//
+//        return contactName;
+//    }
 
     private void hideFragments(FragmentTransaction transaction) {
         ActiveEventFragment activeEventFragment = (ActiveEventFragment)getFragmentManager().findFragmentByTag("ActiveEventFragment");

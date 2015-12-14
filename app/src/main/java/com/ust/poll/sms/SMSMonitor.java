@@ -11,9 +11,6 @@ import android.util.Log;
 
 import com.ust.poll.activity.LoginActivity;
 
-/**
- * Created by CSH529 on 10/29/2015.
- */
 public class SMSMonitor extends BroadcastReceiver {
     private static final String ACTION = "android.provider.Telephony.SMS_RECEIVED";
 

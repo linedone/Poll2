@@ -35,6 +35,7 @@ import com.parse.SaveCallback;
 import com.ust.poll.MainActivity;
 import com.ust.poll.model.Poll;
 import com.ust.poll.ui.dialog.DialogHelper;
+import com.ust.poll.util.TelephonyUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -46,20 +47,16 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by Ken on 10/7/2015.
- */
 public class NewPollFragment extends MainActivity.PlaceholderFragment {
     @Bind(R.id.txt_title) BootstrapEditText txt_title;
     @Bind(R.id.option1) BootstrapButton option1;
     @Bind(R.id.option2) BootstrapButton option2;
     @Bind(R.id.option3) BootstrapButton option3;
     @Bind(R.id.option4) BootstrapButton option4;
-
     @Bind(R.id.txt_deadlineDate) BootstrapEditText txt_deadlineDate;
     @Bind(R.id.txt_deadlineTime) BootstrapEditText txt_deadlineTime;
-    private static int FRAGMENT_CODE = 0;
 
+    private static int FRAGMENT_CODE = 0;
     String members;
     String contactPosition;
 
@@ -97,29 +94,15 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
 
         //Bundle bundle = this.getArguments();
         soption1 = data.getStringExtra("soption1");
-        //option1.setVisibility(View.INVISIBLE);
-        Log.d("eeeeeee", "" + soption1);
-
         soption2 = data.getStringExtra("soption2");
-        //option2.setText(soption2);
-
         soption3 = data.getStringExtra("soption3");
-        //option3.setText(soption3);
-
         soption4 = data.getStringExtra("soption4");
-        //option4.setText(soption4);
-
-        if(requestCode==FRAGMENT_CODE && resultCode==getActivity().RESULT_OK) {
-            if(data != null) {
-
-
-
-                if(data.getStringExtra("members") != null) {
-
-
+        if (requestCode==FRAGMENT_CODE && resultCode==getActivity().RESULT_OK) {
+            if (data != null) {
+                if (data.getStringExtra("members") != null) {
                     members = data.getStringExtra("members");
                     contactPosition = data.getStringExtra("contactPosition");
-                    Log.d("Poll PickFriend", "Data passed from PickFriend Fragment = " + members);
+//                    Log.d("Poll PickFriend", "Data passed from PickFriend Fragment = " + members);
                 }
             }
         }
@@ -156,7 +139,6 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         mDatePicker.show();
     }
 
-
     @OnClick(R.id.txt_deadlineTime)
     public void fnPickTime(View view) {
         final Calendar eventTime = Calendar.getInstance();
@@ -183,20 +165,15 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         mTimePicker.show();
     }
 
-
     @OnClick(R.id.btn_new_poll_friend)
     public void fnPickFriends(View view) {
         PickFriendFragment fragment = new PickFriendFragment();
         fragment.setTargetFragment(this, FRAGMENT_CODE);
         Bundle bundle = new Bundle();
-            if (members!=null) {
-
-
-
-                bundle.putString("members", members);
-                bundle.putString("contactPosition", contactPosition);
+        if (members!=null) {
+            bundle.putString("members", members);
+            bundle.putString("contactPosition", contactPosition);
         }
-
         bundle.putString("soption1", option1.getText().toString());
         bundle.putString("soption2", option2.getText().toString());
         bundle.putString("soption3", option3.getText().toString());
@@ -204,9 +181,6 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
     }
-
-
-
 
     @OnClick({ R.id.option1, R.id.option2, R.id.option3, R.id.option4 })
     public void fnOption(View view) {
@@ -238,18 +212,6 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
 
     @OnClick(R.id.btn_new_poll_next)
     public void fnNewPoll(View view) {
-
-        //HideFragment hideFrag = new HideFragment();
-        //hideFrag.HideFragment();
-
-
-        //Fragment fragment = new NewPollFragment_DateTime();
-        //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        // FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        //fragmentTransaction.replace(R.id.container, fragment);
-        // fragmentTransaction.addToBackStack(null);
-        //fragmentTransaction.commit();
-
         boolean nextChecking = true;
 
         if(txt_deadlineDate.getText().toString().length() == 0 ){
@@ -263,32 +225,19 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         }
 
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
         //Date today = new Date();
-
-
         //try {
         //    Date pollDate = sdf.parse(txt_deadlineDate.getText().toString());
-
-
         //    if(today.compareTo(pollDate) > 0){
-
-
         //        txt_deadlineDate.setError("Poll date invalid");
-
         //        nextChecking = false;
         //    }
-
         //} catch (ParseException e) {
         //    e.printStackTrace();
         //}
-
-
-
         //Log.d("test", "" + );
 
-
-        if( txt_title.getText().toString().length() == 0 ) {
+        if (txt_title.getText().toString().length() == 0 ) {
             txt_title.setError("Poll title is required!");
             nextChecking = false;
         }
@@ -307,47 +256,33 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         if (option4.getText().toString().equals( "OPTION 4")) {
             counter++;
         }
-
         if (counter >=3){
             Toast.makeText(NewPollFragment.super.getActivity(), "Option must be more than one!", Toast.LENGTH_LONG).show();
             nextChecking = false;
         }
 
-        if(members != null){
+        if (members != null) {
             String[] pollmemberArray = members.split(",");
-
             //ArrayList memeberArray = new ArrayList();
-
             //memeberArray.add(Arrays.asList(pollmemberArray));
             //memeberArray.removeAll(Arrays.asList(null,""));
-
             if(pollmemberArray.length<=0 || pollmemberArray[0].equals("")){
                 Toast.makeText(NewPollFragment.super.getActivity(), "Friend must be more than one!", Toast.LENGTH_LONG).show();
                 nextChecking = false;
             }
-        }else{
-
-                Toast.makeText(NewPollFragment.super.getActivity(), "Friend must be more than one!", Toast.LENGTH_LONG).show();
-                nextChecking = false;
-
+        }
+        else {
+            Toast.makeText(NewPollFragment.super.getActivity(), "Friend must be more than one!", Toast.LENGTH_LONG).show();
+            nextChecking = false;
         }
 
-
-        if(nextChecking) {
-
-
-
-
+        if (nextChecking) {
             final Context ctx = this.getContext();
-
             ParseObject pollObject = new ParseObject(Poll.TABLE_NAME);
             pollObject.put(Poll.TITLE, txt_title.getText().toString());
-
             pollObject.addAllUnique(Poll.OPTIONS, Arrays.asList(option1.getText().toString(),
                     option2.getText().toString(), option3.getText().toString(), option4.getText().toString()));
-
             String deadDate = txt_deadlineDate.getText().toString() + " " +  txt_deadlineTime.getText().toString();
-
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
             try {
@@ -359,14 +294,12 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
                 e.printStackTrace();
             }
 
-            if(members != null){
+            if (members != null){
                 String[] pollmemberArray = members.split(",");
                 ParseUser user = ParseUser.getCurrentUser();
                 final String username = user.getUsername();
 
                 pollObject.put(Poll.FRIEND_PHONE, Arrays.asList(pollmemberArray));
-
-
                 pollObject.put(Poll.CREATORPHONE, username);
 
                 pollObject.saveInBackground(new SaveCallback() {
@@ -374,73 +307,22 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
                     public void done(com.parse.ParseException e) {
                         DialogHelper.fnCloseDialog();
                         if (e == null) {
-                            Toast.makeText(ctx,
-                                    "Poll Successfully created.",
-                                    Toast.LENGTH_LONG).show();
+                            Toast.makeText(ctx, "Poll Successfully created.", Toast.LENGTH_LONG).show();
                         } else {
-                            DialogHelper.getOkAlertDialog(ctx,
-                                    "Error in connecting server..", e.getMessage())
-                                    .show();
+                            //DialogHelper.getOkAlertDialog(ctx, "Error in connecting server..", e.getMessage()).show();
+                            Log.e("Server Error", e.toString());
                         }
                     }
                 });
-                fnSendPushNotification(pollmemberArray,txt_title.getText().toString(),getContactName(username));
+                fnSendPushNotification(pollmemberArray,txt_title.getText().toString(), TelephonyUtil.getContactName(getActivity(), username));
             }
         }
-
-
-
-            //NewPollFragment_PickFriend fragment = new NewPollFragment_PickFriend();
-            //Bundle bundle = new Bundle();
-            //bundle.putString("title", txt_title.getText().toString());
-            //bundle.putString("option1", option1.getText().toString());
-            ///bundle.putString("option2", option2.getText().toString());
-            //bundle.putString("option3", option3.getText().toString());
-            //bundle.putString("option4", option4.getText().toString());
-            //bundle.putString("date", txt_deadlineDate.getText().toString());
-            //bundle.putString("time", txt_deadlineTime.getText().toString());
-            //fragment.setArguments(bundle);
-            //getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-
-            //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            //fragmentManager.beginTransaction()
-            //        .replace(R.id.container, MainActivity.PlaceholderFragment.newInstance(5))
-            //        .addToBackStack(null).commit();
-        }
-        // DialogHelper.fnShowDialog(this.getContext());
-        //fnCreatePoll();
-
-
-        //Intent intent = new Intent(getActivity().getBaseContext(),
-        //        MainActivity.class);
-        //intent.putExtra("title", txt_title.getText().toString());
-        //intent.putExtra("option1", option1.getText().toString());
-        //intent.putExtra("option2", option2.getText().toString());
-        //intent.putExtra("option3", option3.getText().toString());
-        //intent.putExtra("option4", option4.getText().toString());
-        //getActivity().startActivity(intent);
-
-
-        //YEAH YEAH YEAH
-
-
-
+    }
 
     private void fnSendPushNotification(String[] phoneList, String titleOpt, String contactName) {
-
-
         String[] userArray = phoneList;
 
         for (int i = 0; i < userArray.length; i++){
-
-            //ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-            //installation.deleteEventually();
-            // installation.saveEventually();
-            //installation.put("username", userArray[i]);
-            //installation.saveInBackground();
-
-
-
             ParsePush push = new ParsePush();
             ParseQuery query = ParseInstallation.getQuery();
             query.whereEqualTo("username", userArray[i]);
@@ -449,10 +331,7 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
             push.setQuery(query);
             push.setMessage(contactName + " just sent you a poll, Title: " + titleOpt);
             push.sendInBackground();
-
         }
-
-
 
         ActivePollFragment fragment = new ActivePollFragment();
         Bundle newbundle = new Bundle();
@@ -479,14 +358,10 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         //pQuery.whereEqualTo(Poll.USERNAME, "+85254990679");
         //parsePush.sendMessageInBackground("aaaaaaaaaaaaaaaaaa", pQuery);
 
-
         //ParseInstallation installation = ParseInstallation.getCurrentInstallation();
         //installation.remove("+85254990678");
         //installation.deleteInBackground();
         //installation.saveInBackground();
-
-
-
 
         //query.whereEqualTo(Poll.USERNAME, "+85254990678");
         //push.sendMessageInBackground("aaaaaaaaaaaaaaaaaa", query);
@@ -498,36 +373,30 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         //parsePush.setExpirationTime(1424841505);
         //parsePush.sendInBackground();
     }
-
-
-    public String getContactName(final String phoneNumber)
-    {
-        Uri uri;
-        String[] projection;
-        Uri mBaseUri = Contacts.Phones.CONTENT_FILTER_URL;
-        projection = new String[] { android.provider.Contacts.People.NAME };
-        try {
-            Class<?> c =Class.forName("android.provider.ContactsContract$PhoneLookup");
-            mBaseUri = (Uri) c.getField("CONTENT_FILTER_URI").get(mBaseUri);
-            projection = new String[] { "display_name" };
-        }
-        catch (Exception e) {
-        }
-
-
-        uri = Uri.withAppendedPath(mBaseUri, Uri.encode(phoneNumber));
-        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
-
-        String contactName = "";
-
-        if (cursor.moveToFirst())
-        {
-            contactName = cursor.getString(0);
-        }
-
-        cursor.close();
-        cursor = null;
-
-        return contactName;
-    }
+//    public String getContactName(final String phoneNumber)
+//    {
+//        Uri uri;
+//        String[] projection;
+//        Uri mBaseUri = Contacts.Phones.CONTENT_FILTER_URL;
+//        projection = new String[] { android.provider.Contacts.People.NAME };
+//        try {
+//            Class<?> c =Class.forName("android.provider.ContactsContract$PhoneLookup");
+//            mBaseUri = (Uri) c.getField("CONTENT_FILTER_URI").get(mBaseUri);
+//            projection = new String[] { "display_name" };
+//        }
+//        catch (Exception e) {
+//        }
+//        uri = Uri.withAppendedPath(mBaseUri, Uri.encode(phoneNumber));
+//        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+//
+//        String contactName = "";
+//
+//        if (cursor.moveToFirst())
+//        {
+//            contactName = cursor.getString(0);
+//        }
+//        cursor.close();
+//        cursor = null;
+//        return contactName;
+//    }
 }
