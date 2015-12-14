@@ -32,13 +32,13 @@
     <string name="text_poll_next">Next</string>
 
     <!-- Titles used in Drawer -->
+    <string name="title_section0">------------</string>
     <string name="title_section1">Active Poll</string>
     <string name="title_section2">Poll Result</string>
-    <string name="title_section3">Friend List</string>
-    <string name="title_section4">New Poll</string>
-    <string name="title_section5">Active Event</string>
-    <string name="title_section6">New Event</string>
-
+    <string name="title_section3">New Poll</string>
+    <string name="title_section4">Active Event</string>
+    <string name="title_section5">New Event</string>
+    <string name="title_section6">Friend List</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

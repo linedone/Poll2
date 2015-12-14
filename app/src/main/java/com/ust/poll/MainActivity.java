@@ -200,16 +200,16 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                     fragment = new PollResultFragment();
                     break;
                 case 3:
-                    fragment = new FriendListFragment();
-                    break;
-                case 4:
                     fragment = new NewPollFragment();
                     break;
-                case 5:
+                case 4:
                     fragment = new ActiveEventFragment();
                     break;
-                case 6:
+                case 5:
                     fragment = new NewEventFragment();
+                    break;
+                case 6:
+                    fragment = new FriendListFragment();
                     break;
                 default:
                     fragment = new MainFragment();
