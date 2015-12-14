@@ -211,7 +211,7 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
 
             case R.id.btn_attend:
                 ParseObject point = ParseObject.createWithoutData("Event", objectId);
-                strAttend = strAttend.concat(userPhoneNumber+",");
+                strAttend = strAttend.concat(","+userPhoneNumber);
                 Log.d("Attend", strAttend);
 
                 point.put("EventAttends", strAttend);
