@@ -240,7 +240,6 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment impleme
                 //Log.d("result------", "" + sortedResult.size());
                 results.add(newsData);
             }
-
             lv1.setAdapter(new CustomListAdapter(getActivity().getBaseContext(), results));
             Log.d("Database", "Retrieved " + parseObjects.size() + " Active");
         }

@@ -64,10 +64,10 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment impleme
 
         parseQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> parseObjects, ParseException e) {
+                progressDialog.dismiss();
                 if (e == null) {
                     retrieveActivePollSuccess(parseObjects, e);
                 }
-                progressDialog.dismiss();
             }
         });
         lv1.setOnItemClickListener(this);

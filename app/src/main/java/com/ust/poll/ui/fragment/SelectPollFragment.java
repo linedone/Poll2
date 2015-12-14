@@ -178,11 +178,11 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
                 polledObject.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
+                        progressDialog.dismiss();
                         DialogHelper.fnCloseDialog();
                         if (e != null) {
                             Log.e("Save", e.toString());
                         }
-                        progressDialog.dismiss();
                     }
                 });
                 ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery(Poll.TABLE_NAME);

@@ -75,10 +75,10 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
         progressDialog = ProgressDialog.show(getActivity(), "", "Loading records...", true);
         parseQuery.getInBackground(objectId, new GetCallback<ParseObject>() {
             public void done(ParseObject parseObject, ParseException e) {
+                progressDialog.dismiss();
                 if (e == null) {
                     retrieveEventSuccess(parseObject, e);
                 }
-                progressDialog.dismiss();
             }
         });
     }

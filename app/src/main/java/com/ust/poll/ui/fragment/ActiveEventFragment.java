@@ -96,12 +96,12 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
                 if (e == null) {
                     retrieveEventSuccess(parseObjects, e);
                 }
-                progressDialog.dismiss();
             }
         });
     }
 
     public void retrieveEventSuccess(List<ParseObject> parseObjects, ParseException e) {
+        progressDialog.dismiss();
         if (e==null) {
             int counter = 0;
             for (ParseObject parseObject : parseObjects) {

@@ -300,6 +300,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                 progressDialog = ProgressDialog.show(getActivity(), "", "Uploading photo...", true);
                 fileObject.saveInBackground(new SaveCallback() {
                     public void done(ParseException e) {
+                        progressDialog.dismiss();
                         if (e == null) {
                             Log.i("PhotoUpload", "Photo upload successful.");
                         } else {
@@ -310,7 +311,6 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                     public void done(Integer percentDone) {
                     }
                 });
-                progressDialog.dismiss();
                 eventObject.put("EventPhoto", fileObject);
             }
             eventObject.put("EventMembers", eventMembers);
@@ -318,6 +318,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
             eventObject.saveInBackground();
             eventObject.fetchInBackground(new GetCallback<ParseObject>() {
                 public void done(ParseObject object, ParseException e) {
+                    progressDialog.dismiss();
                     if (e == null) {
                         // Success!
                         String objectId = object.getObjectId();
@@ -329,7 +330,6 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                         // Failure!
                         Toast.makeText(getActivity().getApplicationContext(), "Server connection failure...", Toast.LENGTH_LONG).show();
                     }
-                    progressDialog.dismiss();
                 }
             });
         }

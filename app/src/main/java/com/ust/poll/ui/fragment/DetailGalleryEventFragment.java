@@ -62,10 +62,10 @@ public class DetailGalleryEventFragment extends MainActivity.PlaceholderFragment
         progressDialog = ProgressDialog.show(getActivity(), "", "Loading records...", true);
         parseQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> parseObjects, ParseException e) {
+                progressDialog.dismiss();
                 if (e == null) {
                     retrieveEventSuccess(parseObjects, e);
                 }
-                progressDialog.dismiss();
             }
         });
     }

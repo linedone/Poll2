@@ -101,14 +101,13 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
             }
 
             String tmpContact = contact.getContactName() + " [" + contact.getContactNumber() + "]";
-            if (contactList.contains(tmpContact) && !contactPerson.contains("***"+tmpContact)) {
+            if (contactList.contains(tmpContact) && !contactPerson.contains(tmpContact) && !contactPerson.contains("***"+tmpContact)) {
                 contactPerson.add("***"+tmpContact);
             }
-            else if (!contactPerson.contains(tmpContact) && !contactList.contains("***"+tmpContact)) {
+            else if (!contactPerson.contains(tmpContact) && !contactPerson.contains("***"+tmpContact)) {
                 contactPerson.add(tmpContact);
             }
         }
-
         ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(PickFriendFragment.super.getActivity(), android.R.layout.simple_list_item_multiple_choice, contactPerson);
         ListView friendList = (ListView)getView().findViewById(R.id.friendList);
 
