@@ -71,14 +71,14 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
             userId = bundle.getString("userId");
             userPhoneNumber = bundle.getString("userPhoneNumber");
         }
-
-        progressDialog = ProgressDialog.show(getActivity(), "", "Loading records...", true);
         ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery("Event");
+        progressDialog = ProgressDialog.show(getActivity(), "", "Loading records...", true);
         parseQuery.getInBackground(objectId, new GetCallback<ParseObject>() {
             public void done(ParseObject parseObject, ParseException e) {
                 if (e == null) {
                     retrieveEventSuccess(parseObject, e);
                 }
+                progressDialog.dismiss();
             }
         });
     }
@@ -133,14 +133,11 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
                     Bundle bundle = new Bundle();
                     fragment.setArguments(bundle);
                     getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-                    progressDialog.dismiss();
                 }
-
                 firendList = (ListView) getActivity().findViewById(R.id.eventfriendListView);
                 ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, arrayMemberNames);
                 firendList.setAdapter(mAdapter);
                 firendList.setOnItemClickListener(this);
-                progressDialog.dismiss();
             }
             else {
                 Log.e("ERROR", "Group member list is equal to null!!!");
@@ -201,6 +198,7 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
                 eventObject.put("EventId", objectId);
                 eventObject.put("UserId", userId);
                 ParseFile fileObject = new ParseFile(fileName, imgFile);
+
                 fileObject.saveInBackground(new SaveCallback() {
                     public void done(ParseException e) {
                         if (e == null) {

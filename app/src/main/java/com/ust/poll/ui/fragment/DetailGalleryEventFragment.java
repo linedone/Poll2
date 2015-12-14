@@ -55,15 +55,17 @@ public class DetailGalleryEventFragment extends MainActivity.PlaceholderFragment
 
         Bundle bundle = this.getArguments();
         objectId = bundle.getString("objectId");
-        progressDialog = ProgressDialog.show(getActivity(), "", "Loading records...", true);
+
         ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery("EventPhoto");
         parseQuery.whereEqualTo("EventId", objectId);
         parseQuery.orderByAscending("File");
+        progressDialog = ProgressDialog.show(getActivity(), "", "Loading records...", true);
         parseQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 if (e == null) {
                     retrieveEventSuccess(parseObjects, e);
                 }
+                progressDialog.dismiss();
             }
         });
     }
@@ -95,7 +97,6 @@ public class DetailGalleryEventFragment extends MainActivity.PlaceholderFragment
                 EventPhotoAdapter mAdapter = new EventPhotoAdapter(getActivity(), strImages);
                 galleryList.setAdapter(mAdapter);
             }
-            progressDialog.dismiss();
         }
         else {
             Toast.makeText(getActivity().getApplicationContext(), "Querying failure...", Toast.LENGTH_LONG).show();

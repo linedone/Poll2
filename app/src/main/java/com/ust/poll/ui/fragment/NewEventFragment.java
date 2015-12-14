@@ -281,9 +281,9 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                 eventObject.put("EventRemarkURL", txt_eRemarkURL.getText().toString());
             }
             if (imgDecodableString!=null) {
-                progressDialog = ProgressDialog.show(getActivity(), "", "Uploading photo...", true);
                 File f = new File(imgDecodableString);
                 ParseFile fileObject = new ParseFile(f.getName().toString(), imgFile);
+                progressDialog = ProgressDialog.show(getActivity(), "", "Uploading photo...", true);
                 fileObject.saveInBackground(new SaveCallback() {
                     public void done(ParseException e) {
                         if (e == null) {
@@ -302,7 +302,6 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
             eventObject.put("EventMembers", eventMembers);
             progressDialog = ProgressDialog.show(getActivity(), "", "Saving record...", true);
             eventObject.saveInBackground();
-
             eventObject.fetchInBackground(new GetCallback<ParseObject>() {
                 public void done(ParseObject object, ParseException e) {
                     if (e == null) {
@@ -311,12 +310,12 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                         fnSendPushNotification(objectId, eventMembers);
                         Toast.makeText(getActivity().getApplicationContext(), "Event created successfully!", Toast.LENGTH_LONG).show();
                         Log.d("ObjectID", objectId);
-                        progressDialog.dismiss();
                     }
                     else {
                         // Failure!
                         Toast.makeText(getActivity().getApplicationContext(), "Server connection failure...", Toast.LENGTH_LONG).show();
                     }
+                    progressDialog.dismiss();
                 }
             });
         }
