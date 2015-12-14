@@ -63,8 +63,8 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a Z");  // 2015-12-13T11:31:00.000Z
 
     @Nullable
-    @Bind(R.id.btn_new_poll_next)
-    BootstrapButton btn_new_poll_next;
+    @Bind(R.id.btn_result_chart_back)
+    BootstrapButton btn_result_chart_back;
 
     @Bind(R.id.result_custom_list)
     ListView lv1;
@@ -161,7 +161,7 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
 
 
                 TextView resultTitle = (TextView) getView().findViewById(R.id.Title);
-                btn_new_poll_next.setVisibility(View.VISIBLE);
+                btn_result_chart_back.setVisibility(View.VISIBLE);
                 mChart.setVisibility(View.VISIBLE);
                 lv1.setVisibility(View.INVISIBLE);
                 resultTitle.setVisibility(View.INVISIBLE);
@@ -524,12 +524,12 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
 
 
 
-    @OnClick(R.id.btn_new_poll_next)
+    @OnClick(R.id.btn_result_chart_back)
     public void fnBackChart(View view) {
 
         TextView resultTitle = (TextView) getView().findViewById(R.id.Title);
         mChart.setVisibility(View.INVISIBLE);
-        btn_new_poll_next.setVisibility(View.INVISIBLE);
+        btn_result_chart_back.setVisibility(View.INVISIBLE);
         lv1.setVisibility(View.VISIBLE);
         resultTitle.setVisibility(View.VISIBLE);
 
