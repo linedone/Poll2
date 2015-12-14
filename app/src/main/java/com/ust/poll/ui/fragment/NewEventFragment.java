@@ -3,6 +3,8 @@
 
 package com.ust.poll.ui.fragment;
 
+import com.parse.FindCallback;
+import com.parse.ParseUser;
 import com.ust.poll.util.MediaUtil;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -35,10 +37,13 @@ import com.parse.ParseQuery;
 import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 import com.ust.poll.MainActivity;
+import com.ust.poll.util.TelephonyUtil;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.Bind;
@@ -53,6 +58,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
     byte[] imgFile;
     String eventMembers;
     String contactPosition;
+    ArrayList<String> contactList = new ArrayList<String>();
 
     @Bind(R.id.txt_etitle) BootstrapEditText txt_etitle;
     @Bind(R.id.txt_eDate) BootstrapEditText txt_eDate;
@@ -82,6 +88,13 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
             txt_eVenue.setText(savedInstanceState.getString("txt_eVenue"));
             txt_eRemarkURL.setText(savedInstanceState.getString("txt_eRemarkURL"));
         }
+
+        ParseQuery<ParseUser> parseQuery = ParseUser.getQuery();
+        parseQuery.findInBackground(new FindCallback<ParseUser>() {
+            public void done(List<ParseUser> parseObjects, ParseException e) {
+                retrieveSuccess(parseObjects, e);
+            }
+        });
     }
 
     @OnClick(R.id.txt_eDate)
@@ -260,6 +273,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
             bundle.putString("members", eventMembers);
             bundle.putString("contactPosition", contactPosition);
         }
+        bundle.putStringArrayList("contactList", contactList);
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
     }
@@ -323,7 +337,6 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
 
     private void fnSendPushNotification(String objectId, String phoneList) {
         String[] userArray = phoneList.split(",");
-
         for (int i=0; i<userArray.length; i++) {
             ParsePush push = new ParsePush();
             ParseQuery query = ParseInstallation.getQuery();
@@ -338,5 +351,16 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
         bundle.putString("objectId", objectId);
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+    }
+
+    private void retrieveSuccess(List<ParseUser> parseObjects, ParseException e) {
+        if (e == null) {
+            for (ParseUser parseItem : parseObjects) {
+                String contactName = TelephonyUtil.getContactName(getActivity(), parseItem.getUsername());
+                if (contactName.compareTo("")!=0) {
+                    contactList.add(contactName + " [" + parseItem.getUsername().toString() + "]");
+                }
+            }
+        }
     }
 }

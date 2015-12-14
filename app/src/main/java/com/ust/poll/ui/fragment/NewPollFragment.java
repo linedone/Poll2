@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.linedone.poll.R;
+import com.parse.FindCallback;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
@@ -36,9 +37,11 @@ import com.ust.poll.util.TelephonyUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.Bind;
@@ -58,6 +61,7 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
 
     String members;
     String contactPosition;
+    ArrayList<String> contactList = new ArrayList<String>();
 
     String soption1 = "";
     String soption2 = "";
@@ -75,6 +79,13 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        ParseQuery<ParseUser> parseQuery = ParseUser.getQuery();
+        parseQuery.findInBackground(new FindCallback<ParseUser>() {
+            public void done(List<ParseUser> parseObjects, com.parse.ParseException e) {
+                retrieveSuccess(parseObjects, e);
+            }
+        });
 
         if(!soption1.isEmpty())
             option1.setText(soption1);
@@ -173,6 +184,7 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
                 bundle.putString("members", members);
                 bundle.putString("contactPosition", contactPosition);
         }
+        bundle.putStringArrayList("contactList", contactList);
         bundle.putString("soption1", option1.getText().toString());
         bundle.putString("soption2", option2.getText().toString());
         bundle.putString("soption3", option3.getText().toString());
@@ -334,5 +346,16 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         Bundle newbundle = new Bundle();
         fragment.setArguments(newbundle);
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+    }
+
+    private void retrieveSuccess(List<ParseUser> parseObjects, com.parse.ParseException e) {
+        if (e == null) {
+            for (ParseUser parseItem : parseObjects) {
+                String contactName = TelephonyUtil.getContactName(getActivity(), parseItem.getUsername());
+                if (contactName.compareTo("")!=0) {
+                    contactList.add(contactName + " [" + parseItem.getUsername().toString() + "]");
+                }
+            }
+        }
     }
 }
