@@ -188,7 +188,6 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
                 ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery(Poll.TABLE_NAME);
                 parseQuery.whereEqualTo(Poll.OBJECTID, pollID);
                 parseQuery.whereContainedIn(Poll.FRIEND_PHONE, Arrays.asList(username));
-                progressDialog = ProgressDialog.show(getActivity(), "", "Loading record...", true);
                 parseQuery.findInBackground(new FindCallback<ParseObject>() {
                     public void done(List<ParseObject> parseObjects, ParseException e) {
                         if (e == null) {
@@ -226,7 +225,6 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
                             }
                             //retrieveEventSuccess(parseObjects, e);
                         }
-                        progressDialog.dismiss();
                     }
                 });
             }
