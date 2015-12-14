@@ -8,10 +8,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Contacts;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.util.Log;
@@ -35,6 +32,7 @@ import com.parse.SaveCallback;
 import com.ust.poll.MainActivity;
 import com.ust.poll.model.Poll;
 import com.ust.poll.ui.dialog.DialogHelper;
+import com.ust.poll.util.TelephonyUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,9 +45,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by Ken on 10/7/2015.
- */
 public class NewPollFragment extends MainActivity.PlaceholderFragment {
     @Bind(R.id.txt_title) BootstrapEditText txt_title;
     @Bind(R.id.option1) BootstrapButton option1;
@@ -95,29 +90,13 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        //Bundle bundle = this.getArguments();
         soption1 = data.getStringExtra("soption1");
-        //option1.setVisibility(View.INVISIBLE);
-        Log.d("eeeeeee", "" + soption1);
-
         soption2 = data.getStringExtra("soption2");
-        //option2.setText(soption2);
-
         soption3 = data.getStringExtra("soption3");
-        //option3.setText(soption3);
-
         soption4 = data.getStringExtra("soption4");
-        //option4.setText(soption4);
-
         if(requestCode==FRAGMENT_CODE && resultCode==getActivity().RESULT_OK) {
             if(data != null) {
-
-
-
                 if(data.getStringExtra("members") != null) {
-
-
                     members = data.getStringExtra("members");
                     contactPosition = data.getStringExtra("contactPosition");
                     Log.d("Poll PickFriend", "Data passed from PickFriend Fragment = " + members);
@@ -191,13 +170,9 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         fragment.setTargetFragment(this, FRAGMENT_CODE);
         Bundle bundle = new Bundle();
             if (members!=null) {
-
-
-
                 bundle.putString("members", members);
                 bundle.putString("contactPosition", contactPosition);
         }
-
         bundle.putString("soption1", option1.getText().toString());
         bundle.putString("soption2", option2.getText().toString());
         bundle.putString("soption3", option3.getText().toString());
@@ -239,137 +214,73 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
 
     @OnClick(R.id.btn_new_poll_next)
     public void fnNewPoll(View view) {
-
-        //HideFragment hideFrag = new HideFragment();
-        //hideFrag.HideFragment();
-
-
-        //Fragment fragment = new NewPollFragment_DateTime();
-        //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        // FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        //fragmentTransaction.replace(R.id.container, fragment);
-        // fragmentTransaction.addToBackStack(null);
-        //fragmentTransaction.commit();
-
         boolean nextChecking = true;
 
-        if(txt_deadlineDate.getText().toString().length() == 0 ){
+        if (txt_deadlineDate.getText().toString().length() == 0) {
             txt_deadlineDate.setError("Poll deadline date is required!");
             nextChecking = false;
         }
-
-        if(txt_deadlineTime.getText().toString().length() == 0 ){
+        if (txt_deadlineTime.getText().toString().length() == 0) {
             txt_deadlineTime.setError("Poll deadline time is required!");
             nextChecking = false;
         }
-
-        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-        //Date today = new Date();
-
-
-        //try {
-        //    Date pollDate = sdf.parse(txt_deadlineDate.getText().toString());
-
-
-        //    if(today.compareTo(pollDate) > 0){
-
-
-        //        txt_deadlineDate.setError("Poll date invalid");
-
-        //        nextChecking = false;
-        //    }
-
-        //} catch (ParseException e) {
-        //    e.printStackTrace();
-        //}
-
-
-
-        //Log.d("test", "" + );
-
-
-        if( txt_title.getText().toString().length() == 0 ) {
+        if (txt_title.getText().toString().length() == 0) {
             txt_title.setError("Poll title is required!");
             nextChecking = false;
         }
-        //Log.d("test", ""+option1.getText());
-
         int counter = 0;
-        if (option1.getText().toString().equals( "OPTION 1") || option1.getText().toString().equals( "")) {
+        if (option1.getText().toString().equals("OPTION 1") || option1.getText().toString().equals("")) {
             counter++;
         }
-        if (option2.getText().toString().equals( "OPTION 2") || option2.getText().toString().equals( "")) {
+        if (option2.getText().toString().equals("OPTION 2") || option2.getText().toString().equals("")) {
             counter++;
         }
-        if (option3.getText().toString().equals( "OPTION 3") || option3.getText().toString().equals( "")) {
+        if (option3.getText().toString().equals("OPTION 3") || option3.getText().toString().equals("")) {
             counter++;
         }
-        if (option4.getText().toString().equals( "OPTION 4") || option4.getText().toString().equals( "")) {
+        if (option4.getText().toString().equals("OPTION 4") || option4.getText().toString().equals("")) {
             counter++;
         }
 
-        if (counter >=3){
+        if (counter >= 3) {
             Toast.makeText(NewPollFragment.super.getActivity(), "Option must be more than one!", Toast.LENGTH_LONG).show();
             nextChecking = false;
         }
 
-        if(members != null){
+        if (members != null) {
             String[] pollmemberArray = members.split(",");
-
-            //ArrayList memeberArray = new ArrayList();
-
-            //memeberArray.add(Arrays.asList(pollmemberArray));
-            //memeberArray.removeAll(Arrays.asList(null,""));
-
-            if(pollmemberArray.length<=0 || pollmemberArray[0].equals("")){
+            if (pollmemberArray.length <= 0 || pollmemberArray[0].equals("")) {
                 Toast.makeText(NewPollFragment.super.getActivity(), "Friend must be more than one!", Toast.LENGTH_LONG).show();
                 nextChecking = false;
             }
-        }else{
-
-                Toast.makeText(NewPollFragment.super.getActivity(), "Friend must be more than one!", Toast.LENGTH_LONG).show();
-                nextChecking = false;
-
+        } else {
+            Toast.makeText(NewPollFragment.super.getActivity(), "Friend must be more than one!", Toast.LENGTH_LONG).show();
+            nextChecking = false;
         }
 
-
-        String testdeadDate = txt_deadlineDate.getText().toString() + " " +  txt_deadlineTime.getText().toString();
+        String testdeadDate = txt_deadlineDate.getText().toString() + " " + txt_deadlineTime.getText().toString();
         SimpleDateFormat testFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         Date date = new Date();
         testFormat.format(date);
 
         try {
             Date testDeadline = testFormat.parse(testdeadDate);
-            if(date.after(testDeadline)) {
+            if (date.after(testDeadline)) {
                 // In between
                 Toast.makeText(NewPollFragment.super.getActivity(), "Deadline Date must be in future!", Toast.LENGTH_LONG).show();
                 nextChecking = false;
-
             }
         } catch (ParseException e) {
             e.printStackTrace();
             nextChecking = false;
         }
-
-
-
-
-        if(nextChecking) {
-
-
-
-
+        if (nextChecking) {
             final Context ctx = this.getContext();
-
             ParseObject pollObject = new ParseObject(Poll.TABLE_NAME);
             pollObject.put(Poll.TITLE, txt_title.getText().toString());
-
             pollObject.addAllUnique(Poll.OPTIONS, Arrays.asList(option1.getText().toString(),
                     option2.getText().toString(), option3.getText().toString(), option4.getText().toString()));
-
-            String deadDate = txt_deadlineDate.getText().toString() + " " +  txt_deadlineTime.getText().toString();
-
+            String deadDate = txt_deadlineDate.getText().toString() + " " + txt_deadlineTime.getText().toString();
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
             try {
@@ -381,7 +292,7 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
                 e.printStackTrace();
             }
 
-            if(members != null){
+            if (members != null) {
                 String[] pollmemberArray = members.split(",");
                 ParseUser user = ParseUser.getCurrentUser();
                 final String username = user.getUsername();
@@ -397,154 +308,31 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
                                     "Poll Successfully created.",
                                     Toast.LENGTH_LONG).show();
                         } else {
-                            //DialogHelper.getOkAlertDialog(ctx,
-                             //       "Error in connecting server..", e.getMessage())
-                             //       .show();
+                            Log.e("Save Error", e.toString());
                         }
                     }
                 });
-                fnSendPushNotification(pollmemberArray,txt_title.getText().toString(),getContactName(username));
+                fnSendPushNotification(pollmemberArray, txt_title.getText().toString(), TelephonyUtil.getContactName(getActivity(), username));
             }
         }
-
-
-
-            //NewPollFragment_PickFriend fragment = new NewPollFragment_PickFriend();
-            //Bundle bundle = new Bundle();
-            //bundle.putString("title", txt_title.getText().toString());
-            //bundle.putString("option1", option1.getText().toString());
-            ///bundle.putString("option2", option2.getText().toString());
-            //bundle.putString("option3", option3.getText().toString());
-            //bundle.putString("option4", option4.getText().toString());
-            //bundle.putString("date", txt_deadlineDate.getText().toString());
-            //bundle.putString("time", txt_deadlineTime.getText().toString());
-            //fragment.setArguments(bundle);
-            //getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-
-            //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            //fragmentManager.beginTransaction()
-            //        .replace(R.id.container, MainActivity.PlaceholderFragment.newInstance(5))
-            //        .addToBackStack(null).commit();
-        }
-        // DialogHelper.fnShowDialog(this.getContext());
-        //fnCreatePoll();
-
-
-        //Intent intent = new Intent(getActivity().getBaseContext(),
-        //        MainActivity.class);
-        //intent.putExtra("title", txt_title.getText().toString());
-        //intent.putExtra("option1", option1.getText().toString());
-        //intent.putExtra("option2", option2.getText().toString());
-        //intent.putExtra("option3", option3.getText().toString());
-        //intent.putExtra("option4", option4.getText().toString());
-        //getActivity().startActivity(intent);
-
-
-        //YEAH YEAH YEAH
-
-
-
+    }
 
     private void fnSendPushNotification(String[] phoneList, String titleOpt, String contactName) {
-
-
         String[] userArray = phoneList;
-
         for (int i = 0; i < userArray.length; i++){
-
-            //ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-            //installation.deleteEventually();
-            // installation.saveEventually();
-            //installation.put("username", userArray[i]);
-            //installation.saveInBackground();
-
             ParsePush push = new ParsePush();
             ParseQuery query = ParseInstallation.getQuery();
             query.whereEqualTo("username", userArray[i]);
-            Log.d("newpollfragment", userArray[i]);
+            Log.d("NewPollFragment", userArray[i]);
 
             push.setQuery(query);
             push.setMessage(contactName + " just sent you a poll, Title: " + titleOpt);
             push.sendInBackground();
-
         }
-
-
 
         ActivePollFragment fragment = new ActivePollFragment();
         Bundle newbundle = new Bundle();
         fragment.setArguments(newbundle);
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-
-        //installation.deleteEventually();
-
-        //ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-        //installation.put(Poll.USERNAME, "+85293483263");
-        //installation.saveInBackground();
-
-        //ParsePush push = new ParsePush();
-        //ParseQuery query = ParseInstallation.getQuery();
-        //query.whereEqualTo(Poll.USERNAME, "+85293483263");
-
-        //push.setQuery(query);
-        //push.setMessage("test");
-        // push.sendInBackground();
-
-        //Log.d("test", "start");
-        //ParsePush parsePush = new ParsePush();
-        //ParseQuery pQuery = ParseInstallation.getQuery(); // <-- Installation query
-        //pQuery.whereEqualTo(Poll.USERNAME, "+85254990679");
-        //parsePush.sendMessageInBackground("aaaaaaaaaaaaaaaaaa", pQuery);
-
-
-        //ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-        //installation.remove("+85254990678");
-        //installation.deleteInBackground();
-        //installation.saveInBackground();
-
-
-
-
-        //query.whereEqualTo(Poll.USERNAME, "+85254990678");
-        //push.sendMessageInBackground("aaaaaaaaaaaaaaaaaa", query);
-        //Log.d("test", "end");
-
-
-        //parsePush.setChannel(Util.PARSE_CHANNEL);
-        //parsePush.setMessage("abc");
-        //parsePush.setExpirationTime(1424841505);
-        //parsePush.sendInBackground();
-    }
-
-
-    public String getContactName(final String phoneNumber)
-    {
-        Uri uri;
-        String[] projection;
-        Uri mBaseUri = Contacts.Phones.CONTENT_FILTER_URL;
-        projection = new String[] { android.provider.Contacts.People.NAME };
-        try {
-            Class<?> c =Class.forName("android.provider.ContactsContract$PhoneLookup");
-            mBaseUri = (Uri) c.getField("CONTENT_FILTER_URI").get(mBaseUri);
-            projection = new String[] { "display_name" };
-        }
-        catch (Exception e) {
-        }
-
-
-        uri = Uri.withAppendedPath(mBaseUri, Uri.encode(phoneNumber));
-        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
-
-        String contactName = "";
-
-        if (cursor.moveToFirst())
-        {
-            contactName = cursor.getString(0);
-        }
-
-        cursor.close();
-        cursor = null;
-
-        return contactName;
     }
 }
