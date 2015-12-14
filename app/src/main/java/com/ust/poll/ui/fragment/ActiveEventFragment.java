@@ -21,12 +21,9 @@ import android.widget.Toast;
 
 import com.linedone.poll.R;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseInstallation;
 import com.parse.ParseObject;
-import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -88,17 +85,18 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
         userId = user.getObjectId();
         userPhoneNumber = user.getUsername();
 
-        progressDialog = ProgressDialog.show(getActivity(), "", "Loading records...", true);
         ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery("Event");
         parseQuery.whereContains("EventMembers", userPhoneNumber);
         parseQuery.whereGreaterThanOrEqualTo("EventDate", dFormat.format(new Date()));
         parseQuery.orderByAscending("EventDate");
 
+        progressDialog = ProgressDialog.show(getActivity(), "", "Loading records...", true);
         parseQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 if (e == null) {
                     retrieveEventSuccess(parseObjects, e);
                 }
+                progressDialog.dismiss();
             }
         });
     }
@@ -138,12 +136,10 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
                 eventList = (ListView) getActivity().findViewById(R.id.activeEventListView);
                 mAdapter = new EventAdapter(getActivity(), strTitles, strDates, strTimes, strVenues, strRemarkURLs, strImages);
                 eventList.setAdapter(mAdapter);
-                progressDialog.dismiss();
                 eventList.setOnItemClickListener(this);
                 eventList.setOnItemLongClickListener(this);
             }
             else {
-                System.out.println("No Event");
                 Log.e("ERROR", "Event ID is equal to null!!!");
             }
         }
@@ -203,13 +199,14 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
 
     private void removeDBRecord(String removeObjectId, int position) {
         final String objectId = removeObjectId;
-        progressDialog = ProgressDialog.show(getActivity(), "", "Removing record...", true);
-        ParseObject point = ParseObject.createWithoutData("Event", removeObjectId);
 
+        ParseObject point = ParseObject.createWithoutData("Event", removeObjectId);
         String newMember = strMembers.get(position);
         newMember = newMember.replace(","+userPhoneNumber.toString(),"");
         newMember = newMember.replace(userPhoneNumber.toString()+",","");
         point.put("EventMembers", newMember);
+
+        progressDialog = ProgressDialog.show(getActivity(), "", "Removing record...", true);
         point.saveInBackground(new SaveCallback() {
             public void done(ParseException e) {
                 if (e == null) {

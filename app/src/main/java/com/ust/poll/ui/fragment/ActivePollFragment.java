@@ -66,9 +66,8 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment impleme
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 if (e == null) {
                     retrieveActivePollSuccess(parseObjects, e);
-                } else {
-                    progressDialog.dismiss();
                 }
+                progressDialog.dismiss();
             }
         });
         lv1.setOnItemClickListener(this);
@@ -110,6 +109,5 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment impleme
             Toast.makeText(getActivity().getApplicationContext(), "Querying failure...", Toast.LENGTH_LONG).show();
             Log.e("Database", "Error: " + e.getMessage());
         }
-        progressDialog.dismiss();
     }
 }
