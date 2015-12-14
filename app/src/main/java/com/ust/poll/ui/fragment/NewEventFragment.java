@@ -53,6 +53,8 @@ import butterknife.OnClick;
 public class NewEventFragment extends MainActivity.PlaceholderFragment {
     private static int FRAGMENT_CODE = 0;
     private static int RESULT_LOAD_IMG = 1;
+    String userId;
+    String userPhoneNumber;
     private ProgressDialog progressDialog;
     String imgDecodableString;
     byte[] imgFile;
@@ -88,6 +90,9 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
             txt_eVenue.setText(savedInstanceState.getString("txt_eVenue"));
             txt_eRemarkURL.setText(savedInstanceState.getString("txt_eRemarkURL"));
         }
+        ParseUser user = ParseUser.getCurrentUser();
+        userId = user.getObjectId();
+        userPhoneNumber = user.getUsername();
 
         ParseQuery<ParseUser> parseQuery = ParseUser.getQuery();
         parseQuery.findInBackground(new FindCallback<ParseUser>() {
@@ -297,7 +302,6 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
             if (imgDecodableString!=null) {
                 File f = new File(imgDecodableString);
                 ParseFile fileObject = new ParseFile(f.getName().toString(), imgFile);
-                progressDialog = ProgressDialog.show(getActivity(), "", "Uploading photo...", true);
                 fileObject.saveInBackground(new SaveCallback() {
                     public void done(ParseException e) {
                         progressDialog.dismiss();
@@ -314,11 +318,11 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                 eventObject.put("EventPhoto", fileObject);
             }
             eventObject.put("EventMembers", eventMembers);
+            eventObject.put("EventAttends", userPhoneNumber);
             progressDialog = ProgressDialog.show(getActivity(), "", "Saving record...", true);
             eventObject.saveInBackground();
             eventObject.fetchInBackground(new GetCallback<ParseObject>() {
                 public void done(ParseObject object, ParseException e) {
-                    progressDialog.dismiss();
                     if (e == null) {
                         // Success!
                         String objectId = object.getObjectId();

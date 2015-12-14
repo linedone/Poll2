@@ -20,7 +20,6 @@ public class MainFragment extends MainActivity.PlaceholderFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-
     }
 
     @Override

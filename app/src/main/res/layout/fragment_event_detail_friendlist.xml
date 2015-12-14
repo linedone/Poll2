@@ -4,6 +4,33 @@
     android:layout_height="match_parent"
     android:background="@color/white">
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Are you available to attend this event?"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/txt_attend" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:id="@+id/layout_attend"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/tick"
+            android:layout_gravity="center"
+            android:id="@+id/btn_attend" />
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/cross"
+            android:layout_gravity="center"
+            android:id="@+id/btn_unattend" />
+    </LinearLayout>
+    <TextView
         android:id="@+id/txt_eflTitle"
         android:layout_height="wrap_content"
         android:textSize="20sp"

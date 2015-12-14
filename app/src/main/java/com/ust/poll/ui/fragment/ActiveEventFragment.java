@@ -3,19 +3,15 @@
 
 package com.ust.poll.ui.fragment;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -26,7 +22,6 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 import com.ust.poll.MainActivity;
 import com.ust.poll.ui.adaptor.EventAdapter;
 import com.ust.poll.util.MediaUtil;
@@ -39,7 +34,7 @@ import java.util.Locale;
 
 import butterknife.ButterKnife;
 
-public class ActiveEventFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public class ActiveEventFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener {
     private ProgressDialog progressDialog;
     ArrayList<String> strEventIds;
     ArrayList<String> strTitles;
@@ -48,6 +43,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
     ArrayList<String> strVenues;
     ArrayList<String> strRemarkURLs;
     ArrayList<String> strMembers;
+    ArrayList<String> strAttends;
     ArrayList<String> strImages;
     String userId;
     String userPhoneNumber;
@@ -73,6 +69,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
         strVenues = new ArrayList<String>();
         strRemarkURLs = new ArrayList<String>();
         strMembers = new ArrayList<String>();
+        strAttends = new ArrayList<String>();
         strImages = new ArrayList<String>();
     }
 
@@ -125,6 +122,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
                     strImages.add(MediaUtil.getStringFromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.empty, null)));
                 }
                 strMembers.add(parseObject.get("EventMembers").toString());
+                strAttends.add(parseObject.get("EventAttends").toString());
                 counter++;
             }
             Log.d("Database", "Retrieved " + parseObjects.size() + " Event");
@@ -137,7 +135,6 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
                 mAdapter = new EventAdapter(getActivity(), strTitles, strDates, strTimes, strVenues, strRemarkURLs, strImages);
                 eventList.setAdapter(mAdapter);
                 eventList.setOnItemClickListener(this);
-                eventList.setOnItemLongClickListener(this);
             }
             else {
                 Log.e("ERROR", "Event ID is equal to null!!!");
@@ -163,82 +160,4 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
     }
-
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-        final String removeObjectId = strEventIds.get(position);
-        final int newPosition = position;
-
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this.getContext());
-        alertDialog.setTitle("Type 'YES' to delete this event.");
-        final EditText inputConfirm = new EditText(this.getContext());
-        inputConfirm.setInputType(InputType.TYPE_CLASS_TEXT);
-        alertDialog.setView(inputConfirm);
-
-        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                if (inputConfirm.getText().toString().toUpperCase().compareTo("YES") == 0) {
-                    // Check DB
-                    removeDBRecord(removeObjectId, newPosition);
-                    fnOpenEventDetailByPosition(newPosition);
-                }
-            }
-        });
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        alertDialog.show();
-
-        // Return ture to stop the click event, return false to propagate the event
-        return true;
-    }
-
-    private void removeDBRecord(String removeObjectId, int position) {
-        final String objectId = removeObjectId;
-
-        ParseObject point = ParseObject.createWithoutData("Event", removeObjectId);
-        String newMember = strMembers.get(position);
-        newMember = newMember.replace(","+userPhoneNumber.toString(),"");
-        newMember = newMember.replace(userPhoneNumber.toString()+",","");
-        point.put("EventMembers", newMember);
-
-        progressDialog = ProgressDialog.show(getActivity(), "", "Removing record...", true);
-        point.saveInBackground(new SaveCallback() {
-            public void done(ParseException e) {
-                if (e == null) {
-//                    fnSendPushNotification(objectId);
-                    Toast.makeText(getActivity().getApplicationContext(), "Event has been removed!", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Server connection failure...", Toast.LENGTH_LONG).show();
-                }
-                progressDialog.dismiss();
-            }
-        });
-    }
-
-//    private void fnSendPushNotification(String objectId) {
-//        ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery("Event");
-//        parseQuery.getInBackground(objectId, new GetCallback<ParseObject>() {
-//            public void done(ParseObject parseObject, ParseException e) {
-//                if (e == null) {
-//                    String phoneList = parseObject.get("EventMembers").toString();
-//                    String[] userArray = phoneList.split(",");
-//
-//                    for (int i = 0; i < userArray.length; i++) {
-//                        ParsePush push = new ParsePush();
-//                        ParseQuery query = ParseInstallation.getQuery();
-//                        query.whereEqualTo("username", userArray[i]);
-//                        Log.d("fnSendPushNotification", userArray[i]);
-//                        push.setQuery(query);
-//                        push.setMessage("Sorry, I ["+userPhoneNumber+"] cannot attend the event: " + parseObject.get("EventTitle").toString());
-//                        push.sendInBackground();
-//                    }
-//                }
-//            }
-//        });
-//    }
 }

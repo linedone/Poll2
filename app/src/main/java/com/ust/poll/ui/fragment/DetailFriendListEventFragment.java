@@ -3,7 +3,9 @@
 
 package com.ust.poll.ui.fragment;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,13 +13,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -27,7 +32,9 @@ import com.linedone.poll.R;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
@@ -50,6 +57,8 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
     String userPhoneNumber;
     String fileName;
     String strMember;
+    String strAttend;
+    TextView title;
     ListView firendList;
     ProgressBar progressBar;
 
@@ -85,6 +94,11 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
 
     public void retrieveEventSuccess(ParseObject parseObject, ParseException e) {
         if (e==null) {
+            TextView txtAttend = (TextView) getActivity().findViewById(R.id.txt_attend);
+            LinearLayout layoutAttend = (LinearLayout) getActivity().findViewById(R.id.layout_attend);
+            ImageButton attendButton = (ImageButton) getActivity().findViewById(R.id.btn_attend);
+            ImageButton unattendButton = (ImageButton) getActivity().findViewById(R.id.btn_unattend);
+
             ImageButton cameraButton = (ImageButton) getActivity().findViewById(R.id.cameraButton);
             ImageButton galleryButton = (ImageButton) getActivity().findViewById(R.id.galleryButton);
 
@@ -92,7 +106,7 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
             TextView txtGalleryButton = (TextView) getActivity().findViewById(R.id.txtGalleyButton);
 
             TextView titleGroupMember = (TextView) getActivity().findViewById(R.id.txt_efl_title_group_member);
-            TextView title = (TextView) getActivity().findViewById(R.id.txt_eflTitle);
+            title = (TextView) getActivity().findViewById(R.id.txt_eflTitle);
             TextView date = (TextView) getActivity().findViewById(R.id.txt_eflDate);
             TextView time = (TextView) getActivity().findViewById(R.id.txt_eflTime);
             TextView venue = (TextView) getActivity().findViewById(R.id.txt_eflVenue);
@@ -119,7 +133,7 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
             remark.setText("Remark: " + parseObject.get("EventRemarkURL").toString());
 
             strMember = parseObject.get("EventMembers").toString();
-
+            strAttend = parseObject.get("EventAttends").toString();
             // Spilt strMember to an array and find the name by phone number
             String[] arrayMemberPhones = strMember.split(",");
             String[] arrayMemberNames = new String[arrayMemberPhones.length];
@@ -141,6 +155,17 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
             }
             else {
                 Log.e("ERROR", "Group member list is equal to null!!!");
+            }
+
+            if (strAttend.contains(userPhoneNumber)) {
+                layoutAttend.setVisibility(View.GONE);
+                txtAttend.setVisibility(View.GONE);
+                attendButton.setVisibility(View.GONE);
+                unattendButton.setVisibility(View.GONE);
+            }
+            else {
+                attendButton.setOnClickListener(this);
+                unattendButton.setOnClickListener(this);
             }
         }
         else {
@@ -182,6 +207,51 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
                 bundle.putString("objectId", objectId);
                 fragment.setArguments(bundle);
                 getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+                break;
+
+            case R.id.btn_attend:
+                ParseObject point = ParseObject.createWithoutData("Event", objectId);
+                strAttend = strAttend.concat(userPhoneNumber+",");
+                Log.d("Attend", strAttend);
+
+                point.put("EventAttends", strAttend);
+                progressDialog = ProgressDialog.show(getActivity(), "", "Updating record...", true);
+                point.saveInBackground(new SaveCallback() {
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            Toast.makeText(getActivity().getApplicationContext(), "I will attend the event!", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getActivity().getApplicationContext(), "Server connection failure...", Toast.LENGTH_LONG).show();
+                        }
+                        progressDialog.dismiss();
+                    }
+                });
+                fnSendPushNotification(objectId, "I ["+ userPhoneNumber +"] will attend the event: " + title.getText().toString());
+                break;
+
+            case R.id.btn_unattend:
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this.getContext());
+                alertDialog.setTitle("Type 'YES' to remove this event.");
+                final EditText inputConfirm = new EditText(this.getContext());
+                inputConfirm.setInputType(InputType.TYPE_CLASS_TEXT);
+                alertDialog.setView(inputConfirm);
+
+                alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        if (inputConfirm.getText().toString().toUpperCase().compareTo("YES") == 0) {
+                            removeDBRecord(objectId);
+                        }
+                    }
+                });
+
+                alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                alertDialog.show();
                 break;
 
             default:
@@ -260,5 +330,50 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
         }
 
         return resource;
+    }
+
+    private void fnSendPushNotification(String objectId, String message) {
+        final String sendMessage = message;
+        ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery("Event");
+        parseQuery.getInBackground(objectId, new GetCallback<ParseObject>() {
+            public void done(ParseObject parseObject, ParseException e) {
+                if (e == null) {
+                    String phoneList = parseObject.get("EventMembers").toString();
+                    String[] userArray = phoneList.split(",");
+
+                    for (int i = 0; i < userArray.length; i++) {
+                        ParsePush push = new ParsePush();
+                        ParseQuery query = ParseInstallation.getQuery();
+                        query.whereEqualTo("username", userArray[i]);
+                        Log.d("fnSendPushNotification", userArray[i]);
+                        push.setQuery(query);
+                        push.setMessage(sendMessage);
+                        push.sendInBackground();
+                    }
+                }
+            }
+        });
+    }
+
+    private void removeDBRecord(String removeObjectId) {
+        final String objectId = removeObjectId;
+
+        ParseObject point = ParseObject.createWithoutData("Event", removeObjectId);
+        strMember = strMember.replace(","+userPhoneNumber.toString(),"");
+        strMember = strMember.replace(userPhoneNumber.toString()+",","");
+        point.put("EventMembers", strMember);
+
+        progressDialog = ProgressDialog.show(getActivity(), "", "Removing record...", true);
+        point.saveInBackground(new SaveCallback() {
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Event has been removed!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "Server connection failure...", Toast.LENGTH_LONG).show();
+                }
+                progressDialog.dismiss();
+            }
+        });
+        fnSendPushNotification(objectId, "Sorry, I [" + userPhoneNumber + "] am not available to attend the event: " + title.getText().toString());
     }
 }
