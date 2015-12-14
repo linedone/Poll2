@@ -445,9 +445,14 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment {
                     for(int i = 0; i < sortedResult.size(); i++) {
 
                         String[] tmpArray = sortedResult.get(i).toString().split("!#####!");
+                        if(!tmpArray[0].equals("")){
+                            allOption += "\n Option: " + tmpArray[0]+", voted"+tmpArray[1];
+                            Log.d("result+++++++", "" + sortedResult.get(i));
+                        }
+                        if(allOption.equals("")){
 
-                        allOption += "\n Option: " + tmpArray[0]+", voted"+tmpArray[1];
-                        Log.d("result+++++++", "" + sortedResult.get(i));
+                            allOption += "\n No one voted : 0";
+                        }
                     }
                     //Log.d("result------", "" + allOpt);
                 } catch (ParseException e1) {
