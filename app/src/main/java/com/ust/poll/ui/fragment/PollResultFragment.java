@@ -88,12 +88,17 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment impleme
         queries.add(votedQuery);
         ParseQuery<ParseObject> mainQuery = ParseQuery.or(queries);
 
+
+        mainQuery.orderByDescending(Poll.END_AT);
+
         progressDialog = ProgressDialog.show(getActivity(), "", "Loading records...", true);
         mainQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 if (e == null) {
                     retrievePollResultSuccess(parseObjects, e);
                 }
+
+                ParseObject.pinAllInBackground(parseObjects);
                 progressDialog.dismiss();
             }
         });
@@ -241,6 +246,8 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment impleme
                 //Log.d("result------", "" + sortedResult.size());
                 results.add(newsData);
             }
+
+            //ParseObject.pinAllInBackground(parseObjects);
             lv1.setAdapter(new CustomListAdapter(getActivity().getBaseContext(), results));
             Log.d("Database", "Retrieved " + parseObjects.size() + " Active");
         } else {
