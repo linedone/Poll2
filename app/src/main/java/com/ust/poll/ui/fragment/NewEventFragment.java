@@ -304,7 +304,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
                 ParseFile fileObject = new ParseFile(f.getName().toString(), imgFile);
                 fileObject.saveInBackground(new SaveCallback() {
                     public void done(ParseException e) {
-                        progressDialog.dismiss();
+//                        progressDialog.dismiss();
                         if (e == null) {
                             Log.i("PhotoUpload", "Photo upload successful.");
                         } else {
@@ -323,6 +323,7 @@ public class NewEventFragment extends MainActivity.PlaceholderFragment {
             eventObject.saveInBackground();
             eventObject.fetchInBackground(new GetCallback<ParseObject>() {
                 public void done(ParseObject object, ParseException e) {
+                    progressDialog.dismiss();
                     if (e == null) {
                         // Success!
                         String objectId = object.getObjectId();
