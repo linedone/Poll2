@@ -25,12 +25,12 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.linedone.poll.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.ust.poll.MainActivity;
-import com.linedone.poll.R;
 import com.ust.poll.model.NewsItem;
 import com.ust.poll.model.Poll;
 import com.ust.poll.model.Polled;
@@ -54,8 +54,10 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment impleme
     private ProgressDialog progressDialog;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a Z");  // 2015-12-13T11:31:00.000Z
     @Nullable
-    @Bind(R.id.btn_result_chart_back) BootstrapButton btn_result_chart_back;
-    @Bind(R.id.result_custom_list) ListView lv1;
+    @Bind(R.id.btn_result_chart_back)
+    BootstrapButton btn_result_chart_back;
+    @Bind(R.id.result_custom_list)
+    ListView lv1;
     private PieChart mChart;  // we're going to display pie chart for smartphones martket shares
 
     @Override
@@ -102,7 +104,7 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment impleme
 
     private void addData(Float[] yData, String[] xData, String titleOpt) {
 
-        mChart.setDescription(""+titleOpt);
+        mChart.setDescription("" + titleOpt);
 
         // configure pie chart
         mChart.setUsePercentValues(true);
@@ -171,12 +173,12 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment impleme
     }
 
     public void retrievePollResultSuccess(List<ParseObject> parseObjects, ParseException e) {
-        if (e==null) {
+        if (e == null) {
             int counter = 0;
 
             ArrayList<String> idList = new ArrayList<String>();
             ArrayList<NewsItem> results = new ArrayList<NewsItem>();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMM-dd HH:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             String id;
             String t;
             String dt;
@@ -213,21 +215,20 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment impleme
                     sortedResult = displayDuplicate(optArray);
 
                     allOption = "";
-                    for(int i = 0; i < sortedResult.size(); i++) {
+                    for (int i = 0; i < sortedResult.size(); i++) {
 
                         String[] tmpArray = sortedResult.get(i).toString().split("!#####!");
-                        if(!tmpArray[0].equals("")){
-                            allOption += "\n Option: " + tmpArray[0]+", voted"+tmpArray[1];
+                        if (!tmpArray[0].equals("")) {
+                            allOption += "\n Option: " + tmpArray[0] + ", voted" + tmpArray[1];
                             Log.d("result+++++++", "" + sortedResult.get(i));
                         }
-                        if(allOption.equals("")){
+                        if (allOption.equals("")) {
 
                             allOption += "\n No one voted : 0";
                         }
                     }
                     //Log.d("result------", "" + allOpt);
-                }
-                catch (ParseException e1) {
+                } catch (ParseException e1) {
                     e1.printStackTrace();
                 }
                 newsData.setResult(sortedResult);
@@ -242,8 +243,7 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment impleme
             }
             lv1.setAdapter(new CustomListAdapter(getActivity().getBaseContext(), results));
             Log.d("Database", "Retrieved " + parseObjects.size() + " Active");
-        }
-        else {
+        } else {
             Toast.makeText(getActivity().getApplicationContext(), "Querying failure...", Toast.LENGTH_LONG).show();
             Log.e("Database", "Error: " + e.getMessage());
         }
@@ -255,14 +255,14 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment impleme
         ArrayList<Result> resultList = new ArrayList<Result>();
 
         boolean[] done = new boolean[ar.length];
-        for(int i=0; i<ar.length; i++) {
-            if(done[i])
+        for (int i = 0; i < ar.length; i++) {
+            if (done[i])
                 continue;
             int nb = 0;
-            for(int j = i; j < ar.length; j++) {
-                if(done[j])
+            for (int j = i; j < ar.length; j++) {
+                if (done[j])
                     continue;
-                if(ar[j].equals(ar[i])) {
+                if (ar[j].equals(ar[i])) {
                     done[j] = true;
                     nb++;
                 }
@@ -271,7 +271,7 @@ public class PollResultFragment extends MainActivity.PlaceholderFragment impleme
         }
 
         Collections.sort(resultList);
-        for(int i=0; i<resultList.size(); i++) {
+        for (int i = 0; i < resultList.size(); i++) {
             Log.d("result", "" + resultList.get(i).toString());
         }
         return resultList;

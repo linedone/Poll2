@@ -39,7 +39,8 @@ import butterknife.ButterKnife;
 public class ActivePollFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener {
     private ProgressDialog progressDialog;
     @Nullable
-    @Bind(R.id.custom_list) ListView lv1;
+    @Bind(R.id.custom_list)
+    ListView lv1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,14 +84,14 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment impleme
     }
 
     public void retrieveActivePollSuccess(List<ParseObject> parseObjects, ParseException e) {
-        if (e==null) {
+        if (e == null) {
             ArrayList<String> idList = new ArrayList<String>();
             final ArrayList<NewsItem> results = new ArrayList<NewsItem>();
             for (ParseObject parseObject : parseObjects) {
                 final String id = parseObject.getObjectId();
                 idList.add(id);
                 final String t = parseObject.get(Poll.TITLE).toString();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMM-dd HH:mm");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 final String dt = sdf.format((Date) parseObject.get(Poll.END_AT));
                 final String cph = parseObject.get(Poll.CREATORPHONE).toString();
 
@@ -104,8 +105,7 @@ public class ActivePollFragment extends MainActivity.PlaceholderFragment impleme
 
             lv1.setAdapter(new CustomListAdapter(getActivity().getBaseContext(), results));
             Log.d("Database", "Retrieved " + parseObjects.size() + " Active");
-        }
-        else {
+        } else {
             Toast.makeText(getActivity().getApplicationContext(), "Querying failure...", Toast.LENGTH_LONG).show();
             Log.e("Database", "Error: " + e.getMessage());
         }

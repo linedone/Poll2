@@ -6,52 +6,49 @@ package com.ust.poll.model;
 public class Result implements Comparable {
 
 
-	private String title;
-	private Integer count;
+    private String title;
+    private Integer count;
 
-	public Result(int count, String title) {
-		this.count = count;
-		this.title = title;
-	}
+    public Result(int count, String title) {
+        this.count = count;
+        this.title = title;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setTitle(String pollId) {
-		this.title = title;
-	}
+    public void setTitle(String pollId) {
+        this.title = title;
+    }
 
-	public Integer getCount() {
-		return count;
-	}
+    public Integer getCount() {
+        return count;
+    }
 
-	public void setCount(Integer count) {
-		this.count = count;
-	}
+    public void setCount(Integer count) {
+        this.count = count;
+    }
 
-	//@Override
-	//public int compareTo(Result compareresult) {
-	//	int compareage=((Result)compareresult).getCount();
+    //@Override
+    //public int compareTo(Result compareresult) {
+    //	int compareage=((Result)compareresult).getCount();
         /* For Ascending order*/
-	//	return this.count-compareage;
+    //	return this.count-compareage;
 
         /* For Descending order do like this */
-		//return compareage-this.studentage;
-	///}
+    //return compareage-this.studentage;
+    ///}
 
-	@Override
-	public String toString() {
-		return title + "!#####!" + count;
-	}
-
-
+    @Override
+    public String toString() {
+        return title + "!#####!" + count;
+    }
 
 
-
-	@Override
-	public int compareTo(Object another) {
-		int compareage=((Result)another).getCount();
-		return compareage-this.count;
-	}
+    @Override
+    public int compareTo(Object another) {
+        int compareage = ((Result) another).getCount();
+        return compareage - this.count;
+    }
 }

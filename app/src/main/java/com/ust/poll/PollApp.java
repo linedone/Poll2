@@ -11,7 +11,7 @@ import com.parse.Parse;
 /**
  * Created by Ken on 10/7/2015.
  */
-public class PollApp extends Application{
+public class PollApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();

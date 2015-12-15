@@ -75,7 +75,7 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
         super.onActivityCreated(savedInstanceState);
 
         Bundle bundle = this.getArguments();
-        if (bundle!=null) {
+        if (bundle != null) {
             objectId = bundle.getString("objectId");
             userId = bundle.getString("userId");
             userPhoneNumber = bundle.getString("userPhoneNumber");
@@ -93,7 +93,7 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
     }
 
     public void retrieveEventSuccess(ParseObject parseObject, ParseException e) {
-        if (e==null) {
+        if (e == null) {
             TextView txtAttend = (TextView) getActivity().findViewById(R.id.txt_attend);
             LinearLayout layoutAttend = (LinearLayout) getActivity().findViewById(R.id.layout_attend);
             ImageButton attendButton = (ImageButton) getActivity().findViewById(R.id.btn_attend);
@@ -137,11 +137,11 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
             // Spilt strMember to an array and find the name by phone number
             String[] arrayMemberPhones = strMember.split(",");
             String[] arrayMemberNames = new String[arrayMemberPhones.length];
-            for (int i=0; i<arrayMemberPhones.length; i++){
+            for (int i = 0; i < arrayMemberPhones.length; i++) {
                 arrayMemberNames[i] = TelephonyUtil.getContactName(getActivity(), arrayMemberPhones[i]) + " [" + arrayMemberPhones[i] + "]";
             }
 
-            if (strMember!=null) {  // Construct a ListView
+            if (strMember != null) {  // Construct a ListView
                 if (!strMember.contains(userPhoneNumber)) {
                     ActiveEventFragment fragment = new ActiveEventFragment();
                     Bundle bundle = new Bundle();
@@ -152,8 +152,7 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
                 ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, arrayMemberNames);
                 firendList.setAdapter(mAdapter);
                 firendList.setOnItemClickListener(this);
-            }
-            else {
+            } else {
                 Log.e("ERROR", "Group member list is equal to null!!!");
             }
 
@@ -162,13 +161,11 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
                 txtAttend.setVisibility(View.GONE);
                 attendButton.setVisibility(View.GONE);
                 unattendButton.setVisibility(View.GONE);
-            }
-            else {
+            } else {
                 attendButton.setOnClickListener(this);
                 unattendButton.setOnClickListener(this);
             }
-        }
-        else {
+        } else {
             Toast.makeText(getActivity().getApplicationContext(), "Querying failure...", Toast.LENGTH_LONG).show();
             Log.e("Database", "Error: " + e.getMessage());
         }
@@ -176,14 +173,13 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        String contact = (String)this.firendList.getItemAtPosition(position);
+        String contact = (String) this.firendList.getItemAtPosition(position);
         Log.i("Contact", contact);
         String number = contact.substring(contact.indexOf("[") + 1, contact.indexOf("]"));
 
         try {
             startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number)));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -193,10 +189,10 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
         switch (v.getId()) {
             case R.id.cameraButton:
                 SimpleDateFormat sdFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.UK);
-                fileName = objectId+"_"+objectId+"_"+sdFormat.format(new Date()).toString()+".jpg";
+                fileName = objectId + "_" + objectId + "_" + sdFormat.format(new Date()).toString() + ".jpg";
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(fileName));
-                if (cameraIntent.resolveActivity(getActivity().getPackageManager())!=null) {
+                if (cameraIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivityForResult(cameraIntent, RESULT_CAMERA);
                 }
                 break;
@@ -211,7 +207,7 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
 
             case R.id.btn_attend:
                 ParseObject point = ParseObject.createWithoutData("Event", objectId);
-                strAttend = strAttend.concat(","+userPhoneNumber);
+                strAttend = strAttend.concat("," + userPhoneNumber);
                 Log.d("Attend", strAttend);
 
                 point.put("EventAttends", strAttend);
@@ -226,7 +222,7 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
                         progressDialog.dismiss();
                     }
                 });
-                fnSendPushNotification(objectId, "I ["+ userPhoneNumber +"] will attend the event: " + title.getText().toString());
+                fnSendPushNotification(objectId, "I [" + userPhoneNumber + "] will attend the event: " + title.getText().toString());
                 break;
 
             case R.id.btn_unattend:
@@ -263,7 +259,7 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
         if (requestCode == RESULT_CAMERA && resultCode == getActivity().RESULT_OK) {
             Uri takenPhotoUri = getPhotoFileUri(fileName);
             byte[] imgFile = MediaUtil.getBytesFromImagePath(takenPhotoUri.getPath());
-            if (imgFile!=null) {
+            if (imgFile != null) {
                 ParseObject eventObject = new ParseObject("EventPhoto");
                 eventObject.put("EventId", objectId);
                 eventObject.put("UserId", userId);
@@ -303,12 +299,7 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
     private boolean isExternalStorageAvailable() {
         String state = Environment.getExternalStorageState();
         boolean status;
-        if (state.equals(Environment.MEDIA_MOUNTED)) {
-            status = true;
-        }
-        else {
-            status = false;
-        }
+        status = state.equals(Environment.MEDIA_MOUNTED);
 
         return status;
     }
@@ -318,14 +309,13 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
         if (isExternalStorageAvailable()) {  // Only continue if the SD Card is mounted
             File storage = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Lets Meet");
             // Create the storage directory if it does not exist
-            if (!storage.exists() && !storage.mkdirs()){
+            if (!storage.exists() && !storage.mkdirs()) {
                 Log.d("Camera", "Create directory failed!");
             }
 
             // Return the file target for the photo based on filename
             resource = Uri.fromFile(new File(storage.getPath() + File.separator + fileName));
-        }
-        else {
+        } else {
             resource = null;
         }
 
@@ -359,8 +349,8 @@ public class DetailFriendListEventFragment extends MainActivity.PlaceholderFragm
         final String objectId = removeObjectId;
 
         ParseObject point = ParseObject.createWithoutData("Event", removeObjectId);
-        strMember = strMember.replace(","+userPhoneNumber.toString(),"");
-        strMember = strMember.replace(userPhoneNumber.toString()+",","");
+        strMember = strMember.replace("," + userPhoneNumber.toString(), "");
+        strMember = strMember.replace(userPhoneNumber.toString() + ",", "");
         point.put("EventMembers", strMember);
 
         progressDialog = ProgressDialog.show(getActivity(), "", "Removing record...", true);

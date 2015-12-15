@@ -28,7 +28,6 @@ import com.ust.poll.ui.fragment.FriendListFragment;
 import com.ust.poll.ui.fragment.MainFragment;
 import com.ust.poll.ui.fragment.NewEventFragment;
 import com.ust.poll.ui.fragment.NewPollFragment;
-import com.ust.poll.ui.fragment.PickFriendFragment;
 import com.ust.poll.ui.fragment.PollResultFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -79,24 +78,20 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
         Log.d("MainActivity", "" + fragmentManager.getFragments().toString());
 
-        if (fragmentManager.getFragments().toString().contains("SelectPollFragment")){
+        if (fragmentManager.getFragments().toString().contains("SelectPollFragment")) {
             backCheck = false;
-        }
-        else if (fragmentManager.getFragments().toString().contains("DetailFriendListEventFragment")) {
+        } else if (fragmentManager.getFragments().toString().contains("DetailFriendListEventFragment")) {
             backCheck = false;
-        }
-        else if (fragmentManager.getFragments().toString().contains("DetailGalleryEventFragment")) {
+        } else if (fragmentManager.getFragments().toString().contains("DetailGalleryEventFragment")) {
             backCheck = false;
-        }
-        else if (fragmentManager.getFragments().toString().contains("PickFriendFragment")) {
+        } else if (fragmentManager.getFragments().toString().contains("PickFriendFragment")) {
             backCheck = false;
             doNothing = true;
-        }
-        else {
+        } else {
 
         }
 
-        if (backCheck && !doNothing){
+        if (backCheck && !doNothing) {
             new AlertDialog.Builder(this)
                     .setMessage("Are you sure you want to exit?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -106,11 +101,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                         }
                     })
                     .setNegativeButton("No", null).show();
-        }
-        else if (!backCheck && doNothing){
+        } else if (!backCheck && doNothing) {
             getFragmentManager().popBackStack();
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }

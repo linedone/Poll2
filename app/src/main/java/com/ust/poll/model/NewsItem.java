@@ -3,69 +3,67 @@
 
 package com.ust.poll.model;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class NewsItem {
 
-	private String headline;
-	private String reporterName;
-	private String date;
-	private String pollId;
-	private String allOpt;
-	private ArrayList result;
+    private String headline;
+    private String reporterName;
+    private String date;
+    private String pollId;
+    private String allOpt;
+    private ArrayList result;
 
-	public ArrayList getResult() {
-		return result;
-	}
+    public ArrayList getResult() {
+        return result;
+    }
 
-	public void setResult(ArrayList result) {
-		this.result = result;
-	}
+    public void setResult(ArrayList result) {
+        this.result = result;
+    }
 
-	public String getpollID() {
-		return pollId;
-	}
+    public String getpollID() {
+        return pollId;
+    }
 
-	public void setpollID(String pollId) {
-		this.pollId = pollId;
-	}
+    public void setpollID(String pollId) {
+        this.pollId = pollId;
+    }
 
-	public String getHeadline() {
-		return headline;
-	}
+    public String getHeadline() {
+        return headline;
+    }
 
-	public void setHeadline(String headline) {
-		this.headline = headline;
-	}
+    public void setHeadline(String headline) {
+        this.headline = headline;
+    }
 
-	public String getReporterName() {
-		return reporterName;
-	}
+    public String getReporterName() {
+        return reporterName;
+    }
 
-	public void setReporterName(String reporterName) {
-		this.reporterName = reporterName;
-	}
+    public void setReporterName(String reporterName) {
+        this.reporterName = reporterName;
+    }
 
-	public String getDate() {
-		return date;
-	}
+    public String getDate() {
+        return date;
+    }
 
-	public void setDate(String date) {
-		this.date = date;
-	}
+    public void setDate(String date) {
+        this.date = date;
+    }
 
-	public String getallOpt() {
-		return allOpt;
-	}
+    public String getallOpt() {
+        return allOpt;
+    }
 
-	public void setallOpt(String allOpt) {
-		this.allOpt = allOpt;
-	}
+    public void setallOpt(String allOpt) {
+        this.allOpt = allOpt;
+    }
 
-	@Override
-	public String toString() {
-		return "[ headline=" + headline + ", reporter Name=" + reporterName + " , date=" + date + " , Option=" + allOpt +"]";
-	}
+    @Override
+    public String toString() {
+        return "[ headline=" + headline + ", reporter Name=" + reporterName + " , date=" + date + " , Option=" + allOpt + "]";
+    }
 }

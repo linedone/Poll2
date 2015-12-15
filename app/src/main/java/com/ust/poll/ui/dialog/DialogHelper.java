@@ -11,7 +11,8 @@ public class DialogHelper {
     private static final String TAG = "DialogHelper";
     private static ProgressDialog pdialog = null;
 
-    public DialogHelper(){}
+    public DialogHelper() {
+    }
 
     public static AlertDialog getOkAlertDialog(Context ctx, String title,
                                                String message) {

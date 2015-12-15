@@ -77,7 +77,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.UK);
+        SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.UK);
         ParseUser user = ParseUser.getCurrentUser();
         userId = user.getObjectId();
         userPhoneNumber = user.getUsername();
@@ -98,8 +98,7 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
     }
 
     public void retrieveEventSuccess(List<ParseObject> parseObjects, ParseException e) {
-        progressDialog.dismiss();
-        if (e==null) {
+        if (e == null) {
             int counter = 0;
             for (ParseObject parseObject : parseObjects) {
                 strEventIds.add(parseObject.getObjectId().toString());
@@ -110,15 +109,13 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
                 strRemarkURLs.add(parseObject.get("EventRemarkURL").toString());
 
                 ParseFile fileObject = parseObjects.get(counter).getParseFile("EventPhoto");
-                if(fileObject!=null){
+                if (fileObject != null) {
                     try {
                         strImages.add(Base64.encodeToString(fileObject.getData(), Base64.DEFAULT));
-                    }
-                    catch (ParseException ePhotoMsg) {
+                    } catch (ParseException ePhotoMsg) {
                         Log.e("File", "Error: " + ePhotoMsg.getMessage());
                     }
-                }
-                else {  //NO Image uploaded
+                } else {  //NO Image uploaded
                     strImages.add(MediaUtil.getStringFromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.empty, null)));
                 }
                 strMembers.add(parseObject.get("EventMembers").toString());
@@ -126,23 +123,29 @@ public class ActiveEventFragment extends MainActivity.PlaceholderFragment implem
                 counter++;
             }
             Log.d("Database", "Retrieved " + parseObjects.size() + " Event");
-            if (parseObjects.size()==0) {
+
+            if (progressDialog!=null) {
+                progressDialog.dismiss();
+            }
+
+            if (parseObjects.size() == 0) {
                 Toast.makeText(getActivity().getApplicationContext(), "No Event", Toast.LENGTH_LONG).show();
             }
 
-            if (strEventIds!=null) {  // Construct a ListView
+            if (strEventIds != null) {  // Construct a ListView
                 eventList = (ListView) getActivity().findViewById(R.id.activeEventListView);
                 mAdapter = new EventAdapter(getActivity(), strTitles, strDates, strTimes, strVenues, strRemarkURLs, strImages);
                 eventList.setAdapter(mAdapter);
                 eventList.setOnItemClickListener(this);
-            }
-            else {
+            } else {
                 Log.e("ERROR", "Event ID is equal to null!!!");
             }
-        }
-        else {
+        } else {
             Toast.makeText(getActivity().getApplicationContext(), "Querying failure...", Toast.LENGTH_LONG).show();
             Log.e("Database", "Error: " + e.getMessage());
+        }
+        if (progressDialog!=null) {
+            progressDialog.dismiss();
         }
     }
 

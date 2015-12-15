@@ -13,13 +13,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import com.ust.poll.MainActivity;
+
 import com.linedone.poll.R;
-import com.ust.poll.ui.dialog.DialogHelper;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.ust.poll.MainActivity;
+import com.ust.poll.ui.dialog.DialogHelper;
 import com.ust.poll.util.TelephonyUtil;
 
 import java.util.ArrayList;
@@ -29,7 +30,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class FriendListFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener {
-    @Bind(R.id.listView) ListView listView;
+    @Bind(R.id.listView)
+    ListView listView;
     ArrayList<String> contactList = new ArrayList<String>();
 
     @Override
@@ -55,29 +57,27 @@ public class FriendListFragment extends MainActivity.PlaceholderFragment impleme
         if (e == null) {
             for (ParseUser parseItem : parseObjects) {
                 String contactName = TelephonyUtil.getContactName(getActivity(), parseItem.getUsername());
-                if (contactName.compareTo("")!=0) {
+                if (contactName.compareTo("") != 0) {
                     contactList.add(contactName + "[" + parseItem.getUsername().toString() + "]");
                 }
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, android.R.id.text1, contactList);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, contactList);
             listView.setAdapter(adapter);
             listView.setOnItemClickListener(this);
-        }
-        else {
+        } else {
             DialogHelper.getOkAlertDialog(getActivity(), "Error in connecting server..", e.getMessage()).show();
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        String contact = (String)this.listView.getItemAtPosition(position);
+        String contact = (String) this.listView.getItemAtPosition(position);
         Log.i("Contact", contact);
         String number = contact.substring(contact.indexOf("[") + 1, contact.indexOf("]"));
 
         try {
             startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number)));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

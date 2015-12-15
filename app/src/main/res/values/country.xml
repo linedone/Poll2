@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="CountryCodes" >
+    <string-array name="CountryCodes">
         <item>+1,CA</item>
         <item>+1,PR</item>
         <item>+1,US</item>

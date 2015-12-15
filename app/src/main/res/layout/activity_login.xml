@@ -10,7 +10,8 @@
     android:background="#0099cc"
     tools:context=".LoginActivity">
 
-    <TextView android:id="@+id/Title"
+    <TextView
+        android:id="@+id/Title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -51,7 +52,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt_password"
-        android:gravity="center" >
+        android:gravity="center">
+
         <com.beardedhen.androidbootstrap.BootstrapButton
             android:id="@+id/btn_login"
             android:layout_width="wrap_content"

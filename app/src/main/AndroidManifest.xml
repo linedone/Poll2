@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.linedone.poll" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.linedone.poll">
+
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -15,22 +17,27 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="com.linedone.poll.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <permission android:protectionLevel="signature" android:name="com.linedone.poll.permission.C2D_MESSAGE" />
+
+    <permission
+        android:protectionLevel="signature"
+        android:name="com.linedone.poll.permission.C2D_MESSAGE" />
     <application
         android:name="com.ust.poll.PollApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
 
         <!-- Push Icon -->
-        <meta-data android:name="com.parse.push.notification_icon" android:resource="@drawable/ic_drawer"/>
+        <meta-data
+            android:name="com.parse.push.notification_icon"
+            android:resource="@drawable/ic_drawer" />
 
         <activity
             android:name="com.ust.poll.activity.LoginActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name"
-            android:theme="@style/FullscreenTheme" >
+            android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,11 +48,12 @@
         <activity
             android:name="com.ust.poll.MainActivity"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_main" >
-        </activity>
+            android:label="@string/title_activity_main"></activity>
 
         <!-- SMS Receiver -->
-        <receiver android:name="com.ust.poll.sms.SMSMonitor" android:exported="true" >
+        <receiver
+            android:name="com.ust.poll.sms.SMSMonitor"
+            android:exported="true">
             <intent-filter android:priority="1000">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
@@ -53,7 +61,9 @@
 
         <!-- Push Policy & Receiver -->
         <service android:name="com.parse.PushService" />
-        <receiver android:name="com.parse.ParsePushBroadcastReceiver"
+
+        <receiver
+            android:name="com.parse.ParsePushBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
@@ -61,11 +71,13 @@
                 <action android:name="com.parse.push.intent.OPEN" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.parse.GcmBroadcastReceiver"
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
                 <category android:name="com.linedone.poll" />
             </intent-filter>
         </receiver>

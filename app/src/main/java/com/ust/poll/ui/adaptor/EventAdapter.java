@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class EventAdapter extends ArrayAdapter<String>
-{
+public class EventAdapter extends ArrayAdapter<String> {
     Context context;
 
     String[] arrayTitles;
@@ -50,25 +49,22 @@ public class EventAdapter extends ArrayAdapter<String>
         EventViewHolder holder = null;
         View vRow = convertView;
 
-        if (vRow==null) {  // Create at 1st time ONLY
+        if (vRow == null) {  // Create at 1st time ONLY
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             vRow = inflater.inflate(R.layout.fragment_event_active_item, parent, false);
             holder = new EventViewHolder(vRow);
             vRow.setTag(holder);
-        }
-        else {  // Recycling
+        } else {  // Recycling
             holder = (EventViewHolder) vRow.getTag();
         }
 
         holder.txtTitle.setText(arrayTitles[position]);
         holder.txtDate.setText("Event Date: " + arrayDates[position]);
-        if (arrayDates[position].toString().compareTo(dFormat.format(new Date()).toString())==0) {
+        if (arrayDates[position].toString().compareTo(dFormat.format(new Date()).toString()) == 0) {
             holder.toolbar.setBackground(new ColorDrawable(Color.parseColor("#ec407a")));
-        }
-        else if (position%2==0) {
+        } else if (position % 2 == 0) {
             holder.toolbar.setBackground(new ColorDrawable(Color.parseColor("#01bcd5")));
-        }
-        else {
+        } else {
             holder.toolbar.setBackground(new ColorDrawable(Color.parseColor("#2d5d82")));
         }
         holder.txtTime.setText("Event Time: " + arrayTimes[position]);

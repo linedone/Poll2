@@ -4,7 +4,6 @@
 package com.ust.poll.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class NewPoll implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -18,11 +17,11 @@ public class NewPoll implements Serializable {
     private String friend;
     private Boolean pollchecked;
 
-    public NewPoll(){
+    public NewPoll() {
 
     }
 
-    public NewPoll (String date, String time, String title, String option1, String option2, String option3, String option4, String friend, Boolean pollchecked) {
+    public NewPoll(String date, String time, String title, String option1, String option2, String option3, String option4, String friend, Boolean pollchecked) {
         this.date = date;
         this.time = time;
         this.title = title;

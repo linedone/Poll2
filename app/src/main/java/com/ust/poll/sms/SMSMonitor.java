@@ -29,11 +29,11 @@ public class SMSMonitor extends BroadcastReceiver {
                 messages[i] = SmsMessage.createFromPdu((byte[]) pduArray[i]);
                 String phoneNo = messages[i].getOriginatingAddress();
                 String body = messages[i].getMessageBody().toString();
-                Log.d("SMSMonitor", ">>>>>>>>>>>>>>>>>>>>>> sender : "+phoneNo);
-                Log.d("SMSMonitor", ">>>>>>>>>>>>>>>>>>>>>> messages : "+body);
+                Log.d("SMSMonitor", ">>>>>>>>>>>>>>>>>>>>>> sender : " + phoneNo);
+                Log.d("SMSMonitor", ">>>>>>>>>>>>>>>>>>>>>> messages : " + body);
 
-                Log.d("SMSMonitor", ">>>>>>>>>>>>>>>>>>>>>> validationCode : "+LoginActivity.validationCode);
-                if(body.equals(LoginActivity.validationCode)){
+                Log.d("SMSMonitor", ">>>>>>>>>>>>>>>>>>>>>> validationCode : " + LoginActivity.validationCode);
+                if (body.equals(LoginActivity.validationCode)) {
                     Intent inten = new Intent(context, LoginActivity.class);
                     inten.putExtra("PHONE_NO", phoneNo);
                     inten.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

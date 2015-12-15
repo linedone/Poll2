@@ -12,10 +12,10 @@ import android.widget.ArrayAdapter;
 import com.linedone.poll.R;
 import com.ust.poll.model.EventPhotoViewHolder;
 import com.ust.poll.util.MediaUtil;
+
 import java.util.ArrayList;
 
-public class EventPhotoAdapter extends ArrayAdapter<String>
-{
+public class EventPhotoAdapter extends ArrayAdapter<String> {
     Context context;
     String[] arrayImages;
 
@@ -31,13 +31,12 @@ public class EventPhotoAdapter extends ArrayAdapter<String>
         EventPhotoViewHolder holder = null;
         View vRow = convertView;
 
-        if (vRow==null) {  // Create at 1st time ONLY
+        if (vRow == null) {  // Create at 1st time ONLY
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             vRow = inflater.inflate(R.layout.fragment_event_detail_gallery, parent, false);
             holder = new EventPhotoViewHolder(vRow);
             vRow.setTag(holder);
-        }
-        else {  // Recycling
+        } else {  // Recycling
             holder = (EventPhotoViewHolder) vRow.getTag();
         }
         holder.imageView.setImageBitmap(MediaUtil.getBitmapFromString(arrayImages[position]));

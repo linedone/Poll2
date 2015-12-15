@@ -10,7 +10,8 @@
     android:background="#0099cc"
     tools:context=".LoginActivity">
 
-    <TextView android:id="@+id/Title"
+    <TextView
+        android:id="@+id/Title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -108,7 +109,6 @@
             app:roundedCorners="true" />
 
     </LinearLayout>
-
 
 
 </RelativeLayout>

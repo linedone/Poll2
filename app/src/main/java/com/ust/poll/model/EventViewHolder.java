@@ -9,8 +9,7 @@ import android.widget.TextView;
 
 import com.linedone.poll.R;
 
-public class EventViewHolder
-{
+public class EventViewHolder {
     public TextView txtTitle;
     public TextView txtDate;
     public TextView txtTime;
@@ -19,8 +18,7 @@ public class EventViewHolder
     public ImageView imgPhoto;
     public android.support.v7.widget.Toolbar toolbar;
 
-    public EventViewHolder(View vRow)
-    {
+    public EventViewHolder(View vRow) {
         txtTitle = (TextView) vRow.findViewById(R.id.txt_aeTitle);
         txtDate = (TextView) vRow.findViewById(R.id.txt_aeDate);
         txtTime = (TextView) vRow.findViewById(R.id.txt_aeTime);

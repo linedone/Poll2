@@ -10,37 +10,28 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.util.SparseBooleanArray;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.linedone.poll.R;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
 import com.ust.poll.MainActivity;
 import com.ust.poll.model.PhoneContactInfo;
-import com.ust.poll.ui.dialog.DialogHelper;
 import com.ust.poll.util.TelephonyUtil;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import butterknife.Bind;
-import butterknife.OnClick;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class PickFriendFragment extends MainActivity.PlaceholderFragment implements AdapterView.OnItemClickListener {
     private static int FRAGMENT_CODE = 0;
@@ -49,11 +40,16 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
     ArrayList contactPerson = new ArrayList();
     ArrayList<String> contactList = new ArrayList<String>();
 
-    @Bind(R.id.btn_friend_list_submit) BootstrapButton btnSubmitFriendList;
-    @Bind(R.id.txt_option1) TextView txtOption1;
-    @Bind(R.id.txt_option2) TextView txtOption2;
-    @Bind(R.id.txt_option3) TextView txtOption3;
-    @Bind(R.id.txt_option4) TextView txtOption4;
+    @Bind(R.id.btn_friend_list_submit)
+    BootstrapButton btnSubmitFriendList;
+    @Bind(R.id.txt_option1)
+    TextView txtOption1;
+    @Bind(R.id.txt_option2)
+    TextView txtOption2;
+    @Bind(R.id.txt_option3)
+    TextView txtOption3;
+    @Bind(R.id.txt_option4)
+    TextView txtOption4;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,10 +86,10 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
         txtOption4.setText(soption4);
 
         // Traversing elements of ArrayList object
-        while (iterator.hasNext()){
-            PhoneContactInfo contact = (PhoneContactInfo)iterator.next();
+        while (iterator.hasNext()) {
+            PhoneContactInfo contact = (PhoneContactInfo) iterator.next();
 
-            if (!contactName.contains(contact.getContactName())){
+            if (!contactName.contains(contact.getContactName())) {
                 contactName.add(contact.getContactName());
             }
             if (!contactNumber.contains(contact.getContactNumber())) {
@@ -101,15 +97,14 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
             }
 
             String tmpContact = contact.getContactName() + " [" + contact.getContactNumber() + "]";
-            if (contactList.contains(tmpContact) && !contactPerson.contains(tmpContact) && !contactPerson.contains("***"+tmpContact)) {
-                contactPerson.add("***"+tmpContact);
-            }
-            else if (!contactPerson.contains(tmpContact) && !contactPerson.contains("***"+tmpContact)) {
+            if (contactList.contains(tmpContact) && !contactPerson.contains(tmpContact) && !contactPerson.contains("***" + tmpContact)) {
+                contactPerson.add("***" + tmpContact);
+            } else if (!contactPerson.contains(tmpContact) && !contactPerson.contains("***" + tmpContact)) {
                 contactPerson.add(tmpContact);
             }
         }
         ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(PickFriendFragment.super.getActivity(), android.R.layout.simple_list_item_multiple_choice, contactPerson);
-        ListView friendList = (ListView)getView().findViewById(R.id.friendList);
+        ListView friendList = (ListView) getView().findViewById(R.id.friendList);
 
         // Assign adapter to ListView
         friendList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -118,11 +113,11 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
         friendList.setOnItemClickListener(this);
 
 
-        if (bundle!=null && bundle.getString("members")!=null) {
+        if (bundle != null && bundle.getString("members") != null) {
             String[] contactPosition = bundle.getString("contactPosition").split(",");
-            for (int i=0; i<friendList.getCount(); i++) {
-                for (int j=0; j<contactPosition.length; j++) {
-                    if (String.valueOf(i).compareTo(contactPosition[j])==0) {
+            for (int i = 0; i < friendList.getCount(); i++) {
+                for (int j = 0; j < contactPosition.length; j++) {
+                    if (String.valueOf(i).compareTo(contactPosition[j]) == 0) {
                         friendList.setItemChecked(i, true);
                     }
                 }
@@ -143,7 +138,7 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
         cursor.moveToFirst();
         while (cursor.isAfterLast() == false) {
             String contactNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            String contactName =  cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             int phoneContactID = cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID));
 
             contactNumber = contactNumber.replace(" ", "");  // remove spaces
@@ -151,9 +146,8 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
 
             String finalContactNumber;
             if (!contactNumber.contains("+")) {
-                finalContactNumber = zipCode+contactNumber;
-            }
-            else {
+                finalContactNumber = zipCode + contactNumber;
+            } else {
                 finalContactNumber = contactNumber;
             }
 
@@ -175,15 +169,15 @@ public class PickFriendFragment extends MainActivity.PlaceholderFragment impleme
 
     @OnClick(R.id.btn_friend_list_submit)
     public void fnPickFriendSubmit(View view) {
-        ListView friendList = (ListView)getView().findViewById(R.id.friendList);
+        ListView friendList = (ListView) getView().findViewById(R.id.friendList);
         int cntChoice = friendList.getCount();
         String checked = "";
         SparseBooleanArray sparseBooleanArray = friendList.getCheckedItemPositions();
         String contactPosition = "";
         String members = "";
 
-        for (int i=0; i<cntChoice; i++) {
-            if (sparseBooleanArray.get(i)==true) {
+        for (int i = 0; i < cntChoice; i++) {
+            if (sparseBooleanArray.get(i) == true) {
                 String contact = friendList.getItemAtPosition(i).toString();
                 contact = contact.substring(contact.indexOf("[") + 1, contact.indexOf("]"));
                 members = members.concat(contact).concat(",");

@@ -9,9 +9,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.ust.poll.activity.LoginActivity;
-import com.ust.poll.MainActivity;
 import com.linedone.poll.R;
+import com.ust.poll.MainActivity;
+import com.ust.poll.activity.LoginActivity;
 
 /**
  * Created by Ken on 10/7/2015.

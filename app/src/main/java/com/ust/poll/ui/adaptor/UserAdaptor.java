@@ -8,5 +8,7 @@ import android.content.Context;
 public class UserAdaptor {
     private static final String TAG = UserAdaptor.class.getSimpleName();
     private Context ctx;
-    public UserAdaptor(Context ctx) {}
+
+    public UserAdaptor(Context ctx) {
+    }
 }

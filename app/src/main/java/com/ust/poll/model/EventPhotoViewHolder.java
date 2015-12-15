@@ -8,12 +8,10 @@ import android.widget.ImageView;
 
 import com.linedone.poll.R;
 
-public class EventPhotoViewHolder
-{
+public class EventPhotoViewHolder {
     public ImageView imageView;
 
-    public EventPhotoViewHolder(View vRow)
-    {
+    public EventPhotoViewHolder(View vRow) {
         imageView = (ImageView) vRow.findViewById(R.id.imageView);
     }
 }

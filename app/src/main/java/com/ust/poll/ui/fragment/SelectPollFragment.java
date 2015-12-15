@@ -30,10 +30,8 @@ import com.ust.poll.model.Poll;
 import com.ust.poll.model.Polled;
 import com.ust.poll.ui.dialog.DialogHelper;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -42,11 +40,16 @@ import butterknife.OnClick;
 
 public class SelectPollFragment extends MainActivity.PlaceholderFragment {
     @Nullable
-    @Bind(R.id.txt_title) BootstrapEditText txt_title;
-    @Bind(R.id.btn_select_op1) BootstrapButton btn_select_op1;
-    @Bind(R.id.btn_select_op2) BootstrapButton btn_select_op2;
-    @Bind(R.id.btn_select_op3) BootstrapButton btn_select_op3;
-    @Bind(R.id.btn_select_op4) BootstrapButton btn_select_op4;
+    @Bind(R.id.txt_title)
+    BootstrapEditText txt_title;
+    @Bind(R.id.btn_select_op1)
+    BootstrapButton btn_select_op1;
+    @Bind(R.id.btn_select_op2)
+    BootstrapButton btn_select_op2;
+    @Bind(R.id.btn_select_op3)
+    BootstrapButton btn_select_op3;
+    @Bind(R.id.btn_select_op4)
+    BootstrapButton btn_select_op4;
 
     private ProgressDialog progressDialog;
 
@@ -86,38 +89,33 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
 
                         if (op.get(0).equals("OPTION 1")) {
                             btn_select_op1.setVisibility(View.GONE);
-                        }
-                        else {
+                        } else {
                             btn_select_op1.setVisibility(View.VISIBLE);
                             btn_select_op1.setText("" + op.get(0));
                         }
 
                         if (op.get(1).equals("OPTION 2")) {
                             btn_select_op2.setVisibility(View.GONE);
-                        }
-                        else {
+                        } else {
                             btn_select_op2.setVisibility(View.VISIBLE);
                             btn_select_op2.setText("" + op.get(1));
                         }
 
                         if (op.get(2).equals("OPTION 3")) {
                             btn_select_op3.setVisibility(View.GONE);
-                        }
-                        else {
+                        } else {
                             btn_select_op3.setVisibility(View.VISIBLE);
                             btn_select_op3.setText("" + op.get(2));
                         }
 
                         if (op.get(3).equals("OPTION 4")) {
                             btn_select_op4.setVisibility(View.GONE);
-                        }
-                        else {
+                        } else {
                             btn_select_op4.setVisibility(View.VISIBLE);
                             btn_select_op4.setText("" + op.get(3));
                         }
                     }
-                }
-                else {
+                } else {
                     DialogHelper.getOkAlertDialog(ctx,
                             "Error in connecting server..", e.getMessage())
                             .show();
@@ -127,8 +125,8 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
         });
     }
 
-    @OnClick({ R.id.btn_select_op1, R.id.btn_select_op2, R.id.btn_select_op3, R.id.btn_select_op4 })
-    public void onClick(View v){
+    @OnClick({R.id.btn_select_op1, R.id.btn_select_op2, R.id.btn_select_op3, R.id.btn_select_op4})
+    public void onClick(View v) {
         String option = "";
         Bundle bundle = this.getArguments();
         final String pollID = bundle.getString("pollID");
@@ -204,8 +202,7 @@ public class SelectPollFragment extends MainActivity.PlaceholderFragment {
 
                                 if (tempPhone.length == 0) {
                                     point.put(Poll.FRIEND_PHONE, Arrays.asList("null"));
-                                }
-                                else {
+                                } else {
                                     point.put(Poll.FRIEND_PHONE, Arrays.asList(tempPhone));
                                 }
                                 point.addAll(Poll.FRIEND_ID, Arrays.asList(userid));

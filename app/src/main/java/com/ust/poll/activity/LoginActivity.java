@@ -36,8 +36,10 @@ public class LoginActivity extends Activity {
 //    private static final String CAP_IMG = "Capcha.jpg";
 //    private Map cookies;
 
-    @Bind(R.id.txt_phone_no) BootstrapEditText txt_phone_no;
-    @Bind(R.id.txt_captcha_code) BootstrapEditText txt_captcha_code;
+    @Bind(R.id.txt_phone_no)
+    BootstrapEditText txt_phone_no;
+    @Bind(R.id.txt_captcha_code)
+    BootstrapEditText txt_captcha_code;
 //    @Bind(R.id.img_captcha) ImageView imgView;
 
     ParseUser user;
@@ -81,15 +83,13 @@ public class LoginActivity extends Activity {
                 if (e != null) {
                     Log.d(TAG, ">>>>>>>>>>>> Error Login >>>>>>>>>>>> " + e.getMessage());
                     DialogHelper.getOkAlertDialog(ctx, "Error in connecting server..", e.getMessage()).show();
-                }
-                else {
+                } else {
                     if (parseUser != null) {
                         // If user exist and authenticated
                         user = parseUser;
                         Log.d(TAG, ">>>>>>>>>>>> User Login >>>>>>>>>>>> " + parseUser.getUsername());
                         fnPostLogin();
-                    }
-                    else {
+                    } else {
                         // If user not - exist create new
                         fnSignup(no);
                     }
@@ -121,14 +121,12 @@ public class LoginActivity extends Activity {
                     Log.d(TAG, ">>>>>>>>>>>> New User created >>>>>>>>>>>> " + puser.getUsername() + " " + puser.getObjectId());
                     user = puser;
                     fnPostLogin();
-                }
-                else {
-                    Log.d(TAG, ">>>>>>>>>>>> Error Signup >>>>>>>>>>"+e.getCode());
+                } else {
+                    Log.d(TAG, ">>>>>>>>>>>> Error Signup >>>>>>>>>>" + e.getCode());
                     Log.d(TAG, ">>>>>>>>>>>> Error Signup >>>>>>>>>>" + e.getMessage());
-                    if(e.getCode()==202){
+                    if (e.getCode() == 202) {
                         fnLogin(no);  // username already taken , try login with token
-                    }
-                    else{
+                    } else {
                         DialogHelper.getOkAlertDialog(ctx, "Error in connecting server..", e.getMessage()).show();
                     }
 
@@ -151,14 +149,13 @@ public class LoginActivity extends Activity {
     public void fnReset(View view) {
         TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         String mPhoneNumber = tMgr.getLine1Number();
-        this.validationCode = tMgr.getDeviceId();
+        validationCode = tMgr.getDeviceId();
 
         Log.d(TAG, ">>>>>>>>>>>> DEFAULT PHONE NO. >>>>>>>>>>>> " + mPhoneNumber);
         if (mPhoneNumber != null && !mPhoneNumber.equalsIgnoreCase("")) {
             txt_phone_no.setText(mPhoneNumber);
             txt_phone_no.setEnabled(false);
-        }
-        else {
+        } else {
             txt_phone_no.setEnabled(true);
         }
         txt_phone_no.setText("");

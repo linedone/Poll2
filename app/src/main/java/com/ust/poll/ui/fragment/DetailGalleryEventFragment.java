@@ -71,34 +71,30 @@ public class DetailGalleryEventFragment extends MainActivity.PlaceholderFragment
     }
 
     public void retrieveEventSuccess(List<ParseObject> parseObjects, ParseException e) {
-        if (e==null) {
+        if (e == null) {
             int counter = 0;
             for (ParseObject parseObject : parseObjects) {
                 ParseFile fileObject = parseObjects.get(counter).getParseFile("File");
-                if(fileObject!=null){
+                if (fileObject != null) {
                     try {
                         strImages.add(Base64.encodeToString(fileObject.getData(), Base64.DEFAULT));
-                    }
-                    catch (ParseException ePhotoMsg) {
+                    } catch (ParseException ePhotoMsg) {
                         Log.e("File", "Error: " + ePhotoMsg.getMessage());
                     }
-                }
-                else {  //NO Image uploaded
+                } else {  //NO Image uploaded
                     strImages.add(MediaUtil.getStringFromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.empty, null)));
                 }
                 counter++;
             }
             Log.d("Database", "Retrieved " + parseObjects.size() + " Event");
-            if (parseObjects.size()==0) {
+            if (parseObjects.size() == 0) {
                 Toast.makeText(getActivity().getApplicationContext(), "No Image for this Event!", Toast.LENGTH_LONG).show();
-            }
-            else if (strImages!=null) {
+            } else if (strImages != null) {
                 galleryList = (ListView) getActivity().findViewById(R.id.activeEventListView);
                 EventPhotoAdapter mAdapter = new EventPhotoAdapter(getActivity(), strImages);
                 galleryList.setAdapter(mAdapter);
             }
-        }
-        else {
+        } else {
             Toast.makeText(getActivity().getApplicationContext(), "Querying failure...", Toast.LENGTH_LONG).show();
             Log.e("Database", "Error: " + e.getMessage());
         }

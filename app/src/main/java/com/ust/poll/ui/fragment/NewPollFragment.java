@@ -49,14 +49,21 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class NewPollFragment extends MainActivity.PlaceholderFragment {
-    @Bind(R.id.txt_title) BootstrapEditText txt_title;
-    @Bind(R.id.option1) BootstrapButton option1;
-    @Bind(R.id.option2) BootstrapButton option2;
-    @Bind(R.id.option3) BootstrapButton option3;
-    @Bind(R.id.option4) BootstrapButton option4;
+    @Bind(R.id.txt_title)
+    BootstrapEditText txt_title;
+    @Bind(R.id.option1)
+    BootstrapButton option1;
+    @Bind(R.id.option2)
+    BootstrapButton option2;
+    @Bind(R.id.option3)
+    BootstrapButton option3;
+    @Bind(R.id.option4)
+    BootstrapButton option4;
 
-    @Bind(R.id.txt_deadlineDate) BootstrapEditText txt_deadlineDate;
-    @Bind(R.id.txt_deadlineTime) BootstrapEditText txt_deadlineTime;
+    @Bind(R.id.txt_deadlineDate)
+    BootstrapEditText txt_deadlineDate;
+    @Bind(R.id.txt_deadlineTime)
+    BootstrapEditText txt_deadlineTime;
     private static int FRAGMENT_CODE = 0;
 
     String members;
@@ -87,16 +94,16 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
             }
         });
 
-        if(!soption1.isEmpty())
+        if (!soption1.isEmpty())
             option1.setText(soption1);
 
-        if(!soption2.isEmpty())
+        if (!soption2.isEmpty())
             option2.setText(soption2);
 
-        if(!soption3.isEmpty())
+        if (!soption3.isEmpty())
             option3.setText(soption3);
 
-        if(!soption4.isEmpty())
+        if (!soption4.isEmpty())
             option4.setText(soption4);
     }
 
@@ -105,9 +112,9 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         soption2 = data.getStringExtra("soption2");
         soption3 = data.getStringExtra("soption3");
         soption4 = data.getStringExtra("soption4");
-        if(requestCode==FRAGMENT_CODE && resultCode==getActivity().RESULT_OK) {
-            if(data != null) {
-                if(data.getStringExtra("members") != null) {
+        if (requestCode == FRAGMENT_CODE && resultCode == getActivity().RESULT_OK) {
+            if (data != null) {
+                if (data.getStringExtra("members") != null) {
                     members = data.getStringExtra("members");
                     contactPosition = data.getStringExtra("contactPosition");
                     Log.d("Poll PickFriend", "Data passed from PickFriend Fragment = " + members);
@@ -136,13 +143,12 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
 
                 if (eventDate.getTime().compareTo(todayDate.getTime()) >= 0) {
                     txt_deadlineDate.setText(sdFormat.format(eventDate.getTime()));
-                }
-                else {
+                } else {
                     txt_deadlineDate.setText("");
                     Toast.makeText(getActivity().getApplicationContext(), "Please select a suitable event date.", Toast.LENGTH_LONG).show();
                 }
             }
-        },mYear, mMonth, mDay);
+        }, mYear, mMonth, mDay);
         mDatePicker.setTitle("Select Date");
         mDatePicker.show();
     }
@@ -156,16 +162,13 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
 
         TimePickerDialog mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
             public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-                if (hourOfDay<10 && minute<10) {
+                if (hourOfDay < 10 && minute < 10) {
                     txt_deadlineTime.setText("0" + hourOfDay + ":0" + minute);
-                }
-                else if (hourOfDay>=10 && minute<10){
+                } else if (hourOfDay >= 10 && minute < 10) {
                     txt_deadlineTime.setText(hourOfDay + ":0" + minute);
-                }
-                else if (hourOfDay<10 && minute>=10){
+                } else if (hourOfDay < 10 && minute >= 10) {
                     txt_deadlineTime.setText("0" + hourOfDay + ":" + minute);
-                }
-                else {
+                } else {
                     txt_deadlineTime.setText(hourOfDay + ":" + minute);
                 }
             }
@@ -179,9 +182,9 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         PickFriendFragment fragment = new PickFriendFragment();
         fragment.setTargetFragment(this, FRAGMENT_CODE);
         Bundle bundle = new Bundle();
-            if (members!=null) {
-                bundle.putString("members", members);
-                bundle.putString("contactPosition", contactPosition);
+        if (members != null) {
+            bundle.putString("members", members);
+            bundle.putString("contactPosition", contactPosition);
         }
         bundle.putStringArrayList("contactList", contactList);
         bundle.putString("soption1", option1.getText().toString());
@@ -192,9 +195,9 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
     }
 
-    @OnClick({ R.id.option1, R.id.option2, R.id.option3, R.id.option4 })
+    @OnClick({R.id.option1, R.id.option2, R.id.option3, R.id.option4})
     public void fnOption(View view) {
-        final BootstrapButton btn = (BootstrapButton)view;
+        final BootstrapButton btn = (BootstrapButton) view;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
         builder.setTitle("Option");
@@ -327,7 +330,7 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
 
     private void fnSendPushNotification(String[] phoneList, String titleOpt, String contactName) {
         String[] userArray = phoneList;
-        for (int i = 0; i < userArray.length; i++){
+        for (int i = 0; i < userArray.length; i++) {
             ParsePush push = new ParsePush();
             ParseQuery query = ParseInstallation.getQuery();
             query.whereEqualTo("username", userArray[i]);
@@ -348,7 +351,7 @@ public class NewPollFragment extends MainActivity.PlaceholderFragment {
         if (e == null) {
             for (ParseUser parseItem : parseObjects) {
                 String contactName = TelephonyUtil.getContactName(getActivity(), parseItem.getUsername());
-                if (contactName.compareTo("")!=0) {
+                if (contactName.compareTo("") != 0) {
                     contactList.add(contactName + " [" + parseItem.getUsername().toString() + "]");
                 }
             }
